@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MLink, press, useOrder } from '../ui.jsx'
+import { setSound, soundOn } from '../sound.js'
 
 const LINKS = [
   ['/services', 'Services'],
@@ -14,6 +15,7 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
   const { picked } = useOrder()
+  const [sound, setSoundState] = useState(soundOn)
 
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -40,6 +42,18 @@ export default function Nav() {
           Start a project{picked.length ? ` (${picked.length})` : ''}
         </MLink>
       </nav>
+
+      <button
+        type="button"
+        className="sound-btn"
+        aria-pressed={sound}
+        onClick={() => {
+          setSound(!sound)
+          setSoundState(!sound)
+        }}
+      >
+        Sound {sound ? 'on' : 'off'}
+      </button>
 
       <button type="button" className="burger" aria-expanded={open} aria-controls="menu" onClick={() => setOpen((v) => !v)}>
         <span className="sr">{open ? 'Close menu' : 'Open menu'}</span>

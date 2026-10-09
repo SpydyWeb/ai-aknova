@@ -20,6 +20,7 @@ export default function Hero() {
   const [i, setI] = useState(0)
   const [label, setLabel] = useState(null)
   const [inView, setInView] = useState(true)
+  const [shake, setShake] = useState(0)
 
   useEffect(() => {
     if (reduce) return
@@ -57,7 +58,7 @@ export default function Hero() {
       {!reduce && (
         <div className="hero-canvas">
           <Suspense fallback={null}>
-            <Playground active={inView} onPop={(name) => setLabel({ name, k: Date.now() })} />
+            <Playground active={inView} shake={shake} onPop={(name) => setLabel({ name, k: Date.now() })} />
           </Suspense>
         </div>
       )}
@@ -100,6 +101,11 @@ export default function Hero() {
             <MLink className="btn btn-paper" to="/work" {...press}>
               See our work
             </MLink>
+            {!reduce && (
+              <motion.button type="button" className="btn btn-sun" data-sound="swish" onClick={() => setShake((n) => n + 1)} {...press}>
+                Shake the toys
+              </motion.button>
+            )}
             {!reduce && <p className="hint">Pick something up and throw it. Tap it to see what it is.</p>}
           </div>
         </div>

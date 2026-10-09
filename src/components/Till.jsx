@@ -1,6 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
-import { EMAIL, SERVICES } from '../data.js'
+import { SERVICES } from '../data.js'
+import { openEmailApp, send, validEmail } from '../send.js'
+import { play } from '../sound.js'
 import { useOrder } from '../ui.jsx'
 
 const BigButton = lazy(() => import('./BigButton.jsx'))
@@ -9,27 +11,62 @@ const today = new Date().toLocaleDateString(undefined, { day: '2-digit', month: 
 
 export default function Till() {
   const { picked, toggle } = useOrder()
-  const [sent, setSent] = useState(0)
+  const [email, setEmail] = useState('')
+  const [state, setState] = useState('idle')
+  const [note, setNote] = useState('')
+  const [burst, setBurst] = useState(0)
+  const [coins, setCoins] = useState(0)
   const [paper, animate] = useAnimate()
+  const count = useRef(picked.length)
+  const emailBox = useRef(null)
 
-  // The paper feeds a notch every time a line is added or removed.
+  // The paper feeds a notch, and coins hop out, every time a line is added.
   useEffect(() => {
+    if (picked.length === count.current) return
     animate(paper.current, { y: [-12, 0] }, { duration: 0.22, ease: 'easeOut' })
-  }, [picked.length, animate, paper])
+    play('print')
+    if (picked.length > count.current) setCoins((n) => n + 1)
+    count.current = picked.length
+    if (state === 'sent') setState('idle')
+  }, [picked.length, animate, paper, state])
 
-  const send = () => {
-    if (!picked.length) return
-    setSent((n) => n + 1)
-    const body = `Hi Anova AI,\n\nI would like to talk about:\n${picked.map((s) => `- ${s}`).join('\n')}\n\nAbout my business:\n`
-    const href = `mailto:${EMAIL}?subject=${encodeURIComponent('Project order from your website')}&body=${encodeURIComponent(body)}`
-    setTimeout(() => (window.location.href = href), 900)
+  const sendOrder = async () => {
+    if (state === 'sending') return
+    if (!picked.length) return setNote('Press at least one service key first.')
+    if (!validEmail(email)) {
+      setNote('Enter your email address so we can reply.')
+      play('buzz')
+      emailBox.current?.focus()
+      return
+    }
+    const subject = 'Order from the website till'
+    const message = `Services wanted:\n${picked.map((s) => `- ${s}`).join('\n')}`
+    setState('sending')
+    setNote('')
+    const r = await send(subject, { email, services: picked.join(', '), message })
+    if (r.ok) {
+      setState('sent')
+      setNote(`Order sent. We will reply to ${email}.`)
+      setBurst((n) => n + 1)
+      play('ding')
+    } else if (r.reason === 'nokey') {
+      setState('idle')
+      setBurst((n) => n + 1)
+      play('whoosh')
+      setNote('Your email app should open with the order filled in. Press send there to finish.')
+      setTimeout(() => openEmailApp(subject, `${message}\n\nReply to: ${email}`), 900)
+    } else {
+      setState('idle')
+      setNote('The order did not send. Check your connection and press the button again.')
+      play('buzz')
+    }
   }
 
   return (
     <section id="order" className="till">
       <div className="till-head">
         <h2>Ring up what you need</h2>
-        <p>Press the services you're after. The till prints your order, and the big button emails it to us.</p>
+        <p>Press the services you're after. The till prints your order, and the big button sends it to us.</p>
         <ul className="keys">
           {SERVICES.map((s) => {
             const on = picked.includes(s)
@@ -38,6 +75,7 @@ export default function Till() {
                 <motion.button
                   type="button"
                   className="key"
+                  data-sound="key"
                   aria-pressed={on}
                   onClick={() => toggle(s)}
                   animate={{ y: on ? 5 : 0, boxShadow: on ? '0 2px 0 #17130E' : '0 7px 0 #17130E' }}
@@ -85,9 +123,23 @@ export default function Till() {
             <span>one conversation</span>
           </p>
         </div>
+
+        <label className="field till-email">
+          <span>Your email, so we can reply</span>
+          <input ref={emailBox} type="email" autoComplete="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
         <Suspense fallback={null}>
-          <BigButton enabled={picked.length > 0} onPress={send} burst={sent} />
+          <BigButton
+            enabled={picked.length > 0 && state !== 'sending'}
+            onPress={sendOrder}
+            burst={burst}
+            coins={coins}
+            label={state === 'sending' ? 'Sending' : state === 'sent' ? 'Order sent' : picked.length ? 'Send this order' : 'Pick a service first'}
+          />
         </Suspense>
+        <p className="till-note" role="status">
+          {note}
+        </p>
       </div>
     </section>
   )

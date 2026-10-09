@@ -3,42 +3,25 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Outlines } from '@react-three/drei'
 import * as THREE from 'three'
 import { C } from '../data.js'
+import { bands } from './models.jsx'
 
-const bands = (() => {
-  const t = new THREE.DataTexture(new Uint8Array([165, 225, 255]), 3, 1, THREE.RedFormat)
-  t.minFilter = t.magFilter = THREE.NearestFilter
-  t.needsUpdate = true
-  return t
-})()
 const CONFETTI = [C.sun, C.grape, C.mint, '#ffffff']
 
-function Scene({ down, enabled, burst }) {
-  const cap = useRef(null)
-  const bits = useRef(null)
+// A pool of small pieces that can be thrown up from the button and fall under gravity.
+function usePieces(count) {
+  const mesh = useRef(null)
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const parts = useMemo(
-    () => Array.from({ length: 80 }, () => ({ p: new THREE.Vector3(0, -99, 0), v: new THREE.Vector3(), r: new THREE.Euler(), s: 0 })),
-    [],
+    () => Array.from({ length: count }, () => ({ p: new THREE.Vector3(0, -99, 0), v: new THREE.Vector3(), r: new THREE.Euler(), s: 0 })),
+    [count],
   )
-
-  useLayoutEffect(() => {
-    const c = new THREE.Color()
-    parts.forEach((_, i) => bits.current.setColorAt(i, c.set(CONFETTI[i % 4])))
-    bits.current.instanceColor.needsUpdate = true
-  }, [parts])
-
-  useEffect(() => {
-    if (!burst) return
-    parts.forEach((q) => {
+  const throwUp = (n, spread, lift, size) =>
+    parts.slice(0, n).forEach((q) => {
       q.p.set(0, 0.9, 0)
-      q.v.set((Math.random() - 0.5) * 7, 5 + Math.random() * 6, (Math.random() - 0.5) * 7)
-      q.s = 0.1 + Math.random() * 0.12
+      q.v.set((Math.random() - 0.5) * spread, lift + Math.random() * lift, (Math.random() - 0.5) * spread)
+      q.s = size * (0.8 + Math.random() * 0.5)
     })
-  }, [burst, parts])
-
-  useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05)
-    cap.current.position.y += ((down ? 0.3 : 0.62) - cap.current.position.y) * Math.min(1, dt * 28)
+  const step = (dt) => {
     parts.forEach((q, i) => {
       if (q.p.y > -20) {
         q.v.y -= 18 * dt
@@ -50,9 +33,37 @@ function Scene({ down, enabled, burst }) {
       dummy.rotation.copy(q.r)
       dummy.scale.setScalar(q.s)
       dummy.updateMatrix()
-      bits.current.setMatrixAt(i, dummy.matrix)
+      mesh.current.setMatrixAt(i, dummy.matrix)
     })
-    bits.current.instanceMatrix.needsUpdate = true
+    mesh.current.instanceMatrix.needsUpdate = true
+  }
+  return { mesh, parts, throwUp, step }
+}
+
+function Scene({ down, enabled, burst, coins }) {
+  const cap = useRef(null)
+  const bits = usePieces(80)
+  const money = usePieces(8)
+
+  useLayoutEffect(() => {
+    const c = new THREE.Color()
+    bits.parts.forEach((_, i) => bits.mesh.current.setColorAt(i, c.set(CONFETTI[i % 4])))
+    bits.mesh.current.instanceColor.needsUpdate = true
+  }, [bits.parts, bits.mesh])
+
+  useEffect(() => {
+    if (burst) bits.throwUp(80, 7, 5.5, 0.11)
+  }, [burst]) // eslint-disable-line react-hooks/exhaustive-deps
+  // A few coins hop out each time a service is rung up.
+  useEffect(() => {
+    if (coins) money.throwUp(4, 3.5, 4, 0.3)
+  }, [coins]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useFrame((_, delta) => {
+    const dt = Math.min(delta, 0.05)
+    cap.current.position.y += ((down ? 0.3 : 0.62) - cap.current.position.y) * Math.min(1, dt * 28)
+    bits.step(dt)
+    money.step(dt)
   })
 
   return (
@@ -68,15 +79,19 @@ function Scene({ down, enabled, burst }) {
         <meshToonMaterial color={enabled ? C.sun : '#E3D8BD'} gradientMap={bands} />
         <Outlines thickness={5} color={C.ink} />
       </mesh>
-      <instancedMesh ref={bits} args={[null, null, 80]} frustumCulled={false}>
+      <instancedMesh ref={bits.mesh} args={[null, null, 80]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 0.3]} />
         <meshBasicMaterial />
+      </instancedMesh>
+      <instancedMesh ref={money.mesh} args={[null, null, 8]} frustumCulled={false}>
+        <cylinderGeometry args={[1, 1, 0.28, 28]} />
+        <meshToonMaterial color={C.sun} gradientMap={bands} />
       </instancedMesh>
     </>
   )
 }
 
-export default function BigButton({ enabled, onPress, burst }) {
+export default function BigButton({ enabled, onPress, burst, coins, label }) {
   const [down, setDown] = useState(false)
   const up = () => setDown(false)
   return (
@@ -84,6 +99,8 @@ export default function BigButton({ enabled, onPress, burst }) {
       type="button"
       className="big-btn"
       aria-disabled={!enabled}
+      data-sound={enabled ? 'tap' : 'buzz'}
+      data-cursor={enabled ? 'Press' : undefined}
       onPointerDown={() => setDown(true)}
       onPointerUp={up}
       onPointerLeave={up}
@@ -93,9 +110,9 @@ export default function BigButton({ enabled, onPress, burst }) {
       onClick={onPress}
     >
       <Canvas flat dpr={[1, 2]} camera={{ fov: 32, position: [0, 3.6, 6] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-        <Scene down={down && enabled} enabled={enabled} burst={burst} />
+        <Scene down={down && enabled} enabled={enabled} burst={burst} coins={coins} />
       </Canvas>
-      <span>{enabled ? 'Email this order' : 'Pick a service first'}</span>
+      <span>{label}</span>
     </button>
   )
 }

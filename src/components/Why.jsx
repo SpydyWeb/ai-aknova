@@ -26,6 +26,7 @@ function Card({ title, text, color }) {
       className="why-card"
       aria-pressed={flipped}
       data-cursor="Turn"
+      data-sound="flip"
       onPointerMove={lean}
       onPointerLeave={rest}
       onClick={() => setFlipped((f) => !f)}

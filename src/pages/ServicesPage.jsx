@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageHero from '../components/PageHero.jsx'
 import Process from '../components/Process.jsx'
+import Tilt from '../components/Tilt.jsx'
 import { SERVICE_INFO } from '../data.js'
 import { press, slug, useOrder } from '../ui.jsx'
 
@@ -22,7 +23,7 @@ export default function ServicesPage() {
             const on = picked.includes(s.name)
             const tone = TONE[i % TONE.length]
             return (
-              <li key={s.name} className={`svc-card bg-${tone} ${tone === 'grape' ? 'on-dark' : ''}`}>
+              <Tilt as="li" key={s.name} className={`svc-card bg-${tone} ${tone === 'grape' ? 'on-dark' : ''}`}>
                 <h2>
                   <Link to={`/services/${slug(s.name)}`}>{s.name}</Link>
                 </h2>
@@ -35,7 +36,7 @@ export default function ServicesPage() {
                 <motion.button type="button" className={`btn ${on ? 'btn-ink' : 'btn-white'}`} onClick={() => toggle(s.name)} {...press}>
                   {on ? 'Remove from order' : 'Add to order'}
                 </motion.button>
-              </li>
+              </Tilt>
             )
           })}
         </ul>

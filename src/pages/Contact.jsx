@@ -4,8 +4,11 @@ import { Float } from '@react-three/drei'
 import { motion, useReducedMotion } from 'framer-motion'
 import Till from '../components/Till.jsx'
 import Faq from '../components/Faq.jsx'
+import Tilt from '../components/Tilt.jsx'
 import { Envelope } from '../components/models.jsx'
 import { EMAIL } from '../data.js'
+import { canSend, openEmailApp, send, validEmail } from '../send.js'
+import { play } from '../sound.js'
 import { press, useOrder } from '../ui.jsx'
 
 // Sits and bobs; when a message is sent it flies off, then a fresh one pops back.
@@ -47,34 +50,47 @@ export default function Contact() {
   const { picked, toggle } = useOrder()
   const [f, setF] = useState(EMPTY)
   const [errors, setErrors] = useState({})
-  const [sent, setSent] = useState(0)
+  const [state, setState] = useState('idle')
+  const [note, setNote] = useState('')
+  const [flown, setFlown] = useState(0)
   const set = (k) => (e) => setF((v) => ({ ...v, [k]: e.target.value }))
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
+    if (state === 'sending') return
     const err = {}
     if (!f.name.trim()) err.name = 'Add your name so we know who to reply to.'
-    if (!/^\S+@\S+\.\S+$/.test(f.email)) err.email = 'Enter an email address like name@example.com.'
+    if (!validEmail(f.email)) err.email = 'Enter an email address like name@example.com.'
     if (!f.message.trim() && !picked.length) err.message = 'Write a line about what you need, or add a service to your order.'
     setErrors(err)
     if (Object.keys(err).length) {
+      play('buzz')
       document.getElementById(`f-${Object.keys(err)[0]}`)?.focus()
       return
     }
-    const body = [
-      `Name: ${f.name}`,
-      `Email: ${f.email}`,
-      f.phone ? `Phone: ${f.phone}` : null,
-      picked.length ? `Services: ${picked.join(', ')}` : null,
-      '',
-      f.message,
-    ]
-      .filter((x) => x !== null)
-      .join('\n')
-    setSent((n) => n + 1)
-    setTimeout(() => {
-      window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(`New project from ${f.name}`)}&body=${encodeURIComponent(body)}`
-    }, 900)
+
+    const subject = `New project from ${f.name}`
+    const fields = { name: f.name, email: f.email, phone: f.phone || 'Not given', services: picked.join(', ') || 'None picked', message: f.message || 'No message' }
+    setState('sending')
+    setNote('')
+    const r = await send(subject, fields)
+    if (r.ok) {
+      setState('sent')
+      setFlown((n) => n + 1)
+      play('whoosh')
+      setTimeout(() => play('ding'), 500)
+    } else if (r.reason === 'nokey') {
+      setState('idle')
+      setFlown((n) => n + 1)
+      play('whoosh')
+      setNote('Your email app should open with the message filled in. Press send there to finish.')
+      const body = Object.entries(fields).map(([k, v]) => `${k[0].toUpperCase()}${k.slice(1)}: ${v}`).join('\n')
+      setTimeout(() => openEmailApp(subject, body), 900)
+    } else {
+      setState('idle')
+      play('buzz')
+      setNote(`The message did not send. Check your connection and try again, or write to ${EMAIL}.`)
+    }
   }
 
   const field = (k, label, props = {}) => (
@@ -98,48 +114,78 @@ export default function Contact() {
       <section className="contact">
         <div className="contact-copy">
           <h1>Tell us what you're building</h1>
-          <p className="lede">Fill this in and your email app opens with the message ready. Press send there and it reaches us.</p>
 
-          <form onSubmit={submit} noValidate>
-            <div className="pair">
-              {field('name', 'Your name', { autoComplete: 'name' })}
-              {field('email', 'Email', { type: 'email', autoComplete: 'email', inputMode: 'email' })}
-            </div>
-            {field('phone', 'Phone (optional)', { type: 'tel', autoComplete: 'tel', inputMode: 'tel' })}
-            {field('message', 'What do you need?', { rows: 5 })}
+          {state === 'sent' ? (
+            <motion.div
+              className="sent-card"
+              role="status"
+              initial={{ scale: 0.6, rotate: -6, opacity: 0 }}
+              animate={{ scale: 1, rotate: -1.5, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 20 }}
+            >
+              <h2>Message sent</h2>
+              <p>Thanks, {f.name.split(' ')[0]}. We will reply to {f.email}.</p>
+              <motion.button
+                type="button"
+                className="btn btn-paper"
+                onClick={() => {
+                  setF(EMPTY)
+                  setState('idle')
+                }}
+                {...press}
+              >
+                Write another message
+              </motion.button>
+            </motion.div>
+          ) : (
+            <>
+              <p className="lede">
+                {canSend()
+                  ? 'Fill this in and press send. It comes straight to our inbox.'
+                  : 'Fill this in and your email app opens with the message ready. Press send there and it reaches us.'}
+              </p>
+              <form onSubmit={submit} noValidate>
+                <div className="pair">
+                  {field('name', 'Your name', { autoComplete: 'name' })}
+                  {field('email', 'Email', { type: 'email', autoComplete: 'email', inputMode: 'email' })}
+                </div>
+                {field('phone', 'Phone (optional)', { type: 'tel', autoComplete: 'tel', inputMode: 'tel' })}
+                {field('message', 'What do you need?', { rows: 5 })}
 
-            {picked.length > 0 && (
-              <div className="on-order">
-                <span>On your order</span>
-                <ul className="chips">
-                  {picked.map((s) => (
-                    <li key={s}>
-                      {s}
-                      <button type="button" aria-label={`Remove ${s}`} onClick={() => toggle(s)}>
-                        ×
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                {picked.length > 0 && (
+                  <div className="on-order">
+                    <span>On your order</span>
+                    <ul className="chips">
+                      {picked.map((s) => (
+                        <li key={s}>
+                          {s}
+                          <button type="button" aria-label={`Remove ${s}`} onClick={() => toggle(s)}>
+                            ×
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-            <motion.button type="submit" className="btn btn-tangerine" {...press}>
-              Open email with this message
-            </motion.button>
-            <p className="status" aria-live="polite">
-              {sent > 0 && 'Your email app should open with the message filled in. Press send there to finish.'}
-            </p>
-          </form>
+                <motion.button type="submit" className="btn btn-tangerine" disabled={state === 'sending'} {...press}>
+                  {state === 'sending' ? 'Sending' : 'Send message'}
+                </motion.button>
+                <p className="status" role="status">
+                  {note}
+                </p>
+              </form>
+            </>
+          )}
         </div>
 
-        <aside className="contact-side">
+        <Tilt as="aside" className="contact-side" max={8}>
           {!reduce && (
             <div className="letter" aria-hidden="true">
               <Canvas flat dpr={[1, 2]} camera={{ fov: 35, position: [0, 0, 7] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
                 <ambientLight intensity={1.1} />
                 <directionalLight position={[4, 6, 8]} intensity={1.9} />
-                <Letter sent={sent} />
+                <Letter sent={flown} />
               </Canvas>
             </div>
           )}
@@ -164,7 +210,7 @@ export default function Contact() {
               <dd>Your working hours</dd>
             </div>
           </dl>
-        </aside>
+        </Tilt>
       </section>
       <Till />
       <Faq />

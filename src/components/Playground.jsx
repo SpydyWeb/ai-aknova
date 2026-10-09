@@ -4,6 +4,7 @@ import { BallCollider, CuboidCollider, CylinderCollider, Physics, RigidBody } fr
 import * as THREE from 'three'
 import { C } from '../data.js'
 import { Ball, MODELS } from './models.jsx'
+import { play } from '../sound.js'
 
 const FOV = 35
 const HALF_PI = Math.PI / 2
@@ -58,8 +59,13 @@ function useWorld() {
   }, [size, camera])
 }
 
-function Toy({ name, index, world, drag, onPop, children }) {
+function Toy({ name, index, world, drag, bodies, onPop, children }) {
   const body = useRef(null)
+  useEffect(() => {
+    const b = body.current
+    bodies.current.add(b)
+    return () => bodies.current.delete(b)
+  }, [bodies])
   const [start] = useState(() => ({
     p: [(Math.random() - 0.5) * Math.max(1, world.w - 3.5), world.h / 2 + 1.5 + index * 1.3, 0],
     r: [0, 0, Math.random() * 3],
@@ -104,6 +110,7 @@ function Toy({ name, index, world, drag, onPop, children }) {
           if (e.delta > 8) return
           body.current.setLinvel({ x: (Math.random() - 0.5) * 8, y: 14, z: 0 }, true)
           body.current.setAngvel({ x: 0, y: 0, z: Math.random() * 16 - 8 }, true)
+          play('pop')
           if (name) onPop(name)
         }}
       >
@@ -113,9 +120,20 @@ function Toy({ name, index, world, drag, onPop, children }) {
   )
 }
 
-function Scene({ onPop }) {
+function Scene({ onPop, shake }) {
   const world = useWorld()
   const drag = useRef(null)
+  const bodies = useRef(new Set())
+  const lastScroll = useRef(0)
+
+  // The shake button tosses everything into the air.
+  useEffect(() => {
+    if (!shake) return
+    bodies.current.forEach((b) => {
+      b.setLinvel({ x: (Math.random() - 0.5) * 22, y: 12 + Math.random() * 12, z: 0 }, true)
+      b.setAngvel({ x: 0, y: 0, z: Math.random() * 20 - 10 }, true)
+    })
+  }, [shake])
   const toys = TOYS.slice(0, world.count)
 
   useEffect(() => {
@@ -133,6 +151,16 @@ function Scene({ onPop }) {
   }, [])
 
   useFrame(({ pointer }) => {
+    // Scrolling the page jolts the toys, as if the floor moved under them.
+    const dy = scrollY - lastScroll.current
+    lastScroll.current = scrollY
+    if (Math.abs(dy) > 3) {
+      const kick = Math.max(-5, Math.min(9, dy * 0.1))
+      bodies.current.forEach((b) => {
+        const v = b.linvel()
+        b.setLinvel({ x: v.x + (Math.random() - 0.5) * Math.abs(kick), y: v.y + kick * Math.random(), z: 0 }, true)
+      })
+    }
     const b = drag.current
     if (!b) return
     const p = b.translation()
@@ -156,7 +184,7 @@ function Scene({ onPop }) {
         <CuboidCollider args={[w, 1, 4]} position={[0, h / 2 + 24, 0]} />
       </RigidBody>
       {toys.map(([name, el], i) => (
-        <Toy key={i} name={name} index={i} world={world} drag={drag} onPop={onPop}>
+        <Toy key={i} name={name} index={i} world={world} drag={drag} bodies={bodies} onPop={onPop}>
           {el}
         </Toy>
       ))}
@@ -164,7 +192,7 @@ function Scene({ onPop }) {
   )
 }
 
-export default function Playground({ active, onPop }) {
+export default function Playground({ active, onPop, shake }) {
   return (
     <Canvas
       flat
@@ -177,7 +205,7 @@ export default function Playground({ active, onPop }) {
       <ambientLight intensity={1.1} />
       <directionalLight position={[4, 6, 8]} intensity={1.9} />
       <Physics gravity={[0, -28, 0]} paused={!active}>
-        <Scene onPop={onPop} />
+        <Scene onPop={onPop} shake={shake} />
       </Physics>
     </Canvas>
   )

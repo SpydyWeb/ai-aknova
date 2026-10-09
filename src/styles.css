@@ -1019,6 +1019,135 @@ h2 {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* ---------- cursor colour, sound, sending ---------- */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text !important;
+}
+.cursor-ring {
+  border-width: 3px;
+  outline: 0;
+  color: var(--ink);
+}
+.cursor-ring.has-label {
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.cursor-ring,
+.cursor-dot {
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.cursor-dot {
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+.nav {
+  gap: 12px;
+}
+.nav .logo {
+  margin-right: auto;
+}
+.sound-btn {
+  order: 2;
+  font: 700 0.85rem var(--body);
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--line);
+  border-radius: 999px;
+  padding: 0.5em 0.9em;
+  cursor: pointer;
+}
+.sound-btn[aria-pressed='true'] {
+  background: var(--mint);
+}
+.till-email {
+  margin-top: 18px;
+}
+.till-note {
+  min-height: 3em;
+  margin-top: 6px;
+  text-align: center;
+  font-weight: 700;
+}
+.sent-card {
+  margin-top: 2rem;
+  max-width: 30rem;
+  padding: 28px;
+  background: var(--mint);
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.sent-card h2 {
+  font-size: 1.8rem;
+}
+.sent-card p {
+  margin: 0.6rem 0 1.4rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.btn:disabled {
+  opacity: 0.6;
+}
+
+/* ---------- pinned 3D build ---------- */
+.story3d {
+  position: relative;
+  height: 360vh;
+  background: var(--mint);
+  border-block: var(--line);
+}
+.story3d-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.story3d h2 {
+  position: absolute;
+  left: var(--pad);
+  top: clamp(28px, 7vh, 72px);
+  z-index: 2;
+}
+.story3d-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.story3d-cap {
+  position: absolute;
+  left: var(--pad);
+  bottom: clamp(24px, 7vh, 72px);
+  z-index: 2;
+  width: min(calc(100% - 2 * var(--pad) - 100px), 21rem);
+}
+.story3d-cap .step {
+  margin: 0;
+}
+.story3d-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}
+.story3d-dots i {
+  width: 34px;
+  height: 12px;
+  border: var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+.story3d-dots i.on {
+  background: var(--tangerine);
+}
+
 /* ---------- shared bits ---------- */
 .sr {
   position: absolute;

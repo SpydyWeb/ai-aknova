@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { play } from '../sound.js'
 import { PROJECTS } from '../data.js'
 
 const SKINS = ['sun', 'tangerine', 'paper', 'mint']
@@ -13,6 +14,7 @@ export default function Work() {
   const top = order[0]
 
   const next = () => {
+    play('swish')
     setFlipped(false)
     setOrder((o) => [...o.slice(1), o[0]])
   }
@@ -94,7 +96,11 @@ export default function Work() {
               onDragEnd={(_, info) => {
                 if (Math.abs(info.offset.x) > 120 || Math.abs(info.velocity.x) > 700) next()
               }}
-              onTap={() => isTop && setFlipped((f) => !f)}
+              onTap={() => {
+                if (!isTop) return
+                play('flip')
+                setFlipped((f) => !f)
+              }}
             >
               <motion.div className="card-inner" animate={{ rotateY: isTop && flipped ? 180 : 0 }} transition={spring}>
                 <div className={`face front bg-${SKINS[i % 4]}`}>
