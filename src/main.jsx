@@ -12,6 +12,7 @@ async function content() {
     if (res.ok && (res.headers.get('content-type') || '').includes('json')) return await res.json()
   } catch {
     /* no server: fall through to the built-in copy */
+    
   }
   return snapshot
 }
