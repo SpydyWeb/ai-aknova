@@ -6,7 +6,7 @@ import { mediaUrl, slug } from '../data.js'
 import { api } from './api.js'
 
 // Gives fields the whole site content (for lists of services and pages) and a way to open the media library.
-export const AdminContext = createContext({ doc: {}, pickMedia: async () => null })
+export const AdminContext = createContext({ doc: {}, pickMedia: async () => null, me: {} })
 
 export const move = (list, from, to) => {
   const next = [...list]
@@ -40,7 +40,8 @@ function Thumb({ url }) {
 
 /* ---------- the media library: every uploaded photo and video ---------- */
 export function MediaLibrary({ kind = 'any', onPick }) {
-  const { doc } = useContext(AdminContext)
+  const { doc, me } = useContext(AdminContext)
+  const limit = me?.maxUpload || 300 * 1048576
   const [files, setFiles] = useState(null)
   const [busy, setBusy] = useState([])
   const [error, setError] = useState('')
@@ -57,6 +58,10 @@ export function MediaLibrary({ kind = 'any', onPick }) {
   const add = async (list) => {
     setError('')
     for (const file of list) {
+      if (file.size > limit) {
+        setError(`${file.name} is ${size(file.size)}. The limit here is ${size(limit)}. For a video, upload it to YouTube or Vimeo and use a Video section with the link.`)
+        continue
+      }
       setBusy((b) => [...b, { name: file.name, done: 0 }])
       try {
         await api.upload(file, (done) => setBusy((b) => b.map((x) => (x.name === file.name ? { ...x, done } : x))))
@@ -101,7 +106,7 @@ export function MediaLibrary({ kind = 'any', onPick }) {
     >
       <div className="adm-drop">
         <p>
-          <strong>Drop files here</strong>, or choose them from your computer. Photos (JPG, PNG, WebP, GIF, SVG), videos (MP4, WebM, MOV) and PDFs, up to 300 MB each.
+          <strong>Drop files here</strong>, or choose them from your computer. Photos (JPG, PNG, WebP, GIF, SVG), videos (MP4, WebM, MOV) and PDFs, up to {size(limit)} each.{me?.remote ? ' Each upload appears on the live site about a minute later.' : ''}
         </p>
         <button type="button" className="adm-btn primary" onClick={() => input.current.click()}>
           Upload files

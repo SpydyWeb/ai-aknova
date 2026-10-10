@@ -937,3 +937,9 @@ body {
     margin-bottom: 4px;
   }
 }
+
+.adm-steps {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px !important;
+}

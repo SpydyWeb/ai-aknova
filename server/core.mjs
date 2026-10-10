@@ -10,6 +10,7 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
 import { createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs'
 import { basename, extname, join } from 'node:path'
+import { StoreError, githubStore } from './github.mjs'
 import { setContent } from '../src/data.js'
 import { bodyHtml, headTags, llmsTxt, robotsTxt, seoFor, sitemapXml } from '../src/seo.js'
 
@@ -39,6 +40,8 @@ const TYPES = {
 }
 const UPLOADS = ['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif', '.svg', '.mp4', '.m4v', '.webm', '.mov', '.pdf']
 const MAX_UPLOAD = 300 * 1024 * 1024
+// Hosts like Vercel refuse any request larger than about 4.5 MB.
+const MAX_REMOTE_UPLOAD = 4 * 1024 * 1024
 const MAX_JSON = 6 * 1024 * 1024
 const KEEP_BACKUPS = 30
 const COOKIE = 'aknova_admin'
@@ -51,6 +54,17 @@ const json = (res, status, body) => {
 const fail = (res, status, message) => json(res, status, { error: message })
 
 function readBody(req, limit) {
+  // Some hosts (Vercel) read the request before handing it over and leave the result on req.body.
+  let given
+  try {
+    given = req.body
+  } catch {
+    given = undefined
+  }
+  if (given !== undefined && given !== null) {
+    const buffer = Buffer.isBuffer(given) ? given : Buffer.from(typeof given === 'string' ? given : JSON.stringify(given))
+    return buffer.length > limit ? Promise.reject(new Error('too large')) : Promise.resolve(buffer)
+  }
   return new Promise((resolve, reject) => {
     const chunks = []
     let size = 0
@@ -112,8 +126,14 @@ export function createSite(root) {
   const adminFile = join(dir, 'admin.json')
   const uploads = join(dir, 'uploads')
   const backups = join(dir, 'backups')
-  mkdirSync(uploads, { recursive: true })
-  mkdirSync(backups, { recursive: true })
+  // With GITHUB_REPO and GITHUB_TOKEN set, saves go to the repository instead of this machine's disk.
+  const remote = !!(process.env.GITHUB_TOKEN && process.env.GITHUB_REPO)
+  // On Vercel there is no disk to save to, so without those two settings nothing can be stored.
+  const stuck = !!process.env.VERCEL && !remote
+  if (!remote && !stuck) {
+    mkdirSync(uploads, { recursive: true })
+    mkdirSync(backups, { recursive: true })
+  }
 
   /* ---------- content ---------- */
   let cache = { time: 0, data: null }
@@ -147,6 +167,8 @@ export function createSite(root) {
   const secret = () => {
     const a = admin()
     if (a.secret) return a.secret
+    // An account set through the host's settings has no file to keep a secret in.
+    if (fromEnv()) return process.env.ADMIN_SECRET || createHmac('sha256', process.env.ADMIN_PASSWORD).update(`aknova-session:${tidy(process.env.ADMIN_EMAIL)}`).digest('hex')
     a.secret = randomBytes(32).toString('hex')
     saveAdmin(a)
     return a.secret
@@ -220,12 +242,12 @@ export function createSite(root) {
       })
       .sort((a, b) => b.time - a.time)
   }
-  function safeName(raw) {
+  function safeName(raw, taken) {
     const ext = extname(raw).toLowerCase()
     if (!UPLOADS.includes(ext)) return null
     const stem = basename(raw, extname(raw)).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'file'
     let name = stem + ext
-    for (let n = 2; existsSync(join(uploads, name)); n++) name = `${stem}-${n}${ext}`
+    for (let n = 2; taken.includes(name); n++) name = `${stem}-${n}${ext}`
     return name
   }
   function upload(req, name) {
@@ -261,6 +283,35 @@ export function createSite(root) {
     })
   }
 
+  /* ---------- where things are kept: this machine's disk, or the GitHub repository ---------- */
+  const local = {
+    read: async () => read(),
+    write: async (data) => write(data),
+    backups: async () =>
+      readdirSync(backups)
+        .filter((f) => f.endsWith('.json'))
+        .sort()
+        .reverse()
+        .map((name) => ({ name, time: statSync(join(backups, name)).mtimeMs })),
+    restore: async (name) => {
+      const from = join(backups, basename(String(name)))
+      return existsSync(from) ? JSON.parse(readFileSync(from, 'utf8')) : null
+    },
+    media: async () => mediaList(),
+    taken: async () => readdirSync(uploads),
+    upload: (name, _buffer, req) => upload(req, name),
+    remove: async (name) => {
+      if (!existsSync(join(uploads, name))) return false
+      unlinkSync(join(uploads, name))
+      return true
+    },
+  }
+  const store = remote
+    ? githubStore({ token: process.env.GITHUB_TOKEN, repo: process.env.GITHUB_REPO, branch: process.env.GITHUB_BRANCH || 'main', dir: process.env.GITHUB_DIR || '', allowed: UPLOADS, types: TYPES })
+    : local
+  const maxUpload = remote ? MAX_REMOTE_UPLOAD : MAX_UPLOAD
+  const mb = (n) => `${Math.round(n / 1048576)} MB`
+
   /* ---------- the API the admin panel talks to ---------- */
   async function api(req, res) {
     const url = new URL(req.url, 'http://site')
@@ -268,9 +319,10 @@ export function createSite(root) {
     if (!path.startsWith('/api/')) return false
     const is = (method, p) => req.method === method && path === p
     try {
-      if (is('GET', '/api/content')) return json(res, 200, read()), true
+      if (is('GET', '/api/admin/me')) return json(res, 200, { stuck, remote, maxUpload, hasPassword: hasPassword(), needsEmail: hasPassword() && !adminEmail(), canSetup: !hasPassword() && isLocal(req), signedIn: hasPassword() && signedIn(req), email: hasPassword() && signedIn(req) ? adminEmail() : undefined, fixed: fromEnv() }), true
 
-      if (is('GET', '/api/admin/me')) return json(res, 200, { hasPassword: hasPassword(), needsEmail: hasPassword() && !adminEmail(), canSetup: !hasPassword() && isLocal(req), signedIn: hasPassword() && signedIn(req), email: hasPassword() && signedIn(req) ? adminEmail() : undefined, fixed: fromEnv() }), true
+      if (stuck) return fail(res, 503, 'This host has nowhere to save. Add GITHUB_REPO and GITHUB_TOKEN in its settings, then redeploy.'), true
+      if (is('GET', '/api/content')) return json(res, 200, await store.read()), true
 
       // Anything that changes something must come from the admin panel itself, not another website.
       if (req.method !== 'GET' && req.headers['x-admin'] !== '1') return fail(res, 403, 'This request did not come from the admin panel.'), true
@@ -293,7 +345,7 @@ export function createSite(root) {
           await new Promise((r) => setTimeout(r, 600))
           return fail(res, 401, 'The email or password is not right.'), true
         }
-        if (!adminEmail()) saveAdmin({ ...admin(), email: tidy(email) })
+        if (!adminEmail() && !fromEnv()) saveAdmin({ ...admin(), email: tidy(email) })
         tries.delete(who(req))
         cookie(req, res, Math.floor(Date.now() / 1000) + WEEK)
         return json(res, 200, { ok: true }), true
@@ -323,42 +375,40 @@ export function createSite(root) {
       if (is('PUT', '/api/content')) {
         const data = await readJson(req)
         if (!looksRight(data)) return fail(res, 400, 'That does not look like the site content, so nothing was saved.'), true
-        write(data)
+        await store.write(data)
         return json(res, 200, { ok: true }), true
       }
-      if (is('GET', '/api/backups')) {
-        const list = readdirSync(backups).filter((f) => f.endsWith('.json')).sort().reverse()
-        return json(res, 200, list.map((name) => ({ name, time: statSync(join(backups, name)).mtimeMs }))), true
-      }
+      if (is('GET', '/api/backups')) return json(res, 200, await store.backups()), true
       if (is('POST', '/api/backups/restore')) {
         const { name } = await readJson(req)
-        const from = join(backups, basename(String(name)))
-        if (!existsSync(from)) return fail(res, 404, 'That saved version no longer exists.'), true
-        const data = JSON.parse(readFileSync(from, 'utf8'))
+        const data = await store.restore(name)
+        if (!data) return fail(res, 404, 'That saved version no longer exists.'), true
         if (!looksRight(data)) return fail(res, 400, 'That saved version is damaged.'), true
-        write(data)
+        await store.write(data, 'Restore an earlier version from the admin panel')
         return json(res, 200, data), true
       }
 
-      if (is('GET', '/api/media')) return json(res, 200, mediaList()), true
+      if (is('GET', '/api/media')) return json(res, 200, await store.media()), true
       if (is('POST', '/api/media')) {
-        const name = safeName(url.searchParams.get('name') || '')
+        const name = safeName(url.searchParams.get('name') || '', await store.taken())
         if (!name) return fail(res, 400, `That kind of file cannot be uploaded. Use ${UPLOADS.join(', ')}.`), true
         try {
-          await upload(req, name)
+          await store.upload(name, remote ? await readBody(req, maxUpload) : null, req)
         } catch (e) {
-          return fail(res, e.message === 'too large' ? 413 : 400, e.message === 'too large' ? 'That file is larger than 300 MB.' : 'The upload did not finish. Try again.'), true
+          if (e instanceof StoreError) throw e
+          return fail(res, e.message === 'too large' ? 413 : 400, e.message === 'too large' ? `That file is larger than ${mb(maxUpload)}.` : 'The upload did not finish. Try again.'), true
         }
-        return json(res, 200, mediaList().find((m) => m.name === name)), true
+        const all = await store.media()
+        return json(res, 200, all.find((m) => m.name === name) || { name, url: `/uploads/${name}`, size: 0, time: Date.now(), type: (TYPES[extname(name)] || '').split('/')[0] }), true
       }
       if (is('DELETE', '/api/media')) {
         const name = basename(url.searchParams.get('name') || '')
-        if (!name || !existsSync(join(uploads, name))) return fail(res, 404, 'That file is not in the library.'), true
-        unlinkSync(join(uploads, name))
+        if (!name || !(await store.remove(name))) return fail(res, 404, 'That file is not in the library.'), true
         return json(res, 200, { ok: true }), true
       }
       return fail(res, 404, 'Not found.'), true
     } catch (e) {
+      if (e instanceof StoreError) return fail(res, 502, e.message), true
       const big = e.message === 'too large'
       return fail(res, big ? 413 : e instanceof SyntaxError ? 400 : 500, big ? 'That is too much to save at once.' : e instanceof SyntaxError ? 'The request could not be read.' : 'Something went wrong on the server.'), true
     }
@@ -418,5 +468,29 @@ export function createSite(root) {
     return { html, missing: !!seoFor(route).missing && !isAdmin }
   }
 
-  return { api, files, page, read, dir }
+  // On a host with no disk, a file uploaded since the last rebuild is fetched from the repository.
+  async function remoteFile(req, res) {
+    const path = decodeURIComponent(new URL(req.url, 'http://site').pathname)
+    if (!remote || !path.startsWith('/uploads/') || (req.method !== 'GET' && req.method !== 'HEAD')) return false
+    const name = basename(path)
+    const ext = extname(name).toLowerCase()
+    let buffer = null
+    try {
+      if (UPLOADS.includes(ext)) buffer = await store.file(name)
+    } catch {
+      buffer = null
+    }
+    if (!buffer) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' })
+      res.end('Not found')
+      return true
+    }
+    const headers = { 'Content-Type': TYPES[ext], 'Content-Length': buffer.length, 'Cache-Control': 'public, max-age=300', 'X-Content-Type-Options': 'nosniff' }
+    if (ext === '.svg') headers['Content-Security-Policy'] = "default-src 'none'; style-src 'unsafe-inline'; sandbox"
+    res.writeHead(200, headers)
+    res.end(req.method === 'HEAD' ? undefined : buffer)
+    return true
+  }
+
+  return { api, files, remoteFile, page, read, dir }
 }

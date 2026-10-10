@@ -97,3 +97,4 @@ temp/
 *.pfx
 
 content/admin.json
+content/backups/

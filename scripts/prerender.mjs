@@ -1,7 +1,7 @@
 // Runs after `vite build`. Only matters if the site is put on plain file hosting with no server:
 // it writes one real HTML file per page, plus sitemap.xml, robots.txt and llms.txt, from the
 // content as it is right now. With `npm start` the server makes all of these fresh on every visit.
-import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createSite } from '../server/core.mjs'
@@ -14,7 +14,7 @@ const dist = join(root, 'dist')
 copyFileSync(join(dist, 'index.html'), join(dist, '_template.html'))
 const template = readFileSync(join(dist, '_template.html'), 'utf8')
 const site = createSite(root)
-const page = (route) => site.page(template, route, { inline: false }).html
+const page = (route) => site.page(template, route).html
 
 setContent(site.read())
 const all = routes()
@@ -25,6 +25,10 @@ for (const route of all) {
 }
 // Unknown addresses get the app shell with a noindex tag.
 writeFileSync(join(dist, '404.html'), page('/404'))
+// The admin panel's own page, and every uploaded photo and video.
+mkdirSync(join(dist, 'admin'), { recursive: true })
+writeFileSync(join(dist, 'admin', 'index.html'), page('/admin'))
+if (existsSync(join(site.dir, 'uploads'))) cpSync(join(site.dir, 'uploads'), join(dist, 'uploads'), { recursive: true })
 
 writeFileSync(join(dist, 'sitemap.xml'), sitemapXml(new Date().toISOString().slice(0, 10)))
 writeFileSync(join(dist, 'robots.txt'), robotsTxt())

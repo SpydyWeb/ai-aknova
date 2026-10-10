@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api?__path=:path*" },
+    { "source": "/uploads/:name", "destination": "/api?__path=uploads/:name" }
+  ]
+}

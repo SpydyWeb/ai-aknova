@@ -49,7 +49,16 @@ function Gate({ me, onDone }) {
       <form className="adm-card" onSubmit={submit}>
         <img src={logo} alt="Aknova Tech" width="682" height="76" />
         <h1>{creating ? 'Create your admin account' : 'Sign in to the admin panel'}</h1>
-        {creating && !me.canSetup ? (
+        {me.stuck ? (
+          <div className="adm-help">
+            <p>This host has no disk, so the admin panel saves into your GitHub repository instead. Add these in the host&rsquo;s settings under Environment Variables, then redeploy:</p>
+            <ul className="adm-steps">
+              <li><code>GITHUB_REPO</code> the repository, written as owner/name</li>
+              <li><code>GITHUB_TOKEN</code> a GitHub fine-grained token with &ldquo;Contents: read and write&rdquo; on that repository</li>
+              <li><code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> what you will sign in with</li>
+            </ul>
+          </div>
+        ) : creating && !me.canSetup ? (
           <p className="adm-help">
             No admin account exists yet. For safety it can only be created on the computer the site runs on. Either create it there and upload the <code>content</code> folder, or set <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> in the server&rsquo;s settings and reload this page.
           </p>
@@ -447,13 +456,13 @@ function Account({ me, onSignOut, onRestore, dirty }) {
 
       <div className="adm-panel">
         <h2>Earlier versions</h2>
-        <p className="adm-help">Each time you save, the version before it is kept here (the last 30). Restoring one replaces everything on the site with that version; photos and videos are not affected.</p>
+        <p className="adm-help">{me.remote ? 'Every save is kept in your GitHub repository; these are the last 30 before the current one.' : 'Each time you save, the version before it is kept here (the last 30).'} Restoring one replaces everything on the site with that version; photos and videos are not affected.</p>
         {dirty && <p className="adm-error">Save or discard your current changes before restoring.</p>}
         {!backups.length && <p className="adm-empty">No earlier versions yet. The first one appears after your next save.</p>}
         <ul className="adm-backups">
           {backups.map((b) => (
             <li key={b.name}>
-              <span>Saved over on {when(b.time)}</span>
+              <span>{me.remote ? 'Saved on' : 'Saved over on'} {when(b.time)}</span>
               {!dirty && (
                 <Danger
                   label="Restore"
@@ -543,12 +552,12 @@ function Panel({ me, onSignOut }) {
     try {
       await api.save(doc)
       setSaved(doc)
-      setState({ kind: 'saved', text: 'Saved. The website now shows this version.' })
+      setState({ kind: 'saved', text: me.remote ? 'Saved. The live website updates in about a minute.' : 'Saved. The website now shows this version.' })
     } catch (e) {
       if (e.status === 401) return onSignOut(true)
       setState({ kind: 'error', text: e.message })
     }
-  }, [doc, dirty, problems, onSignOut])
+  }, [doc, dirty, problems, onSignOut, me.remote])
 
   useEffect(() => {
     const key = (e) => {
@@ -571,7 +580,7 @@ function Panel({ me, onSignOut }) {
     picker.resolve(url || null)
     setPicker(null)
   }
-  const ctx = useMemo(() => ({ doc: doc || {}, pickMedia }), [doc, pickMedia])
+  const ctx = useMemo(() => ({ doc: doc || {}, pickMedia, me }), [doc, pickMedia, me])
 
   if (!doc)
     return (
@@ -654,7 +663,7 @@ function Panel({ me, onSignOut }) {
             )}
             {view === 'media' && (
               <div className="adm-panel">
-                <p className="adm-help">Everything you upload is kept here and can be used anywhere on the site. Files are stored in the site&rsquo;s own content folder.</p>
+                <p className="adm-help">Everything you upload is kept here and can be used anywhere on the site. {me.remote ? 'Files are stored in your GitHub repository, in content/uploads.' : 'Files are stored in the site\u2019s own content folder.'}</p>
                 <MediaLibrary />
               </div>
             )}
