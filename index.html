@@ -13,9 +13,21 @@
       href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Unbounded:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <!-- Shown for the moment before the styles and fonts arrive, so nothing appears half-dressed. -->
+    <style>
+      html { background: #f3f6ff; }
+      body { margin: 0; }
+      .prerender { position: absolute; opacity: 0; pointer-events: none; }
+      #boot { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; background: #f3f6ff; }
+      #boot i { width: 46px; height: 46px; background: #ffc933; border: 3px solid #0b0e14; border-radius: 12px; box-shadow: 5px 5px 0 #0b0e14; animation: boot 0.9s cubic-bezier(0.6, 0, 0.4, 1) infinite alternate; }
+      @keyframes boot { to { transform: translateY(-16px) rotate(90deg); background: #1463ff; } }
+      @media (prefers-reduced-motion: reduce) { #boot i { animation: none; } }
+    </style>
+    <noscript><style>.prerender { position: static; opacity: 1; pointer-events: auto; } #boot { display: none; }</style></noscript>
   </head>
   <body>
     <div id="root"></div>
+    <div id="boot" aria-hidden="true"><i></i></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

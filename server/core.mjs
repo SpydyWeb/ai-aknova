@@ -390,6 +390,21 @@ export function createSite(root) {
   }
 
   /* ---------- a full page: its own title, description, structured data and readable text ---------- */
+  // The stylesheet for the site (or the admin panel) goes in the page itself, so the browser has
+  // it before it draws anything. Otherwise it would only arrive after the script that asks for it.
+  let sheets = null
+  function sheet(name) {
+    if (!sheets) {
+      try {
+        sheets = readdirSync(join(root, 'dist', 'assets')).filter((f) => f.endsWith('.css'))
+      } catch {
+        sheets = []
+      }
+    }
+    const found = sheets.find((f) => f.startsWith(`${name}-`))
+    return found ? `<link rel="stylesheet" crossorigin href="/assets/${found}" />\n    ` : ''
+  }
+
   function page(template, route, { inline = true } = {}) {
     const data = read()
     setContent(data)
@@ -398,7 +413,7 @@ export function createSite(root) {
     const html = template
       .replace(/<title>[\s\S]*?<\/title>\s*/, '')
       .replace(/<meta name="description"[^>]*>\s*/, '')
-      .replace('</head>', () => `  ${isAdmin ? '<title>Admin panel</title>\n    <meta name="robots" content="noindex, nofollow" />' : headTags(route)}${boot}\n  </head>`)
+      .replace('</head>', () => `  ${sheet(isAdmin ? 'Admin' : 'App')}${isAdmin ? '<title>Admin panel</title>\n    <meta name="robots" content="noindex, nofollow" />' : headTags(route)}${boot}\n  </head>`)
       .replace('<div id="root"></div>', () => `<div id="root">${isAdmin ? '' : bodyHtml(route)}</div>`)
     return { html, missing: !!seoFor(route).missing && !isAdmin }
   }

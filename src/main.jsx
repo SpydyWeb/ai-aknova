@@ -16,12 +16,30 @@ async function content() {
   return snapshot
 }
 
+// The headline and text fonts, so the first thing painted is already in the right type.
+// Waits at most a second and a half: on a bad connection the page still opens.
+function fonts() {
+  if (!document.fonts?.load) return Promise.resolve()
+  const wanted = ["800 1em 'Unbounded'", "700 1em 'Unbounded'", "500 1em 'Instrument Sans'", "700 1em 'Instrument Sans'"]
+  const loaded = Promise.all(wanted.map((f) => document.fonts.load(f))).catch(() => {})
+  return Promise.race([loaded, new Promise((r) => setTimeout(r, 1500))])
+}
+
 async function start() {
-  setContent(await content())
   const admin = window.location.pathname.replace(/\/+$/, '') === '/admin'
+  // Fonts are fetched alongside everything else, and the page is drawn once all of it is in.
+  const type = fonts()
+  // The content must be in place before any component file is read, so this order matters.
+  setContent(await content())
   let App
   if (admin) App = (await import('./admin/Admin.jsx')).default
   else App = (await import('./App.jsx')).default
+  await type
   createRoot(document.getElementById('root')).render(<App />)
+  // Lift the cover just after the first paint. The timer covers tabs opened in the background,
+  // where the browser holds animation frames back.
+  const lift = () => document.getElementById('boot')?.remove()
+  requestAnimationFrame(() => requestAnimationFrame(lift))
+  setTimeout(lift, 250)
 }
 start()
