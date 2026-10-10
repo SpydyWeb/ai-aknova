@@ -2,14 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { BallCollider, CuboidCollider, CylinderCollider, Physics, RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
-import { C } from '../data.js'
+import { TOY as C } from '../data.js'
 import { Ball, MODELS } from './models.jsx'
 import { play } from '../sound.js'
+import Studio from './Studio.jsx'
 
 const FOV = 35
 const HALF_PI = Math.PI / 2
 
 const COLLIDERS = {
+  'Aknova Tech': <CuboidCollider args={[1.55, 0.85, 0.26]} />,
   'Web development': <CuboidCollider args={[1.15, 0.8, 0.18]} />,
   'Mobile app development': <CuboidCollider args={[0.525, 1, 0.13]} />,
   'AI automation': (
@@ -43,8 +45,8 @@ const TOYS = [
     const Model = MODELS[name]
     return [name, <><Model />{COLLIDERS[name]}</>]
   }),
-  [null, <><Ball r={0.5} color={C.mint} /><BallCollider args={[0.5]} /></>],
-  [null, <><Ball r={0.34} color={C.grape} /><BallCollider args={[0.34]} /></>],
+  [null, <><Ball r={0.5} color={C.sky} /><BallCollider args={[0.5]} /></>],
+  [null, <><Ball r={0.34} color={C.navy} /><BallCollider args={[0.34]} /></>],
 ]
 
 function useWorld() {
@@ -196,14 +198,14 @@ export default function Playground({ active, onPop, shake }) {
   return (
     <Canvas
       flat
+      shadows
       dpr={[1, 2]}
       frameloop={active ? 'always' : 'never'}
       camera={{ fov: FOV, position: [0, 0, 15] }}
       gl={{ antialias: true, alpha: true }}
       style={{ touchAction: 'pan-y' }}
     >
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[4, 6, 8]} intensity={1.9} />
+      <Studio wall={-0.9} sway={0.35} />
       <Physics gravity={[0, -28, 0]} paused={!active}>
         <Scene onPop={onPop} shake={shake} />
       </Physics>

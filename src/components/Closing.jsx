@@ -4,6 +4,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { EMAIL, SERVICES } from '../data.js'
 import { MLink, press } from '../ui.jsx'
 import { MODELS } from './models.jsx'
+import Studio from './Studio.jsx'
 
 const TEXT = 'Got something to build?'
 const TAU = Math.PI * 2
@@ -51,8 +52,7 @@ export default function Closing() {
       {!reduce && (
         <div className="closing-canvas" aria-hidden="true">
           <Canvas flat dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 13] }} gl={{ alpha: true }}>
-            <ambientLight intensity={1.1} />
-            <directionalLight position={[4, 6, 8]} intensity={1.9} />
+            <Studio sway={0.7} />
             <Orbit />
           </Canvas>
         </div>
@@ -73,7 +73,7 @@ export default function Closing() {
         ))}
       </h2>
       <div className="closing-actions">
-        <MLink className="btn btn-tangerine" to="/contact" {...press}>
+        <MLink className="btn btn-blue" to="/contact" {...press}>
           Start a project
         </MLink>
         <motion.a className="btn btn-paper" href={`mailto:${EMAIL}`} {...press}>

@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, PresentationControls } from '@react-three/drei'
 import { useInView } from 'framer-motion'
 import { MODELS } from './models.jsx'
+import Studio from './Studio.jsx'
 
 function Model({ name }) {
   const g = useRef(null)
@@ -41,14 +42,14 @@ export default function ModelStage({ name, spot = 'sun', className = '' }) {
       <span className={`spot bg-${spot}`} />
       <Canvas
         flat
+        shadows
         dpr={[1, 2]}
         frameloop={inView ? 'always' : 'never'}
         camera={{ fov: 35, position: [0, 0, 7.5] }}
         gl={{ alpha: true }}
         style={{ touchAction: 'pan-y' }}
       >
-        <ambientLight intensity={1.1} />
-        <directionalLight position={[4, 6, 8]} intensity={1.9} />
+        <Studio wall={-1.8} sway={0.3} />
         <PresentationControls snap polar={[-0.6, 0.6]} azimuth={[-1.2, 1.2]} cursor>
           <Float speed={2.2} rotationIntensity={0.5} floatIntensity={0.9}>
             <Model name={name} />

@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 
 export const press = { whileHover: { x: -2, y: -2 }, whileTap: { x: 4, y: 4 } }
 export const MLink = motion.create(Link)
-export const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+export { slug } from './seo.js'
 
 // The order is shared across pages: add a service anywhere, send it from the till or the contact form.
 const Order = createContext(null)
 export function OrderProvider({ children }) {
   const [picked, setPicked] = useState([])
   const toggle = (s) => setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
-  return <Order.Provider value={{ picked, toggle }}>{children}</Order.Provider>
+  const addMany = (list) => setPicked((p) => [...new Set([...p, ...list])])
+  return <Order.Provider value={{ picked, toggle, addMany }}>{children}</Order.Provider>
 }
 export const useOrder = () => useContext(Order)

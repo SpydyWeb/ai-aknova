@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { REASONS } from '../data.js'
+import { REASONS, VIDEOS } from '../data.js'
+import Clip from './Clip.jsx'
 
 const soft = { stiffness: 260, damping: 20 }
 
-function Card({ title, text, color }) {
+function Card({ title, text, color, video }) {
   const [flipped, setFlipped] = useState(false)
   const rx = useSpring(useMotionValue(0), soft)
   const ry = useSpring(useMotionValue(0), soft)
@@ -33,7 +34,8 @@ function Card({ title, text, color }) {
       style={{ rotateX: rx, rotateY: ry }}
     >
       <motion.span className="why-inner" animate={{ rotateY: flipped ? 180 : 0 }} transition={{ type: 'spring', ...soft }}>
-        <span className={`why-face bg-${color} ${color === 'grape' ? 'on-dark' : ''}`}>
+        <span className={`why-face bg-${color}`}>
+          <Clip file={video} label={`Video: ${title}`} />
           <strong>{title}</strong>
         </span>
         <span className="why-face why-back">{text}</span>
@@ -48,8 +50,8 @@ export default function Why() {
       <h2>Why work with us</h2>
       <p>Tap a card to turn it over.</p>
       <div className="why-grid">
-        {REASONS.map(([title, text, color]) => (
-          <Card key={title} title={title} text={text} color={color} />
+        {REASONS.map(([title, text, color], i) => (
+          <Card key={title} title={title} text={text} color={color} video={VIDEOS.why[i]} />
         ))}
       </div>
     </section>

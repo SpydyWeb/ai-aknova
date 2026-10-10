@@ -6,8 +6,10 @@ import Work from '../components/Work.jsx'
 import BuildStory from '../components/BuildStory.jsx'
 import Process from '../components/Process.jsx'
 import Why from '../components/Why.jsx'
+import Pricing from '../components/Pricing.jsx'
 import Voices from '../components/Voices.jsx'
 import Till from '../components/Till.jsx'
+import BlogCards from '../components/BlogCards.jsx'
 import Faq from '../components/Faq.jsx'
 
 export default function Home() {
@@ -20,8 +22,10 @@ export default function Home() {
       <Work />
       {reduce ? <Process /> : <BuildStory />}
       <Why />
+      <Pricing />
       <Voices />
       <Till />
+      <BlogCards />
       <Faq />
     </>
   )

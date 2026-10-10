@@ -6,11 +6,11 @@ const Playground = lazy(() => import('./Playground.jsx'))
 
 const WORDS = [
   ['websites', 'sun'],
-  ['mobile apps', 'mint'],
-  ['AI automations', 'grape'],
-  ['campaigns', 'tangerine'],
+  ['mobile apps', 'sky'],
+  ['AI automations', 'navy'],
+  ['campaigns', 'blue'],
   ['CRM systems', 'sun'],
-  ['POS systems', 'mint'],
+  ['POS systems', 'sky'],
 ]
 import { MLink, press } from '../ui.jsx'
 
@@ -91,11 +91,11 @@ export default function Hero() {
 
         <div className="hero-sub">
           <p className="lede">
-            Anova AI is one team for design, development and marketing. Ten services, from your first website to the
+            Aknova Tech is one team for design, development and marketing. Ten services, from your first website to the
             software that runs your shop.
           </p>
           <div className="hero-actions">
-            <MLink className="btn btn-tangerine" to="/contact" {...press}>
+            <MLink className="btn btn-blue" to="/contact" {...press}>
               Start a project
             </MLink>
             <MLink className="btn btn-paper" to="/work" {...press}>

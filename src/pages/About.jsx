@@ -7,10 +7,10 @@ export default function About() {
   return (
     <>
       <PageHero
-        tone="mint"
+        tone="sky"
         title="One team for the whole job"
-        text="Anova AI is a service company. We design, build and market digital products, and set up the software that runs a business day to day."
-        models={['AI automation', 'CRM systems', 'Social media marketing', 'UI/UX design', 'POS systems']}
+        text="Aknova Tech is a service company. We design, build and market digital products, and set up the software that runs a business day to day."
+        models={['Aknova Tech', 'AI automation', 'CRM systems', 'Social media marketing', 'UI/UX design', 'POS systems']}
       />
       {/* Draft copy: replace with your own story, founding year, team and location. */}
       <section className="story">

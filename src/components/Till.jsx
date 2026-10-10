@@ -78,8 +78,8 @@ export default function Till() {
                   data-sound="key"
                   aria-pressed={on}
                   onClick={() => toggle(s)}
-                  animate={{ y: on ? 5 : 0, boxShadow: on ? '0 2px 0 #17130E' : '0 7px 0 #17130E' }}
-                  whileTap={{ y: 7, boxShadow: '0 0px 0 #17130E' }}
+                  animate={{ y: on ? 5 : 0, boxShadow: on ? '0 2px 0 #0B0E14' : '0 7px 0 #0B0E14' }}
+                  whileTap={{ y: 7, boxShadow: '0 0px 0 #0B0E14' }}
                   transition={{ type: 'spring', stiffness: 700, damping: 30 }}
                 >
                   {s}
@@ -93,7 +93,7 @@ export default function Till() {
       <div className="printer">
         <div className="slot" />
         <div className="paper" ref={paper}>
-          <h3>Anova AI</h3>
+          <h3>Aknova Tech</h3>
           <p className="date">{today}</p>
           <hr />
           <ul aria-live="polite">

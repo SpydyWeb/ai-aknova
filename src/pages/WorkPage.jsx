@@ -4,8 +4,8 @@ import PageHero from '../components/PageHero.jsx'
 import { PROJECTS } from '../data.js'
 import { press } from '../ui.jsx'
 
-const SKINS = ['sun', 'tangerine', 'paper', 'mint']
-const BLOCK = ['grape', 'ink', 'tangerine', 'grape']
+const SKINS = ['sun', 'blue', 'paper', 'sky']
+const BLOCK = ['navy', 'ink', 'blue', 'navy']
 const GROUPS = {
   All: () => true,
   Websites: (t) => /web|ui/i.test(t),
@@ -29,7 +29,7 @@ export default function WorkPage() {
   return (
     <>
       <PageHero
-        tone="grape"
+        tone="navy"
         title="Ten projects we're proud of"
         text="Filter by the kind of work, then tap a project to open it."
         models={['Web development', 'Mobile app development', 'Social media marketing', 'UI/UX design', 'CRM systems']}

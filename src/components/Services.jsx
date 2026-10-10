@@ -5,7 +5,7 @@ import { SERVICE_INFO } from '../data.js'
 import { MLink, press, slug, useOrder } from '../ui.jsx'
 import ModelStage from './ModelStage.jsx'
 
-const SPOT = ['sun', 'mint', 'grape', 'tangerine']
+const SPOT = ['sun', 'sky', 'navy', 'blue']
 
 export default function Services() {
   const { picked, toggle } = useOrder()

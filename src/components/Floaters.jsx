@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import { useInView } from 'framer-motion'
 import { MODELS } from './models.jsx'
+import Studio from './Studio.jsx'
 
 // Centre first, then the four corners.
 const SPOTS = [
@@ -77,14 +78,14 @@ export default function Floaters({ names }) {
     <div className="floaters" ref={box} data-cursor="Spin">
       <Canvas
         flat
+        shadows
         dpr={[1, 2]}
         frameloop={inView ? 'always' : 'never'}
         camera={{ fov: 35, position: [0, 0, 9] }}
         gl={{ alpha: true }}
         style={{ touchAction: 'pan-y' }}
       >
-        <ambientLight intensity={1.1} />
-        <directionalLight position={[4, 6, 8]} intensity={1.9} />
+        <Studio wall={-2.4} sway={0.5} />
         <Cluster names={names} />
       </Canvas>
     </div>

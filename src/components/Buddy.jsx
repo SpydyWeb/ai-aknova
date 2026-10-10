@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { C } from '../data.js'
+import { TOY as C } from '../data.js'
 import { Ink, Mat } from './models.jsx'
+import Studio from './Studio.jsx'
 
 const TIPS = [
   ['Spin a 3D model.', '/services'],
@@ -45,7 +46,7 @@ function Bot({ nudge }) {
 
   return (
     <group ref={g}>
-      <RoundedBox args={[1.4, 1.15, 1.1]} radius={0.2}><Mat color={C.mint} /><Ink /></RoundedBox>
+      <RoundedBox smoothness={8} args={[1.4, 1.15, 1.1]} radius={0.2}><Mat color={C.sky} /><Ink /></RoundedBox>
       {[-0.32, 0.32].map((x, i) => (
         <mesh key={x} ref={(m) => (eyes.current[i] = m)} position={[x, 0.1, 0.56]}>
           <sphereGeometry args={[0.14, 20, 20]} />
@@ -97,8 +98,7 @@ export default function Buddy() {
       </AnimatePresence>
       <button type="button" aria-label="Show me something to play with" data-cursor="Tap" onClick={go}>
         <Canvas flat dpr={[1, 2]} camera={{ fov: 35, position: [0, 0, 4.6] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-          <ambientLight intensity={1.1} />
-          <directionalLight position={[4, 6, 8]} intensity={1.9} />
+          <Studio />
           <Bot nudge={n} />
         </Canvas>
       </button>

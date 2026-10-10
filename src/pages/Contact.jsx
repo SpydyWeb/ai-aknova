@@ -6,10 +6,11 @@ import Till from '../components/Till.jsx'
 import Faq from '../components/Faq.jsx'
 import Tilt from '../components/Tilt.jsx'
 import { Envelope } from '../components/models.jsx'
-import { EMAIL } from '../data.js'
+import { CONTACT, EMAIL } from '../data.js'
 import { canSend, openEmailApp, send, validEmail } from '../send.js'
 import { play } from '../sound.js'
 import { press, useOrder } from '../ui.jsx'
+import Studio from '../components/Studio.jsx'
 
 // Sits and bobs; when a message is sent it flies off, then a fresh one pops back.
 function Letter({ sent }) {
@@ -168,7 +169,7 @@ export default function Contact() {
                   </div>
                 )}
 
-                <motion.button type="submit" className="btn btn-tangerine" disabled={state === 'sending'} {...press}>
+                <motion.button type="submit" className="btn btn-blue" disabled={state === 'sending'} {...press}>
                   {state === 'sending' ? 'Sending' : 'Send message'}
                 </motion.button>
                 <p className="status" role="status">
@@ -183,14 +184,18 @@ export default function Contact() {
           {!reduce && (
             <div className="letter" aria-hidden="true">
               <Canvas flat dpr={[1, 2]} camera={{ fov: 35, position: [0, 0, 7] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-                <ambientLight intensity={1.1} />
-                <directionalLight position={[4, 6, 8]} intensity={1.9} />
+                <Studio />
                 <Letter sent={flown} />
               </Canvas>
             </div>
           )}
-          {/* Placeholders: replace with your real contact details. */}
           <dl>
+            <div>
+              <dt>Phone</dt>
+              <dd>
+                <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a>
+              </dd>
+            </div>
             <div>
               <dt>Email</dt>
               <dd>
@@ -198,16 +203,8 @@ export default function Contact() {
               </dd>
             </div>
             <div>
-              <dt>Phone</dt>
-              <dd>Your phone number</dd>
-            </div>
-            <div>
               <dt>Office</dt>
-              <dd>Your office address</dd>
-            </div>
-            <div>
-              <dt>Hours</dt>
-              <dd>Your working hours</dd>
+              <dd>{CONTACT.address}</dd>
             </div>
           </dl>
         </Tilt>

@@ -7,7 +7,7 @@ import { STEPS } from '../data.js'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
 
-const SKIN = ['sun', 'paper', 'tangerine', 'grape']
+const SKIN = ['sun', 'paper', 'blue', 'navy']
 
 export default function Process() {
   const reduce = useReducedMotion()

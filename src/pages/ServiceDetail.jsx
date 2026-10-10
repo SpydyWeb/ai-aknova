@@ -5,7 +5,7 @@ import NotFound from './NotFound.jsx'
 import { SERVICE_INFO, STEPS } from '../data.js'
 import { MLink, press, slug, useOrder } from '../ui.jsx'
 
-const SPOT = ['sun', 'mint', 'grape', 'tangerine']
+const SPOT = ['sun', 'sky', 'navy', 'blue']
 
 export default function ServiceDetail() {
   const { id } = useParams()
@@ -37,7 +37,7 @@ export default function ServiceDetail() {
             <motion.button type="button" className={`btn ${on ? 'btn-ink' : 'btn-sun'}`} onClick={() => toggle(s.name)} {...press}>
               {on ? 'Remove from order' : 'Add to order'}
             </motion.button>
-            <MLink className="btn btn-tangerine" to="/contact" {...press}>
+            <MLink className="btn btn-blue" to="/contact" {...press}>
               Start a project
             </MLink>
           </div>

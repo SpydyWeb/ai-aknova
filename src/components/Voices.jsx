@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { VOICES } from '../data.js'
 
 const TILT = [-5, 3, -2, 6, -4, 2]
-const SKIN = ['paper', 'mint', 'paper', 'tangerine', 'paper', 'grape']
+const SKIN = ['paper', 'sky', 'paper', 'blue', 'paper', 'navy']
 
 export default function Voices() {
   const board = useRef(null)
@@ -18,7 +18,7 @@ export default function Voices() {
         {VOICES.map((v, i) => (
           <motion.figure
             key={v.id}
-            className={`note bg-${SKIN[i]} ${SKIN[i] === 'grape' ? 'on-dark' : ''}`}
+            className={`note bg-${SKIN[i]} ${SKIN[i] === 'navy' ? 'on-dark' : ''}`}
             data-cursor="Drag"
             style={{ zIndex: order.indexOf(v.id) + 1, rotate: TILT[i] }}
             drag

@@ -3,9 +3,10 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import * as THREE from 'three'
-import { C, STEPS } from '../data.js'
+import { TOY as C, STEPS } from '../data.js'
 import { play } from '../sound.js'
-import { bands, Coin, Heart, Ink, Mat, Phone, Robot } from './models.jsx'
+import { Coin, Heart, Ink, Mat, Phone, Robot } from './models.jsx'
+import Studio from './Studio.jsx'
 
 const TAU = Math.PI * 2
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
@@ -14,7 +15,7 @@ const span = (p, a, b) => {
   const t = clamp((p - a) / (b - a))
   return t * t * (3 - 2 * t)
 }
-const CONFETTI = [C.sun, C.tangerine, C.grape, '#ffffff']
+const CONFETTI = [C.sun, C.blue, C.navy, '#ffffff']
 
 // One piece of the build: it flies in from `from` and grows while the scroll passes a..b.
 function Part({ p, a, b, pos, from = [0, 0, 0], spin = 0, children }) {
@@ -94,17 +95,16 @@ function Scene({ p }) {
 
   return (
     <>
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[4, 6, 8]} intensity={1.9} />
+      <Studio wall={-1.4} sway={0.5} />
       <group ref={g}>
         {/* Brief: an empty window arrives. */}
         <Part p={p} a={0.02} b={0.14} pos={[0, 0, 0]} spin={-0.6}>
-          <RoundedBox args={[4.4, 3, 0.34]} radius={0.16}><Mat color={C.grape} /><Ink /></RoundedBox>
+          <RoundedBox args={[4.4, 3, 0.34]} radius={0.16}><Mat color={C.navy} /><Ink /></RoundedBox>
         </Part>
         <Part p={p} a={0.1} b={0.2} pos={[0, -0.2, 0.16]}>
           <RoundedBox args={[3.95, 2.25, 0.1]} radius={0.06}><Mat color="#ffffff" /></RoundedBox>
         </Part>
-        {[C.tangerine, C.sun, C.mint].map((c, i) => (
+        {[C.blue, C.sun, C.sky].map((c, i) => (
           <Part key={c} p={p} a={0.15 + i * 0.02} b={0.22 + i * 0.02} pos={[-1.75 + i * 0.3, 1.17, 0.2]}>
             <mesh><sphereGeometry args={[0.1, 16, 16]} /><Mat color={c} /></mesh>
           </Part>
@@ -124,7 +124,7 @@ function Scene({ p }) {
           <RoundedBox args={[1.35, 1.6, 0.14]} radius={0.1}><Mat color={C.sun} /><Ink /></RoundedBox>
         </Part>
         <Part p={p} a={0.4} b={0.5} pos={[-1.4, -0.85, 0.3]} from={[0, -4, 2]}>
-          <RoundedBox args={[0.9, 0.36, 0.14]} radius={0.16}><Mat color={C.tangerine} /><Ink /></RoundedBox>
+          <RoundedBox args={[0.9, 0.36, 0.14]} radius={0.16}><Mat color={C.blue} /><Ink /></RoundedBox>
         </Part>
 
         {/* Build: the app, the automation and the till plug in around it. */}
@@ -143,7 +143,7 @@ function Scene({ p }) {
       </group>
       <instancedMesh ref={bits} args={[null, null, 90]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 0.3]} />
-        <meshToonMaterial gradientMap={bands} />
+        <meshStandardMaterial roughness={0.4} />
       </instancedMesh>
     </>
   )
@@ -177,7 +177,7 @@ export default function BuildStory() {
       <div className="story3d-pin">
         <h2>How a project runs</h2>
         <div className="story3d-canvas" aria-hidden="true">
-          <Canvas flat dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 11] }} gl={{ alpha: true }}>
+          <Canvas flat shadows dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 11] }} gl={{ alpha: true }}>
             <Scene p={p} />
           </Canvas>
         </div>

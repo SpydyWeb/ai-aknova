@@ -1,11 +1,10 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Outlines } from '@react-three/drei'
 import * as THREE from 'three'
-import { C } from '../data.js'
-import { bands } from './models.jsx'
+import { TOY as C } from '../data.js'
+import Studio from './Studio.jsx'
 
-const CONFETTI = [C.sun, C.grape, C.mint, '#ffffff']
+const CONFETTI = [C.sun, C.navy, C.sky, '#ffffff']
 
 // A pool of small pieces that can be thrown up from the button and fall under gravity.
 function usePieces(count) {
@@ -68,16 +67,14 @@ function Scene({ down, enabled, burst, coins }) {
 
   return (
     <>
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[3, 6, 5]} intensity={1.9} />
+      <Studio />
       <mesh>
         <cylinderGeometry args={[1.55, 1.7, 0.55, 56]} />
-        <meshToonMaterial color={C.ink} gradientMap={bands} />
+        <meshPhysicalMaterial color={C.ink} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
       </mesh>
       <mesh ref={cap} position={[0, 0.62, 0]}>
         <cylinderGeometry args={[1.2, 1.2, 0.7, 56]} />
-        <meshToonMaterial color={enabled ? C.sun : '#E3D8BD'} gradientMap={bands} />
-        <Outlines thickness={5} color={C.ink} />
+        <meshPhysicalMaterial color={enabled ? C.sun : '#D5DBEA'} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
       </mesh>
       <instancedMesh ref={bits.mesh} args={[null, null, 80]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 0.3]} />
@@ -85,7 +82,7 @@ function Scene({ down, enabled, burst, coins }) {
       </instancedMesh>
       <instancedMesh ref={money.mesh} args={[null, null, 8]} frustumCulled={false}>
         <cylinderGeometry args={[1, 1, 0.28, 28]} />
-        <meshToonMaterial color={C.sun} gradientMap={bands} />
+        <meshPhysicalMaterial color={C.sun} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
       </instancedMesh>
     </>
   )

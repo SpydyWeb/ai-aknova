@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MLink, press, useOrder } from '../ui.jsx'
-import { setSound, soundOn } from '../sound.js'
+import Logo from './Logo.jsx'
 
 const LINKS = [
   ['/services', 'Services'],
   ['/work', 'Work'],
+  ['/pricing', 'Pricing'],
+  ['/blog', 'Blog'],
   ['/about', 'About'],
   ['/contact', 'Contact'],
 ]
@@ -15,7 +17,6 @@ export default function Nav() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
   const { picked } = useOrder()
-  const [sound, setSoundState] = useState(soundOn)
 
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -27,13 +28,10 @@ export default function Nav() {
 
   return (
     <header className="nav">
-      <Link className="logo" to="/">
-        <span className="logo-mark" aria-hidden="true" />
-        Anova AI
-      </Link>
+      <Logo />
 
       <nav className="nav-wide">
-        {LINKS.slice(0, 3).map(([to, label]) => (
+        {LINKS.slice(0, -1).map(([to, label]) => (
           <NavLink key={to} to={to}>
             {label}
           </NavLink>
@@ -43,19 +41,7 @@ export default function Nav() {
         </MLink>
       </nav>
 
-      <button
-        type="button"
-        className="sound-btn"
-        aria-pressed={sound}
-        onClick={() => {
-          setSound(!sound)
-          setSoundState(!sound)
-        }}
-      >
-        Sound {sound ? 'on' : 'off'}
-      </button>
-
-      <button type="button" className="burger" aria-expanded={open} aria-controls="menu" onClick={() => setOpen((v) => !v)}>
+      <button type="button" className="burger" data-sound={open ? 'close' : 'open'} aria-expanded={open} aria-controls="menu" onClick={() => setOpen((v) => !v)}>
         <span className="sr">{open ? 'Close menu' : 'Open menu'}</span>
         <motion.i animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }} />
         <motion.i animate={{ opacity: open ? 0 : 1 }} />

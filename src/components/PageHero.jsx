@@ -5,7 +5,7 @@ import Floaters from './Floaters.jsx'
 export default function PageHero({ title, text, models, tone = 'paper', children }) {
   const reduce = useReducedMotion()
   return (
-    <section className={`page-hero bg-${tone} ${tone === 'grape' ? 'on-dark' : ''}`}>
+    <section className={`page-hero bg-${tone} ${tone === 'navy' ? 'on-dark' : ''}`}>
       <div className="page-hero-copy">
         <h1>{title}</h1>
         {text && <p className="lede">{text}</p>}

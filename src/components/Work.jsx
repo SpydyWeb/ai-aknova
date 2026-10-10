@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { play } from '../sound.js'
 import { PROJECTS } from '../data.js'
 
-const SKINS = ['sun', 'tangerine', 'paper', 'mint']
+const SKINS = ['sun', 'blue', 'paper', 'sky']
 const spring = { type: 'spring', stiffness: 260, damping: 24 }
 const press = { whileHover: { x: -2, y: -2 }, whileTap: { x: 4, y: 4 } }
 
@@ -105,7 +105,7 @@ export default function Work() {
               <motion.div className="card-inner" animate={{ rotateY: isTop && flipped ? 180 : 0 }} transition={spring}>
                 <div className={`face front bg-${SKINS[i % 4]}`}>
                   <div className={`shot ${i % 2 ? 'flip' : ''}`}>
-                    <i className={`bg-${['grape', 'ink', 'tangerine', 'grape'][i % 4]}`} />
+                    <i className={`bg-${['navy', 'ink', 'blue', 'navy'][i % 4]}`} />
                     <div>
                       <b />
                       <b />

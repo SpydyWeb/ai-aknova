@@ -14,7 +14,7 @@ export async function send(subject, fields) {
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ access_key: KEY, subject, from_name: 'Anova AI website', ...fields }),
+      body: JSON.stringify({ access_key: KEY, subject, from_name: 'Aknova Tech website', ...fields }),
     })
     const json = await res.json().catch(() => ({}))
     return res.ok && json.success ? { ok: true } : { ok: false, reason: json.message || `Server answered ${res.status}` }

@@ -6,7 +6,7 @@ import Tilt from '../components/Tilt.jsx'
 import { SERVICE_INFO } from '../data.js'
 import { press, slug, useOrder } from '../ui.jsx'
 
-const TONE = ['sun', 'paper', 'mint', 'tangerine', 'paper', 'grape']
+const TONE = ['sun', 'paper', 'sky', 'blue', 'paper', 'navy']
 
 export default function ServicesPage() {
   const { picked, toggle } = useOrder()
@@ -23,7 +23,7 @@ export default function ServicesPage() {
             const on = picked.includes(s.name)
             const tone = TONE[i % TONE.length]
             return (
-              <Tilt as="li" key={s.name} className={`svc-card bg-${tone} ${tone === 'grape' ? 'on-dark' : ''}`}>
+              <Tilt as="li" key={s.name} className={`svc-card bg-${tone} ${tone === 'navy' ? 'on-dark' : ''}`}>
                 <h2>
                   <Link to={`/services/${slug(s.name)}`}>{s.name}</Link>
                 </h2>
