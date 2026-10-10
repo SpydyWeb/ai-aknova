@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, PresentationControls } from '@react-three/drei'
 import { useInView } from 'framer-motion'
-import { MODELS } from './models.jsx'
+import { shapeFor } from './models.jsx'
 import Studio from './Studio.jsx'
 
 function Model({ name }) {
@@ -10,7 +10,7 @@ function Model({ name }) {
   const grow = useRef(0)
   const turn = useRef(0)
   const rot = useRef(0)
-  const Shape = MODELS[name]
+  const Shape = shapeFor(name)
 
   // Each new model pops in with one full turn.
   useEffect(() => {

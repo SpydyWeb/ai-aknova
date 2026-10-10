@@ -7,17 +7,18 @@ import ModelStage from './ModelStage.jsx'
 
 const SPOT = ['sun', 'sky', 'navy', 'blue']
 
-export default function Services() {
+export default function Services({ title, text }) {
   const { picked, toggle } = useOrder()
   const [i, setI] = useState(0)
-  const s = SERVICE_INFO[i]
+  const s = SERVICE_INFO[i] || SERVICE_INFO[0]
+  if (!s) return null
   const on = picked.includes(s.name)
 
   return (
     <section id="services" className="services">
       <div className="services-head">
-        <h2>What we do</h2>
-        <p>Pick a service. Drag the model to turn it, tap it to spin it.</p>
+        <h2>{title}</h2>
+        {text && <p>{text}</p>}
       </div>
 
       <ul className="svc-list">

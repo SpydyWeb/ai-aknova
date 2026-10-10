@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
 
 const SKIN = ['sun', 'paper', 'blue', 'navy']
 
-export default function Process() {
+export default function Process({ title = 'How a project runs' }) {
   const reduce = useReducedMotion()
   const root = useRef(null)
 
@@ -32,7 +32,7 @@ export default function Process() {
 
   return (
     <section id="process" className="process" ref={root}>
-      <h2>How a project runs</h2>
+      <h2>{title}</h2>
       <div className="route">
         <svg viewBox="0 0 1200 200" aria-hidden="true">
           <path
@@ -44,8 +44,8 @@ export default function Process() {
         </svg>
         <ol>
           {STEPS.map(([name, text], i) => (
-            <li key={name} className="step">
-              <span className={`num bg-${SKIN[i]}`}>{i + 1}</span>
+            <li key={i} className="step">
+              <span className={`num bg-${SKIN[i % SKIN.length]}`}>{i + 1}</span>
               <h3>{name}</h3>
               <p>{text}</p>
             </li>

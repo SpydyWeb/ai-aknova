@@ -2,15 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import { motion, useReducedMotion } from 'framer-motion'
-import Till from '../components/Till.jsx'
-import Faq from '../components/Faq.jsx'
-import Tilt from '../components/Tilt.jsx'
-import { Envelope } from '../components/models.jsx'
+import Tilt from './Tilt.jsx'
+import { Envelope } from './models.jsx'
 import { CONTACT, EMAIL } from '../data.js'
 import { canSend, openEmailApp, send, validEmail } from '../send.js'
 import { play } from '../sound.js'
 import { press, useOrder } from '../ui.jsx'
-import Studio from '../components/Studio.jsx'
+import Studio from './Studio.jsx'
 
 // Sits and bobs; when a message is sent it flies off, then a fresh one pops back.
 function Letter({ sent }) {
@@ -46,7 +44,7 @@ function Letter({ sent }) {
 
 const EMPTY = { name: '', email: '', phone: '', message: '' }
 
-export default function Contact() {
+export default function ContactForm({ title }) {
   const reduce = useReducedMotion()
   const { picked, toggle } = useOrder()
   const [f, setF] = useState(EMPTY)
@@ -111,10 +109,9 @@ export default function Contact() {
   )
 
   return (
-    <>
       <section className="contact">
         <div className="contact-copy">
-          <h1>Tell us what you're building</h1>
+          <h1>{title}</h1>
 
           {state === 'sent' ? (
             <motion.div
@@ -209,8 +206,5 @@ export default function Contact() {
           </dl>
         </Tilt>
       </section>
-      <Till />
-      <Faq />
-    </>
   )
 }

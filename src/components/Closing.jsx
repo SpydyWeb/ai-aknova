@@ -1,12 +1,11 @@
 import { useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { EMAIL, SERVICES } from '../data.js'
+import { EMAIL, SERVICES, SITE_INFO } from '../data.js'
 import { MLink, press } from '../ui.jsx'
-import { MODELS } from './models.jsx'
+import { shapeFor } from './models.jsx'
 import Studio from './Studio.jsx'
 
-const TEXT = 'Got something to build?'
 const TAU = Math.PI * 2
 
 // All ten service models circle the headline; scrolling pushes them faster.
@@ -30,7 +29,7 @@ function Orbit() {
       <group ref={g}>
         {SERVICES.map((name, i) => {
           const a = (i / SERVICES.length) * TAU
-          const Shape = MODELS[name]
+          const Shape = shapeFor(name)
           return (
             <group key={name} position={[Math.sin(a) * R, 0, Math.cos(a) * R]} rotation={[0, a, 0]} scale={size}>
               <Shape />
@@ -46,6 +45,7 @@ export default function Closing() {
   const reduce = useReducedMotion()
   const root = useRef(null)
   const inView = useInView(root, { margin: '100px' })
+  const TEXT = SITE_INFO.closing.title || 'Got something to build?'
 
   return (
     <section className="closing" ref={root}>
@@ -74,7 +74,7 @@ export default function Closing() {
       </h2>
       <div className="closing-actions">
         <MLink className="btn btn-blue" to="/contact" {...press}>
-          Start a project
+          {SITE_INFO.closing.button || 'Start a project'}
         </MLink>
         <motion.a className="btn btn-paper" href={`mailto:${EMAIL}`} {...press}>
           {EMAIL}

@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import NotFound from './NotFound.jsx'
 import { PostCard } from '../components/BlogCards.jsx'
-import { POSTS } from '../data.js'
+import { POSTS, mediaUrl } from '../data.js'
+import { paragraphs } from '../blocks.js'
 import { MLink, press } from '../ui.jsx'
 
 export default function BlogPost() {
@@ -18,14 +19,18 @@ export default function BlogPost() {
         </Link>
         <div className={`post-banner bg-${post.tone}`}>
           <span>{post.topic}</span>
-          <span>{post.minutes} minute read</span>
+          {post.minutes ? <span>{post.minutes} minute read</span> : null}
         </div>
         <h1>{post.title}</h1>
         <p className="lede">{post.intro}</p>
-        {post.body.map(([heading, text]) => (
-          <section key={heading}>
-            <h2>{heading}</h2>
-            <p>{text}</p>
+        {post.cover && <img className="post-photo" src={mediaUrl(post.cover)} alt="" />}
+        {post.body.map((s, i) => (
+          <section key={i}>
+            {s.heading && <h2>{s.heading}</h2>}
+            {paragraphs(s.text).map((t, k) => (
+              <p key={k}>{t}</p>
+            ))}
+            {s.image && <img className="post-photo" src={mediaUrl(s.image)} alt="" loading="lazy" />}
           </section>
         ))}
         <div className="post-end">

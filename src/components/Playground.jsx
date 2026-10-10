@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { BallCollider, CuboidCollider, CylinderCollider, Physics, RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
-import { TOY as C } from '../data.js'
-import { Ball, MODELS } from './models.jsx'
+import { SERVICE_INFO, SITE_INFO, TOY as C } from '../data.js'
+import { Ball, SHAPES } from './models.jsx'
 import { play } from '../sound.js'
 import Studio from './Studio.jsx'
 
@@ -11,39 +11,41 @@ const FOV = 35
 const HALF_PI = Math.PI / 2
 
 const COLLIDERS = {
-  'Aknova Tech': <CuboidCollider args={[1.55, 0.85, 0.26]} />,
-  'Web development': <CuboidCollider args={[1.15, 0.8, 0.18]} />,
-  'Mobile app development': <CuboidCollider args={[0.525, 1, 0.13]} />,
-  'AI automation': (
+  mark: <CuboidCollider args={[1.55, 0.85, 0.26]} />,
+  browser: <CuboidCollider args={[1.15, 0.8, 0.18]} />,
+  phone: <CuboidCollider args={[0.525, 1, 0.13]} />,
+  robot: (
     <>
       <CuboidCollider args={[0.7, 0.575, 0.55]} />
       <BallCollider args={[0.15]} position={[0, 1, 0]} />
     </>
   ),
-  SEO: (
+  magnifier: (
     <>
       <CylinderCollider args={[0.17, 0.79]} rotation={[HALF_PI, 0, 0]} />
       <CuboidCollider args={[0.15, 0.5, 0.15]} position={[0.91, -0.91, 0]} rotation={[0, 0, Math.PI / 4]} />
     </>
   ),
-  'Social media marketing': <BallCollider args={[0.66]} />,
-  'POS systems': <CylinderCollider args={[0.1, 0.72]} rotation={[HALF_PI, 0, 0]} />,
-  'UI/UX design': <CuboidCollider args={[0.55, 0.92, 0.18]} />,
-  'Digital marketing': <CylinderCollider args={[0.85, 0.62]} position={[0.1, 0, 0]} rotation={[0, 0, -HALF_PI]} />,
-  'CRM systems': (
+  heart: <BallCollider args={[0.66]} />,
+  coin: <CylinderCollider args={[0.1, 0.72]} rotation={[HALF_PI, 0, 0]} />,
+  cursor: <CuboidCollider args={[0.55, 0.92, 0.18]} />,
+  megaphone: <CylinderCollider args={[0.85, 0.62]} position={[0.1, 0, 0]} rotation={[0, 0, -HALF_PI]} />,
+  pawn: (
     <>
       <BallCollider args={[0.38]} position={[0, 0.55, 0]} />
       <CylinderCollider args={[0.47, 0.45]} position={[0, -0.2, 0]} />
     </>
   ),
-  'HRM systems': <CuboidCollider args={[0.55, 0.725, 0.09]} />,
+  badge: <CuboidCollider args={[0.55, 0.725, 0.09]} />,
 }
 
 // Order matters: narrow screens only get the first few.
 const TOYS = [
-  ...Object.keys(COLLIDERS).map((name) => {
-    const Model = MODELS[name]
-    return [name, <><Model />{COLLIDERS[name]}</>]
+  ...Object.keys(COLLIDERS).map((key) => {
+    const Model = SHAPES[key]
+    // A toy is named after the service that uses its shape.
+    const name = key === 'mark' ? SITE_INFO.name : SERVICE_INFO.find((s) => s.model === key)?.name
+    return [name || null, <><Model />{COLLIDERS[key]}</>]
   }),
   [null, <><Ball r={0.5} color={C.sky} /><BallCollider args={[0.5]} /></>],
   [null, <><Ball r={0.34} color={C.navy} /><BallCollider args={[0.34]} /></>],

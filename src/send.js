@@ -1,20 +1,21 @@
-import { EMAIL } from './data.js'
+import { CONTENT, EMAIL, SITE_INFO } from './data.js'
 
-// Messages are delivered by Web3Forms (https://web3forms.com). Put your access key in a file named
-// .env.local next to package.json:  VITE_WEB3FORMS_KEY=your-key
+// Messages are delivered by Web3Forms (https://web3forms.com). Paste your access key in the admin
+// panel under Site details (or in .env.local as VITE_WEB3FORMS_KEY).
 // Without a key the site falls back to opening the visitor's own email app.
-const KEY = import.meta.env.VITE_WEB3FORMS_KEY || ''
+const key = () => CONTENT.site?.web3formsKey?.trim() || import.meta.env.VITE_WEB3FORMS_KEY || ''
 
-export const canSend = () => !!KEY
+export const canSend = () => !!key()
 
 // Resolves to { ok: true } or { ok: false, reason }.
 export async function send(subject, fields) {
+  const KEY = key()
   if (!KEY) return { ok: false, reason: 'nokey' }
   try {
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ access_key: KEY, subject, from_name: 'Aknova Tech website', ...fields }),
+      body: JSON.stringify({ access_key: KEY, subject, from_name: `${SITE_INFO.name} website`, ...fields }),
     })
     const json = await res.json().catch(() => ({}))
     return res.ok && json.success ? { ok: true } : { ok: false, reason: json.message || `Server answered ${res.status}` }

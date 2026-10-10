@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import PageHero from '../components/PageHero.jsx'
-import { PROJECTS } from '../data.js'
+import { PROJECTS, mediaUrl } from '../data.js'
 import { press } from '../ui.jsx'
 
 const SKINS = ['sun', 'blue', 'paper', 'sky']
@@ -14,7 +13,8 @@ const GROUPS = {
   'Business software': (t) => /crm|hrm|pos|automation/i.test(t),
 }
 
-export default function WorkPage() {
+// Every project in a grid, with filter buttons. Tapping one opens it.
+export default function WorkGrid() {
   const [group, setGroup] = useState('All')
   const [open, setOpen] = useState(null)
   const list = PROJECTS.map((p, i) => ({ ...p, i })).filter((p) => GROUPS[group](p.type))
@@ -28,12 +28,6 @@ export default function WorkPage() {
 
   return (
     <>
-      <PageHero
-        tone="navy"
-        title="Ten projects we're proud of"
-        text="Filter by the kind of work, then tap a project to open it."
-        models={['Web development', 'Mobile app development', 'Social media marketing', 'UI/UX design', 'CRM systems']}
-      />
       <section className="work-all">
         <div className="filters" role="group" aria-label="Filter projects">
           {Object.keys(GROUPS).map((g) => (
@@ -47,7 +41,7 @@ export default function WorkPage() {
           <AnimatePresence mode="popLayout">
             {list.map((p) => (
               <motion.li
-                key={p.name}
+                key={p.i}
                 layout
                 initial={{ scale: 0.6, opacity: 0, rotate: -6 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
@@ -62,19 +56,25 @@ export default function WorkPage() {
                   whileHover={{ x: -3, y: -3, rotate: p.i % 2 ? 1 : -1 }}
                   whileTap={{ x: 4, y: 4 }}
                 >
-                  <span className={`shot ${p.i % 2 ? 'flip' : ''}`}>
-                    <i className={`bg-${BLOCK[p.i % 4]}`} />
-                    <span>
-                      <b />
-                      <b />
-                      <b />
-                      <em />
+                  {p.image ? (
+                    <span className="shot photo">
+                      <img src={mediaUrl(p.image)} alt="" loading="lazy" />
                     </span>
-                  </span>
+                  ) : (
+                    <span className={`shot ${p.i % 2 ? 'flip' : ''}`}>
+                      <i className={`bg-${BLOCK[p.i % 4]}`} />
+                      <span>
+                        <b />
+                        <b />
+                        <b />
+                        <em />
+                      </span>
+                    </span>
+                  )}
                   <strong>{p.name}</strong>
                   <span className="meta">
                     <span>{p.type}</span>
-                    <span>Sample</span>
+                    {p.tag && <span>{p.tag}</span>}
                   </span>
                 </motion.button>
               </motion.li>
@@ -100,7 +100,12 @@ export default function WorkPage() {
               <h2>{PROJECTS[open].name}</h2>
               <p className="type">{PROJECTS[open].type}</p>
               <p>{PROJECTS[open].blurb}</p>
-              <p className="link">Your live link goes here</p>
+              {PROJECTS[open].image && <img className="sheet-photo" src={mediaUrl(PROJECTS[open].image)} alt="" />}
+              {PROJECTS[open].link && (
+                <a className="link" href={PROJECTS[open].link} target="_blank" rel="noreferrer">
+                  Visit the project
+                </a>
+              )}
               <motion.button type="button" className="btn btn-sun" autoFocus onClick={() => setOpen(null)} {...press}>
                 Close
               </motion.button>

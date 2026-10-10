@@ -9,20 +9,21 @@ import Cursor from './components/Cursor.jsx'
 import Seo from './components/Seo.jsx'
 import SoundScape from './components/SoundScape.jsx'
 import Buddy from './components/Buddy.jsx'
-import Home from './pages/Home.jsx'
-import ServicesPage from './pages/ServicesPage.jsx'
+import Blocks from './components/Blocks.jsx'
 import ServiceDetail from './pages/ServiceDetail.jsx'
-import WorkPage from './pages/WorkPage.jsx'
-import About from './pages/About.jsx'
-import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
 import { Link } from 'react-router-dom'
-import PricingPage from './pages/PricingPage.jsx'
-import Blog from './pages/Blog.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import Logo from './components/Logo.jsx'
-import { CONTACT, EMAIL, TAGLINE } from './data.js'
+import { CONTACT, EMAIL, PAGES, SITE_INFO, TAGLINE, findPage } from './data.js'
 import { OrderProvider } from './ui.jsx'
+import './styles.css'
+
+// Every page made in the admin panel is a list of sections.
+function Page() {
+  const page = findPage(useLocation().pathname)
+  return page ? <Blocks blocks={page.blocks} /> : <NotFound />
+}
 
 const CURTAIN = ['sun', 'navy', 'sky', 'blue']
 
@@ -80,36 +81,37 @@ function Shell() {
       )}
       <main key={loc.pathname}>
         <Routes location={loc}>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/:id" element={<ServiceDetail />} />
-          <Route path="/work" element={<WorkPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Page />} />
         </Routes>
       </main>
-      {loc.pathname !== '/contact' && <Closing />}
+      {!findPage(loc.pathname)?.blocks.some((b) => b.type === 'contact') && <Closing />}
       <footer className="footer">
         <div className="footer-brand">
           <Logo onDark />
           <p>{TAGLINE}</p>
         </div>
         <nav aria-label="Pages">
-          <Link to="/services">Services</Link>
-          <Link to="/work">Work</Link>
-          <Link to="/pricing">Pricing</Link>
-          <Link to="/blog">Blog</Link>
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
+          {PAGES.filter((p) => p.inNav && p.path !== '/').map((p) => (
+            <Link key={p.path} to={p.path}>
+              {p.title}
+            </Link>
+          ))}
         </nav>
         <address>
           <a href={`tel:${CONTACT.tel}`}>{CONTACT.phone}</a>
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           <span>{CONTACT.address}</span>
+          {SITE_INFO.social.length > 0 && (
+            <span className="social">
+              {SITE_INFO.social.map((s) => (
+                <a key={s.url} href={s.url} target="_blank" rel="noreferrer">
+                  {s.label || s.url}
+                </a>
+              ))}
+            </span>
+          )}
         </address>
       </footer>
       <Buddy />

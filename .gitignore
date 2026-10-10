@@ -95,3 +95,5 @@ temp/
 *.key
 *.p12
 *.pfx
+
+content/admin.json

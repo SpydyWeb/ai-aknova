@@ -2,21 +2,14 @@ import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MLink, press, useOrder } from '../ui.jsx'
+import { PAGES } from '../data.js'
 import Logo from './Logo.jsx'
-
-const LINKS = [
-  ['/services', 'Services'],
-  ['/work', 'Work'],
-  ['/pricing', 'Pricing'],
-  ['/blog', 'Blog'],
-  ['/about', 'About'],
-  ['/contact', 'Contact'],
-]
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
   const { picked } = useOrder()
+  const LINKS = PAGES.filter((p) => p.inNav && p.path !== '/').map((p) => [p.path, p.title])
 
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -31,7 +24,7 @@ export default function Nav() {
       <Logo />
 
       <nav className="nav-wide">
-        {LINKS.slice(0, -1).map(([to, label]) => (
+        {LINKS.filter(([to]) => to !== '/contact').map(([to, label]) => (
           <NavLink key={to} to={to}>
             {label}
           </NavLink>

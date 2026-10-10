@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
-import { SERVICES } from '../data.js'
+import { SERVICES, SITE_INFO } from '../data.js'
 import { openEmailApp, send, validEmail } from '../send.js'
 import { play } from '../sound.js'
 import { useOrder } from '../ui.jsx'
@@ -9,7 +9,7 @@ const BigButton = lazy(() => import('./BigButton.jsx'))
 
 const today = new Date().toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })
 
-export default function Till() {
+export default function Till({ title = 'Ring up what you need', text }) {
   const { picked, toggle } = useOrder()
   const [email, setEmail] = useState('')
   const [state, setState] = useState('idle')
@@ -65,8 +65,8 @@ export default function Till() {
   return (
     <section id="order" className="till">
       <div className="till-head">
-        <h2>Ring up what you need</h2>
-        <p>Press the services you're after. The till prints your order, and the big button sends it to us.</p>
+        <h2>{title}</h2>
+        {text && <p>{text}</p>}
         <ul className="keys">
           {SERVICES.map((s) => {
             const on = picked.includes(s)
@@ -93,7 +93,7 @@ export default function Till() {
       <div className="printer">
         <div className="slot" />
         <div className="paper" ref={paper}>
-          <h3>Aknova Tech</h3>
+          <h3>{SITE_INFO.name}</h3>
           <p className="date">{today}</p>
           <hr />
           <ul aria-live="polite">

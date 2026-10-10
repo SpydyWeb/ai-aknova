@@ -3,16 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { TOY as C } from '../data.js'
+import { SITE_INFO, TOY as C } from '../data.js'
 import { Ink, Mat } from './models.jsx'
 import Studio from './Studio.jsx'
 
-const TIPS = [
-  ['Spin a 3D model.', '/services'],
-  ['Fling the project cards.', '/#work'],
-  ['Ring up an order on the till.', '/contact#order'],
-  ['Throw the toys around.', '/'],
-]
 
 function Bot({ nudge }) {
   const g = useRef(null)
@@ -64,6 +58,7 @@ export default function Buddy() {
   const reduce = useReducedMotion()
   const navigate = useNavigate()
   const [n, setN] = useState(0)
+  const TIPS = SITE_INFO.buddyTips.map((t) => [t.text, t.to])
   const tip = n ? TIPS[(n - 1) % TIPS.length] : null
 
   useEffect(() => {
@@ -72,7 +67,7 @@ export default function Buddy() {
     return () => clearTimeout(t)
   }, [n])
 
-  if (reduce) return null
+  if (reduce || !TIPS.length) return null
 
   const go = () => {
     navigate(TIPS[n % TIPS.length][1])

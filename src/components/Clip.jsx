@@ -1,21 +1,22 @@
 import { useState } from 'react'
+import { mediaUrl } from '../data.js'
 
-// Plays a silent looping video from public/videos. Until the file exists it shows a labelled slot.
+// Plays a silent looping video chosen in the admin panel. Until one is chosen it shows a labelled slot.
 export default function Clip({ file, label, className = '' }) {
   const [missing, setMissing] = useState(false)
-  if (missing) {
+  if (missing || !file) {
     return (
       <span className={`clip clip-empty ${className}`}>
         <i aria-hidden="true" />
         <span>{label}</span>
-        <small>Add {file} to public/videos</small>
+        <small>Choose a video for this spot in the admin panel</small>
       </span>
     )
   }
   return (
     <video
       className={`clip ${className}`}
-      src={`/videos/${file}`}
+      src={mediaUrl(file)}
       aria-label={label}
       autoPlay
       muted

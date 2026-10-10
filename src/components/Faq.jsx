@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FAQS, VIDEOS } from '../data.js'
+import { FAQS } from '../data.js'
 import Clip from './Clip.jsx'
 import Tilt from './Tilt.jsx'
 
-export default function Faq() {
+export default function Faq({ title = 'Questions people ask first', video }) {
   const [open, setOpen] = useState(0)
   return (
     <section className="faq">
-      <h2>Questions people ask first</h2>
+      <h2>{title}</h2>
       <Tilt className="faq-video" max={8}>
-        <Clip file={VIDEOS.faq} label="A short video about how we work" />
+        <Clip file={video} label="A short video about how we work" />
       </Tilt>
       <ul>
         {FAQS.map(([q, a], i) => {
           const on = open === i
           return (
-            <li key={q} className={on ? 'on' : ''}>
+            <li key={i} className={on ? 'on' : ''}>
               <button type="button" data-sound={on ? 'close' : 'open'} aria-expanded={on} aria-controls={`faq-${i}`} onClick={() => setOpen(on ? -1 : i)}>
                 <span>{q}</span>
                 <motion.i animate={{ rotate: on ? 45 : 0 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }} aria-hidden="true" />

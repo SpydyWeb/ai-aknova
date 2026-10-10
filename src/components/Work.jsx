@@ -2,16 +2,17 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { play } from '../sound.js'
-import { PROJECTS } from '../data.js'
+import { PROJECTS, mediaUrl } from '../data.js'
 
 const SKINS = ['sun', 'blue', 'paper', 'sky']
 const spring = { type: 'spring', stiffness: 260, damping: 24 }
 const press = { whileHover: { x: -2, y: -2 }, whileTap: { x: 4, y: 4 } }
 
-export default function Work() {
+export default function Work({ title, text }) {
   const [order, setOrder] = useState(PROJECTS.map((_, i) => i))
   const [flipped, setFlipped] = useState(false)
   const top = order[0]
+  if (!PROJECTS.length) return null
 
   const next = () => {
     play('swish')
@@ -33,8 +34,8 @@ export default function Work() {
   return (
     <section id="work" className="work">
       <div className="work-copy">
-        <h2>Ten projects we're proud of</h2>
-        <p>Fling the top card away to see the next one. Tap it to turn it over.</p>
+        <h2>{title}</h2>
+        {text && <p>{text}</p>}
 
         <div className="now" aria-live="polite">
           <strong>{PROJECTS[top].name}</strong>
@@ -46,7 +47,7 @@ export default function Work() {
         <div className="dots">
           {PROJECTS.map((p, i) => (
             <button
-              key={p.name}
+              key={i}
               type="button"
               className={`dot bg-${SKINS[i % 4]}`}
               aria-label={`Show ${p.name}`}
@@ -68,7 +69,7 @@ export default function Work() {
           </motion.button>
         </div>
         <Link className="more on-dark" to="/work">
-          See all ten on one page
+          See every project on one page
         </Link>
       </div>
 
@@ -78,7 +79,7 @@ export default function Work() {
           const isTop = d === 0
           return (
             <motion.div
-              key={p.name}
+              key={i}
               className="card"
               style={{ zIndex: 20 - d, pointerEvents: isTop ? 'auto' : 'none' }}
               animate={{
@@ -104,26 +105,36 @@ export default function Work() {
             >
               <motion.div className="card-inner" animate={{ rotateY: isTop && flipped ? 180 : 0 }} transition={spring}>
                 <div className={`face front bg-${SKINS[i % 4]}`}>
-                  <div className={`shot ${i % 2 ? 'flip' : ''}`}>
-                    <i className={`bg-${['navy', 'ink', 'blue', 'navy'][i % 4]}`} />
-                    <div>
-                      <b />
-                      <b />
-                      <b />
-                      <em />
+                  {p.image ? (
+                    <div className="shot photo">
+                      <img src={mediaUrl(p.image)} alt="" draggable="false" />
                     </div>
-                  </div>
+                  ) : (
+                    <div className={`shot ${i % 2 ? 'flip' : ''}`}>
+                      <i className={`bg-${['navy', 'ink', 'blue', 'navy'][i % 4]}`} />
+                      <div>
+                        <b />
+                        <b />
+                        <b />
+                        <em />
+                      </div>
+                    </div>
+                  )}
                   <h3>{p.name}</h3>
                   <div className="meta">
                     <span>{p.type}</span>
-                    <span>Sample</span>
+                    {p.tag && <span>{p.tag}</span>}
                   </div>
                 </div>
                 <div className="face back">
                   <h3>{p.name}</h3>
                   <p className="type">{p.type}</p>
                   <p className="blurb">{p.blurb}</p>
-                  <p className="link">Your live link goes here</p>
+                  {p.link && (
+                    <a className="link" href={p.link} target="_blank" rel="noreferrer">
+                      Visit the project
+                    </a>
+                  )}
                 </div>
               </motion.div>
             </motion.div>

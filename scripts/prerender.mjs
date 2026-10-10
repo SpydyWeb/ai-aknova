@@ -1,22 +1,24 @@
-// Runs after `vite build`. Writes one real HTML file per page, each with its own title,
-// description, structured data and readable content, plus sitemap.xml, robots.txt and llms.txt.
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+// Runs after `vite build`. Only matters if the site is put on plain file hosting with no server:
+// it writes one real HTML file per page, plus sitemap.xml, robots.txt and llms.txt, from the
+// content as it is right now. With `npm start` the server makes all of these fresh on every visit.
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { ROUTES, bodyHtml, headTags, llmsTxt, robotsTxt, sitemapXml } from '../src/seo.js'
+import { createSite } from '../server/core.mjs'
+import { setContent } from '../src/data.js'
+import { llmsTxt, robotsTxt, routes, sitemapXml } from '../src/seo.js'
 
-const dist = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist')
-const template = readFileSync(join(dist, 'index.html'), 'utf8')
+const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+const dist = join(root, 'dist')
+// The untouched app shell, kept for the server to fill in.
+copyFileSync(join(dist, 'index.html'), join(dist, '_template.html'))
+const template = readFileSync(join(dist, '_template.html'), 'utf8')
+const site = createSite(root)
+const page = (route) => site.page(template, route, { inline: false }).html
 
-function page(route) {
-  return template
-    .replace(/<title>[\s\S]*?<\/title>\s*/, '')
-    .replace(/<meta name="description"[^>]*>\s*/, '')
-    .replace('</head>', `  ${headTags(route)}\n  </head>`)
-    .replace('<div id="root"></div>', `<div id="root">${bodyHtml(route)}</div>`)
-}
-
-for (const route of ROUTES) {
+setContent(site.read())
+const all = routes()
+for (const route of all) {
   const file = route === '/' ? join(dist, 'index.html') : join(dist, route, 'index.html')
   mkdirSync(dirname(file), { recursive: true })
   writeFileSync(file, page(route))
@@ -29,4 +31,4 @@ writeFileSync(join(dist, 'robots.txt'), robotsTxt())
 writeFileSync(join(dist, 'llms.txt'), llmsTxt())
 writeFileSync(join(dist, 'llms-full.txt'), llmsTxt(true))
 
-console.log(`Prerendered ${ROUTES.length} pages, sitemap.xml, robots.txt, llms.txt and llms-full.txt`)
+console.log(`Prerendered ${all.length} pages, sitemap.xml, robots.txt, llms.txt and llms-full.txt`)

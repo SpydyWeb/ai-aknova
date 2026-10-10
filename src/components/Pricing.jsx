@@ -11,7 +11,7 @@ const MODES = [
   ['monthly', 'Monthly care', 'per month'],
 ]
 
-export default function Pricing() {
+export default function Pricing({ title, text }) {
   const [mode, setMode] = useState('once')
   const { addMany } = useOrder()
   const navigate = useNavigate()
@@ -26,8 +26,8 @@ export default function Pricing() {
     <section id="pricing" className="pricing">
       <div className="pricing-head">
         <CoinStack count={mode === 'once' ? 8 : 3} />
-        <h2>Pick a plan, or build your own</h2>
-        <p>Every plan can be changed to fit. Choosing one adds its services to your order.</p>
+        <h2>{title}</h2>
+        {text && <p>{text}</p>}
         <div className="switch" role="group" aria-label="How you pay">
           {MODES.map(([id, label]) => (
             <button key={id} type="button" data-sound="coin" aria-pressed={mode === id} onClick={() => setMode(id)}>
@@ -39,8 +39,8 @@ export default function Pricing() {
       </div>
 
       <ul className="plans">
-        {PLANS.map((p) => (
-          <Tilt as="li" key={p.name} max={8} className={`plan ${p.best ? 'best' : ''}`}>
+        {PLANS.map((p, i) => (
+          <Tilt as="li" key={i} max={8} className={`plan ${p.best ? 'best' : ''}`}>
             {p.best && <span className="flag">Most chosen</span>}
             <h3>{p.name}</h3>
             <p className="line">{p.line}</p>

@@ -1,0 +1,861 @@
+{
+  "site": {
+    "name": "Aknova Tech",
+    "tagline": "Powering what's next.",
+    "url": "https://www.aknovatech.com",
+    "city": "Delhi",
+    "email": "official.aknovatech@gmail.com",
+    "phone": "+91 93184 86435",
+    "address": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn, Delhi 110059",
+    "street": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn",
+    "locality": "Delhi",
+    "postcode": "110059",
+    "country": "IN",
+    "social": [],
+    "web3formsKey": "",
+    "closing": {
+      "title": "Got something to build?",
+      "button": "Start a project"
+    },
+    "notFound": {
+      "title": "This page is not here",
+      "text": "The link may be old or mistyped. The home page has everything.",
+      "button": "Go to the home page"
+    },
+    "buddyTips": [
+      {
+        "text": "Spin a 3D model.",
+        "to": "/services"
+      },
+      {
+        "text": "Fling the project cards.",
+        "to": "/#work"
+      },
+      {
+        "text": "Ring up an order on the till.",
+        "to": "/contact#order"
+      },
+      {
+        "text": "Throw the toys around.",
+        "to": "/"
+      }
+    ]
+  },
+  "seo": {
+    "indexing": true,
+    "image": "/og.png",
+    "keywords": "",
+    "googleVerification": "",
+    "bingVerification": "",
+    "founded": "",
+    "priceRange": "",
+    "hours": "",
+    "areaServed": "India",
+    "ai": {
+      "summary": "",
+      "facts": [],
+      "answers": true,
+      "training": true
+    }
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Home",
+      "inNav": false,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b1",
+          "type": "hero",
+          "before": "We build",
+          "words": [
+            {
+              "text": "websites",
+              "tone": "sun"
+            },
+            {
+              "text": "mobile apps",
+              "tone": "sky"
+            },
+            {
+              "text": "AI automations",
+              "tone": "navy"
+            },
+            {
+              "text": "campaigns",
+              "tone": "blue"
+            },
+            {
+              "text": "CRM systems",
+              "tone": "sun"
+            },
+            {
+              "text": "POS systems",
+              "tone": "sky"
+            }
+          ],
+          "after": "people enjoy using.",
+          "text": "Aknova Tech is one team for design, development and marketing. Ten services, from your first website to the software that runs your shop.",
+          "primaryLabel": "Start a project",
+          "primaryTo": "/contact",
+          "secondaryLabel": "See our work",
+          "secondaryTo": "/work"
+        },
+        {
+          "id": "b2",
+          "type": "marquee"
+        },
+        {
+          "id": "b3",
+          "type": "services",
+          "title": "What we do",
+          "text": "Pick a service. Drag the model to turn it, tap it to spin it."
+        },
+        {
+          "id": "b4",
+          "type": "work",
+          "title": "Ten projects we're proud of",
+          "text": "Fling the top card away to see the next one. Tap it to turn it over."
+        },
+        {
+          "id": "b5",
+          "type": "story",
+          "title": "How a project runs"
+        },
+        {
+          "id": "b6",
+          "type": "why",
+          "title": "Why work with us",
+          "text": "Tap a card to turn it over."
+        },
+        {
+          "id": "b7",
+          "type": "pricing",
+          "title": "Pick a plan, or build your own",
+          "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
+        },
+        {
+          "id": "b8",
+          "type": "voices",
+          "title": "What clients say",
+          "text": "Drag the notes around. Tap one to bring it to the front."
+        },
+        {
+          "id": "b9",
+          "type": "till",
+          "title": "Ring up what you need",
+          "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
+        },
+        {
+          "id": "b10",
+          "type": "blog",
+          "title": "From the blog"
+        },
+        {
+          "id": "b11",
+          "type": "faq",
+          "title": "Questions people ask first",
+          "video": "faq.mp4"
+        }
+      ]
+    },
+    {
+      "path": "/services",
+      "title": "Services",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b12",
+          "type": "pageHero",
+          "title": "Ten services, one team",
+          "text": "Take one, or put several together. Add what you need to your order and send it when you are ready.",
+          "tone": "paper",
+          "models": [
+            "browser",
+            "robot",
+            "magnifier",
+            "phone",
+            "coin"
+          ]
+        },
+        {
+          "id": "b13",
+          "type": "serviceGrid"
+        },
+        {
+          "id": "b14",
+          "type": "process",
+          "title": "How a project runs"
+        }
+      ]
+    },
+    {
+      "path": "/work",
+      "title": "Work",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b15",
+          "type": "pageHero",
+          "title": "Ten projects we're proud of",
+          "text": "Filter by the kind of work, then tap a project to open it.",
+          "tone": "navy",
+          "models": [
+            "browser",
+            "phone",
+            "heart",
+            "cursor",
+            "pawn"
+          ]
+        },
+        {
+          "id": "b16",
+          "type": "workGrid"
+        }
+      ]
+    },
+    {
+      "path": "/pricing",
+      "title": "Pricing",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b17",
+          "type": "pageHero",
+          "title": "Clear prices before we start",
+          "text": "Three starting points. Tell us what you need and we shape the plan and the price around it.",
+          "tone": "sun",
+          "models": [
+            "coin",
+            "browser",
+            "pawn",
+            "megaphone",
+            "robot"
+          ]
+        },
+        {
+          "id": "b18",
+          "type": "pricing",
+          "title": "Pick a plan, or build your own",
+          "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
+        },
+        {
+          "id": "b19",
+          "type": "faq",
+          "title": "Questions people ask first",
+          "video": "faq.mp4"
+        }
+      ]
+    },
+    {
+      "path": "/blog",
+      "title": "Blog",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b20",
+          "type": "pageHero",
+          "title": "Plain advice on websites, marketing and software",
+          "text": "Short articles for business owners. No jargon, and nothing you need a developer to understand.",
+          "tone": "sky",
+          "models": [
+            "magnifier",
+            "megaphone",
+            "robot",
+            "pawn",
+            "browser"
+          ]
+        },
+        {
+          "id": "b21",
+          "type": "blogGrid"
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "title": "About",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b22",
+          "type": "pageHero",
+          "title": "One team for the whole job",
+          "text": "Aknova Tech is a service company. We design, build and market digital products, and set up the software that runs a business day to day.",
+          "tone": "sky",
+          "models": [
+            "mark",
+            "robot",
+            "pawn",
+            "heart",
+            "cursor"
+          ]
+        },
+        {
+          "id": "b23",
+          "type": "text",
+          "title": "Why we work this way",
+          "body": "Most businesses end up with one company for the website, another for the app, a freelancer for ads and a separate vendor for billing software. Things get lost between them.\n\nWe put those jobs under one roof. The people who design your screens sit next to the people who build them and the people who bring customers to them."
+        },
+        {
+          "id": "b24",
+          "type": "why",
+          "title": "Why work with us",
+          "text": "Tap a card to turn it over."
+        },
+        {
+          "id": "b25",
+          "type": "process",
+          "title": "How a project runs"
+        },
+        {
+          "id": "b26",
+          "type": "voices",
+          "title": "What clients say",
+          "text": "Drag the notes around. Tap one to bring it to the front."
+        }
+      ]
+    },
+    {
+      "path": "/contact",
+      "title": "Contact",
+      "inNav": true,
+      "core": true,
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": "",
+        "noindex": false
+      },
+      "blocks": [
+        {
+          "id": "b27",
+          "type": "contact",
+          "title": "Tell us what you're building"
+        },
+        {
+          "id": "b28",
+          "type": "till",
+          "title": "Ring up what you need",
+          "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
+        },
+        {
+          "id": "b29",
+          "type": "faq",
+          "title": "Questions people ask first",
+          "video": "faq.mp4"
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "name": "Web development",
+      "line": "Fast websites and web apps that are easy for you to update.",
+      "items": [
+        "Company websites",
+        "Online stores",
+        "Web apps"
+      ],
+      "model": "browser",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "UI/UX design",
+      "line": "Screens people understand the first time they see them.",
+      "items": [
+        "Wireframes",
+        "App and web design",
+        "Design systems"
+      ],
+      "model": "cursor",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "SEO",
+      "line": "Help the right people find you on Google.",
+      "items": [
+        "Site audits",
+        "Keyword plans",
+        "Content and links"
+      ],
+      "model": "magnifier",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "Digital marketing",
+      "line": "Ads and campaigns that are measured, not guessed.",
+      "items": [
+        "Google and Meta ads",
+        "Email campaigns",
+        "Landing pages"
+      ],
+      "model": "megaphone",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "Social media marketing",
+      "line": "A feed that looks like you and posts on time.",
+      "items": [
+        "Content calendars",
+        "Reels and creatives",
+        "Community replies"
+      ],
+      "model": "heart",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "Mobile app development",
+      "line": "Android and iPhone apps, from idea to store listing.",
+      "items": [
+        "Android apps",
+        "iOS apps",
+        "App store launch"
+      ],
+      "model": "phone",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "AI automation",
+      "line": "Let software handle the repetitive work.",
+      "items": [
+        "Chatbots",
+        "WhatsApp automation",
+        "Workflow automation"
+      ],
+      "model": "robot",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "CRM systems",
+      "line": "Every lead and customer in one place.",
+      "items": [
+        "Lead tracking",
+        "Sales pipelines",
+        "Follow-up reminders"
+      ],
+      "model": "pawn",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "HRM systems",
+      "line": "Attendance, leave and payroll without spreadsheets.",
+      "items": [
+        "Attendance",
+        "Leave and payroll",
+        "Employee records"
+      ],
+      "model": "badge",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "name": "POS systems",
+      "line": "Billing and stock for shops and restaurants.",
+      "items": [
+        "Billing",
+        "Inventory",
+        "Sales reports"
+      ],
+      "model": "coin",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    }
+  ],
+  "projects": [
+    {
+      "name": "Clinic booking app",
+      "type": "Mobile app development",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Furniture store",
+      "type": "Web development",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Restaurant POS",
+      "type": "POS systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Sales pipeline CRM",
+      "type": "CRM systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Staff attendance portal",
+      "type": "HRM systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Support chatbot",
+      "type": "AI automation",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Travel brand launch",
+      "type": "Social media marketing",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Real estate search ranking",
+      "type": "SEO",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Fitness app redesign",
+      "type": "UI/UX design",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Festival sale campaign",
+      "type": "Digital marketing",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    }
+  ],
+  "steps": [
+    {
+      "name": "Brief",
+      "text": "Tell us what you need. One call or one email is enough to start."
+    },
+    {
+      "name": "Design",
+      "text": "You see the screens before we write code, and change what you want."
+    },
+    {
+      "name": "Build",
+      "text": "We build it and show you progress as we go."
+    },
+    {
+      "name": "Launch",
+      "text": "We put it live, then stay around for fixes and upgrades."
+    }
+  ],
+  "reasons": [
+    {
+      "title": "One team",
+      "text": "Design, code and marketing sit together, so nothing gets lost between vendors.",
+      "tone": "sun",
+      "video": "why-1.mp4"
+    },
+    {
+      "title": "Built to be used",
+      "text": "Big buttons, fast pages and plain words, because your customers are busy.",
+      "tone": "sky",
+      "video": "why-2.mp4"
+    },
+    {
+      "title": "Software that fits",
+      "text": "CRM, HRM and POS shaped around how your staff already work.",
+      "tone": "blue",
+      "video": "why-3.mp4"
+    },
+    {
+      "title": "Here after launch",
+      "text": "Fixes, updates and new ideas once the project is live.",
+      "tone": "navy",
+      "video": "why-4.mp4"
+    }
+  ],
+  "voices": [
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    },
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    },
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    },
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    },
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    },
+    {
+      "quote": "Sample note. A real client quote goes here.",
+      "who": "Client name, business"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How do we start?",
+      "a": "Ring up the services you need on the till and email the order. We reply with questions, a plan and a price."
+    },
+    {
+      "q": "Can you work on a website or app we already have?",
+      "a": "Yes. Send us the link and tell us what is not working."
+    },
+    {
+      "q": "Do you only build, or also run the marketing?",
+      "a": "Both. The same team handles design, development, SEO, ads and social media."
+    },
+    {
+      "q": "Will the CRM, HRM or POS fit how we work?",
+      "a": "We set it up around your process and show your staff how to use it."
+    },
+    {
+      "q": "What happens after launch?",
+      "a": "We stay for fixes, updates and new features."
+    }
+  ],
+  "plans": [
+    {
+      "best": false,
+      "name": "Starter",
+      "line": "A clean website that gets you found.",
+      "once": "XX,XXX",
+      "monthly": "X,XXX",
+      "items": [
+        "Up to five pages",
+        "Works on every phone",
+        "Contact form",
+        "Basic SEO setup"
+      ],
+      "services": [
+        "Web development",
+        "SEO"
+      ]
+    },
+    {
+      "best": true,
+      "name": "Growth",
+      "line": "The website, plus the marketing that fills it.",
+      "once": "XX,XXX",
+      "monthly": "XX,XXX",
+      "items": [
+        "Everything in Starter",
+        "Online store or booking",
+        "Ads and social media setup",
+        "A report every month"
+      ],
+      "services": [
+        "Web development",
+        "SEO",
+        "Digital marketing",
+        "Social media marketing"
+      ]
+    },
+    {
+      "best": false,
+      "name": "Business suite",
+      "line": "Software built around how you run things.",
+      "once": "X,XX,XXX",
+      "monthly": "XX,XXX",
+      "items": [
+        "CRM, HRM or POS",
+        "AI automation",
+        "Staff training",
+        "Ongoing tech support"
+      ],
+      "services": [
+        "CRM systems",
+        "HRM systems",
+        "POS systems",
+        "AI automation"
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "id": "how-to-brief-a-web-team",
+      "title": "How to brief a web team in ten minutes",
+      "topic": "Websites",
+      "tone": "blue",
+      "minutes": 3,
+      "intro": "A short, clear brief saves weeks. You do not need a long document, only honest answers to four questions.",
+      "body": [
+        {
+          "heading": "Who is it for?",
+          "text": "Describe one real customer: what they do, what they are looking for, and what device they are probably holding. A site built for everyone works for no one."
+        },
+        {
+          "heading": "What should they do?",
+          "text": "Pick one main action. Call you, book a slot, buy a product, or fill in a form. Every page should make that one action easy."
+        },
+        {
+          "heading": "What do you already have?",
+          "text": "List your logo, photos, text, domain and any old site. Knowing what exists tells the team what must be made from scratch."
+        },
+        {
+          "heading": "How will you know it worked?",
+          "text": "Choose a number you can check in three months: enquiries per week, orders per day, or calls from the site. That number guides every decision after launch."
+        }
+      ],
+      "cover": "",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "id": "spreadsheet-or-crm",
+      "title": "When a spreadsheet stops being enough",
+      "topic": "Business software",
+      "tone": "sun",
+      "minutes": 3,
+      "intro": "Most businesses start by tracking customers in a spreadsheet, and that is fine. These are the signs it is time for a CRM.",
+      "body": [
+        {
+          "heading": "Leads are slipping",
+          "text": "If someone enquired last week and nobody followed up, the sheet is not reminding anyone. A CRM does."
+        },
+        {
+          "heading": "Two people edit the same row",
+          "text": "Once more than one person handles customers, you need to see who spoke to whom and when, without asking around."
+        },
+        {
+          "heading": "You cannot answer simple questions",
+          "text": "How many enquiries came in this month? Where did they come from? How many became sales? If that takes an afternoon to work out, you have outgrown the sheet."
+        },
+        {
+          "heading": "Start small",
+          "text": "A CRM does not need fifty fields. Begin with name, need, next step and date. Add more only when someone asks for it twice."
+        }
+      ],
+      "cover": "",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    },
+    {
+      "id": "what-to-automate-first",
+      "title": "What to automate first in a small business",
+      "topic": "AI automation",
+      "tone": "sky",
+      "minutes": 4,
+      "intro": "Automation pays off fastest on jobs that are frequent, boring and follow the same steps every time.",
+      "body": [
+        {
+          "heading": "Answering the same questions",
+          "text": "Opening hours, prices, delivery areas. A chatbot on your site or WhatsApp can answer these at any hour and hand over to a person when it gets stuck."
+        },
+        {
+          "heading": "Following up",
+          "text": "A message the day after an enquiry, a reminder before an appointment, a thank-you after a purchase. These are easy to automate and easy to forget by hand."
+        },
+        {
+          "heading": "Moving data between tools",
+          "text": "If someone copies orders from a form into a sheet and then into billing, that is three chances for a typo. Connect the tools once and the copying stops."
+        },
+        {
+          "heading": "Keep a person in the loop",
+          "text": "Automate the routine, not the judgement. Complaints, refunds and unusual requests should still reach a human quickly."
+        }
+      ],
+      "cover": "",
+      "seo": {
+        "title": "",
+        "description": ""
+      }
+    }
+  ]
+}

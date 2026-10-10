@@ -51,7 +51,7 @@ export default function ServiceDetail() {
         <h2>How it runs</h2>
         <ol>
           {STEPS.map(([name, text], k) => (
-            <li key={name}>
+            <li key={k}>
               <span className="num bg-sun">{k + 1}</span>
               <div>
                 <h3>{name}</h3>

@@ -1,17 +1,19 @@
 import PageHero from '../components/PageHero.jsx'
+import { SITE_INFO } from '../data.js'
 import { MLink, press } from '../ui.jsx'
 
 export default function NotFound() {
+  const t = SITE_INFO.notFound
   return (
     <PageHero
       tone="sun"
-      title="This page is not here"
-      text="The link may be old or mistyped. The home page has everything."
-      models={['SEO', 'UI/UX design', 'AI automation']}
+      title={t.title || 'This page is not here'}
+      text={t.text}
+      models={['magnifier', 'cursor', 'robot']}
     >
       <div className="row">
         <MLink className="btn btn-ink" to="/" {...press}>
-          Go to the home page
+          {t.button || 'Go to the home page'}
         </MLink>
       </div>
     </PageHero>

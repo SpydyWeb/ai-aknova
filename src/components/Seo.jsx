@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { SITE, seoFor } from '../seo.js'
+import { SITE_INFO } from '../data.js'
+import { robotsMeta, seoFor } from '../seo.js'
 
 function meta(attr, key, content) {
   let el = document.head.querySelector(`meta[${attr}="${key}"]`)
@@ -19,11 +20,13 @@ export default function Seo() {
     const m = seoFor(pathname)
     document.title = m.title
     meta('name', 'description', m.description)
-    meta('name', 'robots', m.missing ? 'noindex' : 'index, follow, max-image-preview:large, max-snippet:-1')
+    meta('name', 'robots', robotsMeta(m))
     meta('property', 'og:title', m.title)
     meta('property', 'og:description', m.description)
     meta('property', 'og:url', m.url)
-    meta('property', 'og:site_name', SITE.name)
+    meta('property', 'og:site_name', SITE_INFO.name)
+    meta('property', 'og:image', m.image)
+    meta('name', 'twitter:image', m.image)
     meta('name', 'twitter:title', m.title)
     meta('name', 'twitter:description', m.description)
 

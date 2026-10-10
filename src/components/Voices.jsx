@@ -5,22 +5,22 @@ import { VOICES } from '../data.js'
 const TILT = [-5, 3, -2, 6, -4, 2]
 const SKIN = ['paper', 'sky', 'paper', 'blue', 'paper', 'navy']
 
-export default function Voices() {
+export default function Voices({ title = 'What clients say', text }) {
   const board = useRef(null)
   const [order, setOrder] = useState(VOICES.map((v) => v.id))
   const lift = (id) => setOrder((o) => [...o.filter((x) => x !== id), id])
 
   return (
     <section className="voices">
-      <h2>What clients say</h2>
-      <p>Drag the notes around. Tap one to bring it to the front.</p>
+      <h2>{title}</h2>
+      {text && <p>{text}</p>}
       <div className="board" ref={board}>
         {VOICES.map((v, i) => (
           <motion.figure
             key={v.id}
-            className={`note bg-${SKIN[i]} ${SKIN[i] === 'navy' ? 'on-dark' : ''}`}
+            className={`note bg-${SKIN[i % 6]} ${SKIN[i % 6] === 'navy' ? 'on-dark' : ''}`}
             data-cursor="Drag"
-            style={{ zIndex: order.indexOf(v.id) + 1, rotate: TILT[i] }}
+            style={{ zIndex: order.indexOf(v.id) + 1, rotate: TILT[i % 6] }}
             drag
             dragConstraints={board}
             dragElastic={0.15}

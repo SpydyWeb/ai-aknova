@@ -4,17 +4,11 @@ import gsap from 'gsap'
 
 const Playground = lazy(() => import('./Playground.jsx'))
 
-const WORDS = [
-  ['websites', 'sun'],
-  ['mobile apps', 'sky'],
-  ['AI automations', 'navy'],
-  ['campaigns', 'blue'],
-  ['CRM systems', 'sun'],
-  ['POS systems', 'sky'],
-]
 import { MLink, press } from '../ui.jsx'
 
-export default function Hero() {
+export default function Hero({ before, words, after, text, primaryLabel, primaryTo, secondaryLabel, secondaryTo }) {
+  const WORDS = (words || []).filter((w) => w?.text).map((w) => [w.text, w.tone || 'sun'])
+  if (!WORDS.length) WORDS.push(['', 'sun'])
   const reduce = useReducedMotion()
   const root = useRef(null)
   const [i, setI] = useState(0)
@@ -26,7 +20,7 @@ export default function Hero() {
     if (reduce) return
     const t = setInterval(() => setI((v) => (v + 1) % WORDS.length), 2200)
     return () => clearInterval(t)
-  }, [reduce])
+  }, [reduce, WORDS.length])
 
   useEffect(() => {
     const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting))
@@ -51,7 +45,7 @@ export default function Hero() {
     return () => clearTimeout(t)
   }, [label])
 
-  const [word, color] = WORDS[i]
+  const [word, color] = WORDS[i % WORDS.length]
 
   return (
     <section id="top" className="hero" ref={root}>
@@ -64,9 +58,9 @@ export default function Hero() {
       )}
 
       <div className="hero-copy">
-        <h1 aria-label="We build websites, apps and automations people enjoy using.">
+        <h1 aria-label={[before, WORDS.map((w) => w[0]).join(', '), after].filter(Boolean).join(' ')}>
           <span className="line" aria-hidden="true">
-            <span className="rise">We build</span>
+            <span className="rise">{before}</span>
           </span>
           <span className="line chip-line" aria-hidden="true">
             <span className="chip-wrap">
@@ -85,22 +79,23 @@ export default function Hero() {
             </span>
           </span>
           <span className="line" aria-hidden="true">
-            <span className="rise">people enjoy using.</span>
+            <span className="rise">{after}</span>
           </span>
         </h1>
 
         <div className="hero-sub">
-          <p className="lede">
-            Aknova Tech is one team for design, development and marketing. Ten services, from your first website to the
-            software that runs your shop.
-          </p>
+          {text && <p className="lede">{text}</p>}
           <div className="hero-actions">
-            <MLink className="btn btn-blue" to="/contact" {...press}>
-              Start a project
-            </MLink>
-            <MLink className="btn btn-paper" to="/work" {...press}>
-              See our work
-            </MLink>
+            {primaryLabel && (
+              <MLink className="btn btn-blue" to={primaryTo || '/contact'} {...press}>
+                {primaryLabel}
+              </MLink>
+            )}
+            {secondaryLabel && (
+              <MLink className="btn btn-paper" to={secondaryTo || '/'} {...press}>
+                {secondaryLabel}
+              </MLink>
+            )}
             {!reduce && (
               <motion.button type="button" className="btn btn-sun" data-sound="swish" onClick={() => setShake((n) => n + 1)} {...press}>
                 Shake the toys

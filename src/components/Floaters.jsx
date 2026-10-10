@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
 import { useInView } from 'framer-motion'
-import { MODELS } from './models.jsx'
+import { shapeFor } from './models.jsx'
 import Studio from './Studio.jsx'
 
 // Centre first, then the four corners.
@@ -19,7 +19,7 @@ function Item({ name, spot, unit, index }) {
   const turn = useRef(0)
   const rot = useRef(0)
   const grow = useRef(0)
-  const Shape = MODELS[name]
+  const Shape = shapeFor(name)
   useFrame(({ clock }, delta) => {
     const dt = Math.min(delta, 0.05)
     // Models arrive one after another.
@@ -64,7 +64,7 @@ function Cluster({ names }) {
   return (
     <group ref={g}>
       {names.slice(0, SPOTS.length).map((n, i) => (
-        <Item key={n} name={n} spot={SPOTS[i]} unit={unit} index={i} />
+        <Item key={i} name={n} spot={SPOTS[i]} unit={unit} index={i} />
       ))}
     </group>
   )

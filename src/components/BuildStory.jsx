@@ -150,7 +150,7 @@ function Scene({ p }) {
 }
 
 // A pinned section: scrolling assembles a website in 3D, one project step at a time.
-export default function BuildStory() {
+export default function BuildStory({ title = 'How a project runs' }) {
   const root = useRef(null)
   const p = useRef(0)
   const [step, setStep] = useState(0)
@@ -158,6 +158,7 @@ export default function BuildStory() {
 
   useEffect(() => {
     const read = () => {
+      if (!root.current) return
       const r = root.current.getBoundingClientRect()
       p.current = clamp(-r.top / (r.height - innerHeight))
       setStep(Math.min(STEPS.length - 1, Math.floor(p.current * STEPS.length)))
@@ -171,11 +172,12 @@ export default function BuildStory() {
     }
   }, [])
 
-  const [name, text] = STEPS[step]
+  if (!STEPS.length) return null
+  const [name, text] = STEPS[Math.min(step, STEPS.length - 1)]
   return (
     <section id="process" className="story3d" ref={root}>
       <div className="story3d-pin">
-        <h2>How a project runs</h2>
+        <h2>{title}</h2>
         <div className="story3d-canvas" aria-hidden="true">
           <Canvas flat shadows dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 11] }} gl={{ alpha: true }}>
             <Scene p={p} />
@@ -197,8 +199,8 @@ export default function BuildStory() {
             </motion.div>
           </AnimatePresence>
           <div className="story3d-dots" aria-hidden="true">
-            {STEPS.map(([n], i) => (
-              <i key={n} className={i <= step ? 'on' : ''} />
+            {STEPS.map((_, i) => (
+              <i key={i} className={i <= step ? 'on' : ''} />
             ))}
           </div>
         </div>
