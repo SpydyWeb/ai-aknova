@@ -27,7 +27,8 @@ body {
   font-family: var(--body);
   font-size: 18px;
   line-height: 1.5;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden would turn the body into its own scroll box and stop pinned sections sticking. */
+  overflow-x: clip;
 }
 a {
   color: inherit;
