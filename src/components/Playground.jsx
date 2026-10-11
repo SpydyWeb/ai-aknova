@@ -79,7 +79,11 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
     const b = body.current
     if (!b) return
     const p = b.translation()
-    if (p.y > -world.h / 2 - 2 && Math.abs(p.x) < world.w / 2 + 2) return
+    // Nothing may travel fast enough to pass through a wall.
+    const v = b.linvel()
+    const speed = Math.hypot(v.x, v.y)
+    if (speed > 45) b.setLinvel({ x: (v.x * 45) / speed, y: (v.y * 45) / speed, z: 0 }, true)
+    if (p.y > -world.h / 2 - 2 && p.y < world.h / 2 + 20 && Math.abs(p.x) < world.w / 2 + 2) return
     b.setTranslation({ x: (Math.random() - 0.5) * Math.max(1, world.w - 3.5), y: world.h / 2 + 2, z: 0 }, true)
     b.setLinvel({ x: 0, y: 0, z: 0 }, true)
   })
@@ -98,6 +102,7 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
       restitution={0.35}
       friction={0.6}
       linearDamping={0.15}
+      ccd
       angularDamping={0.5}
       enabledTranslations={[true, true, false]}
       enabledRotations={[false, false, true]}
@@ -129,6 +134,7 @@ function Scene({ onPop, shake }) {
   const drag = useRef(null)
   const bodies = useRef(new Set())
   const lastScroll = useRef(0)
+  const lastKick = useRef(0)
 
   // The shake button tosses everything into the air.
   useEffect(() => {
@@ -158,11 +164,15 @@ function Scene({ onPop, shake }) {
     // Scrolling the page jolts the toys, as if the floor moved under them.
     const dy = scrollY - lastScroll.current
     lastScroll.current = scrollY
-    if (Math.abs(dy) > 3) {
-      const kick = Math.max(-5, Math.min(9, dy * 0.1))
+    // One nudge per scroll gesture. Smooth scrolling moves the page a little on every frame, and
+    // nudging on each of those frames would pile up until the toys shot off the screen.
+    const now = performance.now()
+    if (Math.abs(dy) > 3 && now - lastKick.current > 700) {
+      lastKick.current = now
+      const kick = Math.max(-4, Math.min(7, dy * 0.1))
       bodies.current.forEach((b) => {
         const v = b.linvel()
-        b.setLinvel({ x: v.x + (Math.random() - 0.5) * Math.abs(kick), y: v.y + kick * Math.random(), z: 0 }, true)
+        b.setLinvel({ x: v.x + (Math.random() - 0.5) * Math.abs(kick), y: Math.min(v.y + kick * Math.random(), 9), z: 0 }, true)
       })
     }
     const b = drag.current
