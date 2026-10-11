@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useAnimate } from 'framer-motion'
 import { SERVICES, SITE_INFO } from '../data.js'
-import { openEmailApp, send, validEmail } from '../send.js'
+import { canWhatsApp, openEmailApp, openWhatsApp, send, validEmail } from '../send.js'
 import { play } from '../sound.js'
 import { useOrder } from '../ui.jsx'
 
@@ -137,6 +137,22 @@ export default function Till({ title = 'Ring up what you need', text }) {
             label={state === 'sending' ? 'Sending' : state === 'sent' ? 'Order sent' : picked.length ? 'Send this order' : 'Pick a service first'}
           />
         </Suspense>
+        {canWhatsApp() && (
+          <motion.button
+            type="button"
+            className="btn btn-whatsapp till-whatsapp"
+            data-sound="swish"
+            onClick={() => {
+              if (!picked.length) return setNote('Press at least one service key first.')
+              openWhatsApp(`Hello, I would like to ask about these services:\n${picked.map((s) => `- ${s}`).join('\n')}${validEmail(email) ? `\nEmail: ${email}` : ''}`)
+              setNote('WhatsApp opened with your order typed in. Press send there to finish.')
+            }}
+            whileHover={{ x: -2, y: -2 }}
+            whileTap={{ x: 4, y: 4 }}
+          >
+            Send this order on WhatsApp
+          </motion.button>
+        )}
         <p className="till-note" role="status">
           {note}
         </p>

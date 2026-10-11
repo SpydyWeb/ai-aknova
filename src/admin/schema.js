@@ -133,6 +133,7 @@ export const SITE_FIELDS = [
   { k: 'url', label: 'Website address', type: 'text', placeholder: 'https://www.example.com', help: 'The address the site is live on. Search engines are told every page lives under it.' },
   { k: 'email', label: 'Email', type: 'text' },
   { k: 'phone', label: 'Phone', type: 'text' },
+  { k: 'whatsapp', label: 'WhatsApp number', type: 'text', placeholder: '+91 98765 43210', help: 'Enquiries sent with the "Send on WhatsApp" buttons open a chat with this number. Include the country code. Leave empty to use the phone number above.' },
   { k: 'address', label: 'Full address, as shown on the site', type: 'area', rows: 2 },
   { k: 'street', label: 'Street part of the address', type: 'text', help: 'These four are given to search engines and maps.' },
   { k: 'locality', label: 'City', type: 'text' },

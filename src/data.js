@@ -23,7 +23,7 @@ export let CONTENT = {}
 export let SITE_INFO = { name: '', tagline: '', url: '', city: '' }
 export let EMAIL = ''
 export let TAGLINE = ''
-export let CONTACT = { phone: '', tel: '', site: '', address: '' }
+export let CONTACT = { phone: '', tel: '', whatsapp: '', site: '', address: '' }
 export let SEO_SETTINGS = { ai: {} }
 export let PAGES = []
 export let SERVICE_INFO = []
@@ -58,6 +58,8 @@ export function setContent(json) {
   CONTACT = {
     phone: site.phone || '',
     tel: String(site.phone || '').replace(/[^\d+]/g, ''),
+    // WhatsApp wants the number as digits only, country code first. Falls back to the main phone.
+    whatsapp: String(site.whatsapp || site.phone || '').replace(/\D/g, ''),
     site: SITE_INFO.url.replace(/^https?:\/\//, ''),
     address: site.address || '',
   }

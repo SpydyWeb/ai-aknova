@@ -2393,3 +2393,18 @@ h3 {
 .nav-wide a {
   white-space: nowrap;
 }
+
+/* ---------- send on WhatsApp ---------- */
+.send-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.btn-whatsapp {
+  background: #1fbf5c;
+  color: var(--ink);
+}
+.till-whatsapp {
+  display: flex;
+  margin: 14px auto 0;
+}

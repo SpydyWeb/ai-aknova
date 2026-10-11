@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import Tilt from './Tilt.jsx'
 import { Envelope } from './models.jsx'
 import { CONTACT, EMAIL } from '../data.js'
-import { canSend, openEmailApp, send, validEmail } from '../send.js'
+import { canSend, canWhatsApp, openEmailApp, openWhatsApp, send, validEmail } from '../send.js'
 import { play } from '../sound.js'
 import { press, useOrder } from '../ui.jsx'
 import Studio from './Studio.jsx'
@@ -92,6 +92,23 @@ export default function ContactForm({ title }) {
     }
   }
 
+  // The same enquiry, sent as a WhatsApp chat instead. An email address is not needed for this.
+  const whatsapp = () => {
+    const err = {}
+    if (!f.name.trim()) err.name = 'Add your name so we know who is writing.'
+    if (!f.message.trim() && !picked.length) err.message = 'Write a line about what you need, or add a service to your order.'
+    setErrors(err)
+    if (Object.keys(err).length) {
+      play('buzz')
+      document.getElementById(`f-${Object.keys(err)[0]}`)?.focus()
+      return
+    }
+    const lines = [`Hello, I am ${f.name.trim()}.`, f.message.trim(), picked.length ? `Services I am interested in: ${picked.join(', ')}` : '', f.email.trim() ? `Email: ${f.email.trim()}` : '', f.phone.trim() ? `Phone: ${f.phone.trim()}` : '']
+    openWhatsApp(lines.filter(Boolean).join('\n'))
+    play('whoosh')
+    setNote('WhatsApp opened with your message typed in. Press send there to finish.')
+  }
+
   const field = (k, label, props = {}) => (
     <label className={`field ${errors[k] ? 'bad' : ''}`}>
       <span>{label}</span>
@@ -166,9 +183,16 @@ export default function ContactForm({ title }) {
                   </div>
                 )}
 
-                <motion.button type="submit" className="btn btn-blue" disabled={state === 'sending'} {...press}>
-                  {state === 'sending' ? 'Sending' : 'Send message'}
-                </motion.button>
+                <div className="send-row">
+                  <motion.button type="submit" className="btn btn-blue" disabled={state === 'sending'} {...press}>
+                    {state === 'sending' ? 'Sending' : 'Send message'}
+                  </motion.button>
+                  {canWhatsApp() && (
+                    <motion.button type="button" className="btn btn-whatsapp" data-sound="swish" onClick={whatsapp} {...press}>
+                      Send on WhatsApp
+                    </motion.button>
+                  )}
+                </div>
                 <p className="status" role="status">
                   {note}
                 </p>
