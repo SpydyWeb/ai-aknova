@@ -8,6 +8,10 @@ ErrorDocument 404 /404.html
 
 RewriteEngine On
 
+# One address for search engines: https://www.aknovatech.com (the url in content/site.json).
+RewriteCond %{HTTP_HOST} ^aknovatech\.com$ [NC]
+RewriteRule ^ https://www.aknovatech.com%{REQUEST_URI} [L,R=301]
+
 # Always HTTPS. The second line stops a redirect loop when a proxy in front already speaks HTTPS.
 RewriteCond %{HTTPS} !=on
 RewriteCond %{HTTP:X-Forwarded-Proto} !=https
