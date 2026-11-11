@@ -8,7 +8,7 @@
 //
 // `npm run dev` (through vite.config.js) and `npm start` (through server/index.mjs) both use this file.
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
-import { createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs'
+import { cpSync, createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, unlinkSync, writeFileSync } from 'node:fs'
 import { basename, extname, join } from 'node:path'
 import { StoreError, githubStore } from './github.mjs'
 import { setContent } from '../src/data.js'
@@ -133,6 +133,13 @@ export function createSite(root) {
   if (!remote && !stuck) {
     mkdirSync(uploads, { recursive: true })
     mkdirSync(backups, { recursive: true })
+    // CONTENT_DIR can point to a folder outside the app, so that redeploying the code never
+    // replaces what was saved in the admin panel. The first time, it is filled from the app's own copy.
+    const shipped = join(root, 'content')
+    if (!existsSync(file) && existsSync(join(shipped, 'site.json')) && shipped !== dir) {
+      cpSync(join(shipped, 'site.json'), file)
+      if (existsSync(join(shipped, 'uploads'))) cpSync(join(shipped, 'uploads'), uploads, { recursive: true })
+    }
   }
 
   /* ---------- content ---------- */

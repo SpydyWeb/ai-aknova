@@ -98,3 +98,6 @@ temp/
 
 content/admin.json
 content/backups/
+
+.vercel
+.env*

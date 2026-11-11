@@ -1,0 +1,51 @@
+# Aknova site on plain Apache/LiteSpeed hosting (MilesWeb). No Node server:
+# every page is a prebuilt HTML file, and only the admin panel's API runs, as PHP (api/index.php).
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+# Page addresses have no trailing slash (/about), so folders must not get one added.
+DirectorySlash Off
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# Always HTTPS. The second line stops a redirect loop when a proxy in front already speaks HTTPS.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# The admin panel's API, and uploads newer than the last rebuild, are answered by PHP.
+RewriteRule ^api/index\.php$ - [L]
+RewriteRule ^api(/.*)?$ api/index.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^uploads/ api/index.php [L]
+
+# /about/ -> /about, the one address search engines are told about.
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+# /about -> about/index.html, without a redirect.
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.+)$ $1/index.html [L]
+
+# Never served: the page template, and dotfiles such as the deploy tool's .ftp-deploy-sync-state.json.
+<FilesMatch "(^\.|^_template\.html$)">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Built scripts and styles have a hash in their name, so they never change.
+  <If "%{REQUEST_URI} =~ m#^/assets/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain application/xml
+</IfModule>

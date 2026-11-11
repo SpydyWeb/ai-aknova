@@ -8,6 +8,13 @@ import { fileURLToPath } from 'node:url'
 import { createSite, sendFile } from './core.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
+// Settings such as ADMIN_EMAIL, ADMIN_PASSWORD and CONTENT_DIR can be put in a file named .env
+// beside package.json, for hosts that have no screen for them. Settings made on the host itself win.
+try {
+  process.loadEnvFile(join(root, '.env'))
+} catch {
+  /* no .env file: use what the host provides */
+}
 const dist = join(root, 'dist')
 const clean = join(dist, '_template.html')
 if (!existsSync(join(dist, 'index.html'))) {
