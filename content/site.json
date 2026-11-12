@@ -444,12 +444,11 @@
                         "Mobile-first",
                         "Conversion focused"
                     ],
-                    "image": "/uploads/about-blank-3.png",
+                    "image": "",
                     "primaryLabel": "Get a custom design",
                     "primaryTo": "/contact",
                     "secondaryLabel": "View our work",
-                    "secondaryTo": "/work",
-                    "imageAlt": "web development test image"
+                    "secondaryTo": "/work"
                 },
                 {
                     "id": "s002web",
@@ -576,7 +575,7 @@
                     "steps": [
                         {
                             "title": "Understanding your business",
-                            "text": "We learn <a href=\"https://www.aknovatech.com/\">about</a> your brand, audience, goals and requirements."
+                            "text": "We learn about your brand, audience, goals and requirements."
                         },
                         {
                             "title": "Audience and competitor research",
@@ -1740,84 +1739,20 @@
     ],
     "projects": [
         {
-            "name": "Clinic booking app",
-            "type": "Mobile app development",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Furniture store",
+            "name": "SkyDot Footwear – Manufacturing Website",
             "type": "Web development",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
+            "blurb": "Built to Showcase. Designed to Grow.\n\nWe created a professional digital platform for SkyDot Footwear, showcasing its diverse footwear collections with a modern design, seamless browsing experience, and enquiry-focused functionality.\n\nServices: UI/UX Design | Website Development | Responsive Design | SEO-Friendly Structure",
+            "image": "/uploads/skydot-footwear-ecommerce-showcase.png",
+            "link": "https://skydotfootwear.com/",
+            "tag": "Footwear Website"
         },
         {
-            "name": "Restaurant POS",
-            "type": "POS systems",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
+            "name": "New project",
+            "type": "",
+            "blurb": "",
             "image": "",
-            "link": ""
-        },
-        {
-            "name": "Sales pipeline CRM",
-            "type": "CRM systems",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Staff attendance portal",
-            "type": "HRM systems",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Support chatbot",
-            "type": "AI automation",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Travel brand launch",
-            "type": "Social media marketing",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Real estate search ranking",
-            "type": "SEO",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Fitness app redesign",
-            "type": "UI/UX design",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
-        },
-        {
-            "name": "Festival sale campaign",
-            "type": "Digital marketing",
-            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-            "tag": "Sample",
-            "image": "",
-            "link": ""
+            "link": "",
+            "tag": ""
         }
     ],
     "steps": [
