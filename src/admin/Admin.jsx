@@ -5,7 +5,7 @@ import { setContent, slug } from '../data.js'
 import { llmsTxt, robotsTxt, seoFor } from '../seo.js'
 import logo from '../assets/logo-light.png'
 import { api } from './api.js'
-import { AddSection, AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, newId } from './fields.jsx'
+import { AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, newId } from './fields.jsx'
 import { AI_FIELDS, LISTS, SEO_FIELDS, SITE_FIELDS } from './schema.js'
 import './admin.css'
 
@@ -126,13 +126,51 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
   const set = (k) => (v) => onChange({ ...page, [k]: v })
   const clash = taken.includes(page.path)
   const reserved = RESERVED.some((r) => page.path === r || page.path.startsWith(r.endsWith('/') ? r : r + '/'))
+  const [tab, setTab] = useState(clash || reserved ? 'settings' : 'sections')
+  const tabs = [
+    ['sections', `Sections (${page.blocks?.length || 0})`],
+    ['settings', 'Name and address'],
+    ['seo', 'Search engines'],
+  ]
   return (
     <>
-      <button type="button" className="adm-btn" onClick={onBack}>
-        Back to all pages
-      </button>
-      <div className="adm-panel">
-        <h2>Page details</h2>
+      <div className="adm-pagehead">
+        <button type="button" className="adm-btn" onClick={onBack}>
+          All pages
+        </button>
+        <div>
+          <h2>{page.title || 'Untitled page'}</h2>
+          <span>{page.path}</span>
+        </div>
+        <a className="adm-btn" href={page.path} target="_blank" rel="noreferrer">
+          View page
+        </a>
+      </div>
+      <div className="adm-tabs adm-pagetabs" role="tablist" aria-label="Parts of this page">
+        {tabs.map(([id, label]) => (
+          <button key={id} type="button" role="tab" id={`pg-tab-${id}`} aria-selected={tab === id} aria-controls="pg-tabpanel" onClick={() => setTab(id)}>
+            {label}
+            {id === 'settings' && (clash || reserved) && <b className="adm-dot" aria-label="needs attention" />}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'sections' && (
+        <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-sections">
+          <p className="adm-help">The page shows these from top to bottom. Choose one to edit it, or use the arrows to move it.</p>
+          <Items def={SECTIONS} value={page.blocks} onChange={set('blocks')} />
+        </div>
+      )}
+
+      {tab === 'seo' && (
+        <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-seo">
+          <SeoBox path={page.path} value={page.seo} onChange={set('seo')} />
+        </div>
+      )}
+
+      {tab === 'settings' && (
+      <>
+      <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-settings">
         <div className="adm-field">
           <label htmlFor="pg-title">Page name</label>
           <input id="pg-title" value={page.title} onChange={(e) => set('title')(e.target.value)} />
@@ -156,24 +194,14 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
         )}
       </div>
 
-      <div className="adm-panel">
-        <h2>Sections</h2>
-        <p className="adm-help">The page shows these from top to bottom. Open one to edit it, use the arrows to reorder.</p>
-        <Items def={SECTIONS} value={page.blocks} onChange={set('blocks')} />
-        <AddSection onAdd={(b) => set('blocks')([...(page.blocks || []), b])} />
-      </div>
-
-      <div className="adm-panel">
-        <h2>Search engines</h2>
-        <SeoBox path={page.path} value={page.seo} onChange={set('seo')} />
-      </div>
-
       {!page.core && (
         <div className="adm-panel">
           <h2>Delete this page</h2>
           <p className="adm-help">The page and its sections are removed when you save. Uploaded photos and videos stay in the library.</p>
           <Danger label="Delete page" sure="Really delete this page?" onConfirm={onDelete} />
         </div>
+      )}
+      </>
       )}
     </>
   )

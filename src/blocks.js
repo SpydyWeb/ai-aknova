@@ -26,7 +26,7 @@ export const MODEL_OPTIONS = [
 
 const title = { k: 'title', label: 'Heading', type: 'text' }
 const text = { k: 'text', label: 'Line under the heading', type: 'area', rows: 2 }
-const tone = { k: 'tone', label: 'Background colour', type: 'select', options: TONES }
+const tone = { k: 'tone', label: 'Background colour', type: 'select', options: TONES, more: true }
 const LOOKS = [
   ['cards', 'Separate cards'],
   ['cells', 'Joined boxes'],
@@ -64,7 +64,7 @@ export const BLOCKS = {
       { k: 'media', label: 'Photo or video', type: 'media', kind: 'any' },
       { k: 'alt', label: 'Describe the picture (for search engines and screen readers)', type: 'text' },
       { k: 'points', label: 'Bullet points (optional)', type: 'strings', noun: 'point' },
-      { k: 'flip', label: 'Put the picture on the left', type: 'bool' },
+      { k: 'flip', label: 'Put the picture on the left', type: 'bool', more: true },
       tone,
       { k: 'buttonLabel', label: 'Button text (optional)', type: 'text' },
       { k: 'buttonTo', label: 'Button goes to', type: 'link' },
@@ -111,7 +111,7 @@ export const BLOCKS = {
       title,
       { k: 'src', label: 'Uploaded video', type: 'media', kind: 'video' },
       { k: 'embed', label: 'Or a YouTube / Vimeo link', type: 'text' },
-      { k: 'loop', label: 'Play silently on repeat, without controls', type: 'bool' },
+      { k: 'loop', label: 'Play silently on repeat, without controls', type: 'bool', more: true },
       { k: 'caption', label: 'Caption (optional)', type: 'text' },
     ],
     blank: { title: '', src: '', embed: '', loop: false, caption: '' },
@@ -133,7 +133,7 @@ export const BLOCKS = {
           { k: 'title', label: 'Heading', type: 'text' },
           { k: 'text', label: 'Text', type: 'area', rows: 3 },
           { k: 'image', label: 'Photo (optional)', type: 'media', kind: 'image' },
-          { k: 'tone', label: 'Colour', type: 'select', options: TONES },
+          { k: 'tone', label: 'Colour', type: 'select', options: TONES, more: true },
           { k: 'to', label: 'Opens this page when tapped (optional)', type: 'link' },
         ],
         blank: { title: 'Card heading', text: '', image: '', tone: 'paper', to: '' },
@@ -157,7 +157,7 @@ export const BLOCKS = {
     fields: [
       { k: 'title', label: 'Heading', type: 'text' },
       { k: 'highlight', label: 'Second line, on a coloured label (optional)', type: 'text' },
-      { k: 'tone', label: 'Label colour', type: 'select', options: TONES.slice(1) },
+      { k: 'tone', label: 'Label colour', type: 'select', options: TONES.slice(1), more: true },
       { k: 'text', label: 'Introduction', type: 'area', rows: 3 },
       { k: 'ticks', label: 'Short promises under the buttons', type: 'strings', noun: 'promise' },
       { k: 'image', label: 'Photo (optional)', type: 'media', kind: 'image', help: 'Leave empty to show the service’s 3D model.' },
@@ -183,7 +183,7 @@ export const BLOCKS = {
       title,
       text,
       tone,
-      { k: 'look', label: 'Look', type: 'select', options: LOOKS },
+      { k: 'look', label: 'Look', type: 'select', options: LOOKS, more: true },
       {
         k: 'items',
         label: 'Points',
@@ -229,7 +229,7 @@ export const BLOCKS = {
     label: 'Projects of one kind',
     group: 'Write your own',
     about: 'Projects from the Projects screen, picked by kind of work. On a service page, leave the kind empty to show that service’s projects.',
-    fields: [title, text, { k: 'service', label: 'Kind of work', type: 'service' }, { k: 'max', label: 'How many to show', type: 'number' }],
+    fields: [title, text, { k: 'service', label: 'Kind of work', type: 'service' }, { k: 'max', label: 'How many to show', type: 'number', more: true }],
     blank: { title: 'Projects', text: '', service: '', max: 3 },
   },
   questions: {

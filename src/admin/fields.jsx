@@ -1,6 +1,6 @@
 // Form fields for the admin panel. A screen describes what it edits as a list of field
 // definitions (see schema.js and ../blocks.js) and <Fields> draws the form.
-import { createContext, useContext, useEffect, useId, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState } from 'react'
 import { BLOCKS, isVideo } from '../blocks.js'
 import { mediaUrl, slug } from '../data.js'
 import { api } from './api.js'
@@ -10,55 +10,82 @@ export const AdminContext = createContext({ doc: {}, pickMedia: async () => null
 
 export const newId = () => `b${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
 
+// Closes a dialog on Escape, unless the media picker is open on top of it.
+function useEscape(close) {
+  useEffect(() => {
+    const key = (e) => e.key === 'Escape' && !document.querySelector('.adm-modal') && close()
+    addEventListener('keydown', key)
+    return () => removeEventListener('keydown', key)
+  }, [close])
+}
+
 /* ---------- sections of a page: the same picker for pages and service pages ---------- */
-export function AddSection({ onAdd }) {
+function AddSection({ onAdd }) {
   const [open, setOpen] = useState(false)
+  const [q, setQ] = useState('')
+  const close = useCallback(() => (setOpen(false), setQ('')), [])
   if (!open)
     return (
       <button type="button" className="adm-btn primary" onClick={() => setOpen(true)}>
         Add a section
       </button>
     )
+  const find = q.trim().toLowerCase()
+  const groups = ['Write your own', 'Ready-made'].map((group) => [group, Object.entries(BLOCKS).filter(([, b]) => b.group === group && (!find || `${b.label} ${b.about}`.toLowerCase().includes(find)))])
   return (
-    <div className="adm-add">
-      <div className="adm-add-head">
-        <h3>Choose a section to add</h3>
-        <button type="button" className="adm-btn" onClick={() => setOpen(false)}>
-          Cancel
-        </button>
-      </div>
-      {['Write your own', 'Ready-made'].map((group) => (
-        <div key={group}>
-          <h4>{group === 'Ready-made' ? 'Ready-made interactive sections' : 'Sections you write yourself'}</h4>
-          <ul>
-            {Object.entries(BLOCKS)
-              .filter(([, b]) => b.group === group)
-              .map(([type, b]) => (
-                <li key={type}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onAdd({ id: newId(), type, ...structuredClone(b.blank) })
-                      setOpen(false)
-                    }}
-                  >
-                    <strong>{b.label}</strong>
-                    <span>{b.about}</span>
-                  </button>
-                </li>
-              ))}
-          </ul>
+    <div className="adm-sheet-back" onClick={close}>
+      <div className="adm-picker" role="dialog" aria-modal="true" aria-labelledby="adm-pick-h" onClick={(e) => e.stopPropagation()}>
+        <Esc close={close} />
+        <div className="adm-add-head">
+          <h3 id="adm-pick-h">Add a section</h3>
+          <button type="button" className="adm-btn" onClick={close}>
+            Cancel
+          </button>
         </div>
-      ))}
+        <input type="search" autoFocus aria-label="Find a section" placeholder="Find a section, for example photo or button" value={q} onChange={(e) => setQ(e.target.value)} />
+        <div className="adm-picker-list">
+          {groups.map(([group, list]) =>
+            list.length ? (
+              <div key={group} className="adm-add">
+                <h4>{group === 'Ready-made' ? 'Ready-made: fills itself from your other screens' : 'Write your own'}</h4>
+                <ul>
+                  {list.map(([type, b]) => (
+                    <li key={type}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onAdd({ id: newId(), type, ...structuredClone(b.blank) })
+                          close()
+                        }}
+                      >
+                        <strong>{b.label}</strong>
+                        <span>{b.about}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null,
+          )}
+          {groups.every(([, list]) => !list.length) && <p className="adm-empty">No section matches &ldquo;{q}&rdquo;. Try a shorter word.</p>}
+        </div>
+      </div>
     </div>
   )
+}
+function Esc({ close }) {
+  useEscape(close)
+  return null
 }
 
 export const SECTIONS = {
   noun: 'section',
-  name: (b) => [BLOCKS[b.type]?.label || b.type, b.title || b.before].filter(Boolean).join(': '),
+  sheet: true,
+  name: (b) => b.title || b.before || BLOCKS[b.type]?.label || b.type,
+  badge: (b) => ((b.title || b.before) && (b.title || b.before) !== BLOCKS[b.type]?.label ? BLOCKS[b.type]?.label : ''),
   about: (b) => BLOCKS[b.type]?.about,
   of: (b) => BLOCKS[b.type]?.fields || [],
+  adder: (add) => <AddSection onAdd={add} />,
 }
 
 export const move = (list, from, to) => {
@@ -281,26 +308,75 @@ function Strings({ def, value, onChange }) {
   )
 }
 
+// The form of one open item, in a side sheet so the list stays in view.
+function Sheet({ title, kind, onClose, children, footer }) {
+  const box = useRef(null)
+  useEscape(onClose)
+  useEffect(() => {
+    const back = document.activeElement
+    box.current.focus()
+    document.documentElement.style.overflow = 'hidden'
+    return () => {
+      document.documentElement.style.overflow = ''
+      back?.focus?.()
+    }
+  }, [])
+  return (
+    <div className="adm-sheet-back" onClick={onClose}>
+      <aside className="adm-sheet" role="dialog" aria-modal="true" aria-label={title} ref={box} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+        <header className="adm-sheet-head">
+          <div>
+            <span>{kind}</span>
+            <h3>{title}</h3>
+          </div>
+          <button type="button" className="adm-btn primary" onClick={onClose}>
+            Done
+          </button>
+        </header>
+        <div className="adm-sheet-body">{children}</div>
+        <footer className="adm-sheet-foot">{footer}</footer>
+      </aside>
+    </div>
+  )
+}
+
 // A list of things, each with its own small form. One is open at a time.
-export function Items({ def, value, onChange, renderExtra }) {
+export function Items({ def, value, onChange }) {
   const list = Array.isArray(value) ? value : []
   const [open, setOpen] = useState(-1)
   const shift = (i, to) => {
     onChange(move(list, i, to))
     setOpen((o) => (o === i ? to : o === to ? i : o))
   }
+  const close = useCallback(() => setOpen(-1), [])
   return (
-    <div className="adm-items">
+    <div className={`adm-items ${def.sheet ? 'outline' : ''}`}>
       {list.map((item, i) => {
         const name = (def.name?.(item) || '').trim() || `${def.noun} ${i + 1}`
         const isOpen = open === i
+        const form = (
+          <>
+            {def.about?.(item) && <p className="adm-help">{def.about(item)}</p>}
+            <Fields schema={typeof def.of === 'function' ? def.of(item) : def.of} value={item} onChange={(v) => onChange(list.map((x, k) => (k === i ? v : x)))} />
+          </>
+        )
+        const remove = (
+          <Danger
+            label={`Delete this ${def.noun}`}
+            onConfirm={() => {
+              onChange(list.filter((_, k) => k !== i))
+              setOpen(-1)
+            }}
+          />
+        )
         return (
           <div key={i} className={`adm-item ${isOpen ? 'open' : ''}`}>
             <div className="adm-item-head">
               <button type="button" className="adm-item-name" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? -1 : i)}>
-                <i aria-hidden="true">{isOpen ? '–' : '+'}</i>
+                {def.sheet ? <b aria-hidden="true">{i + 1}</b> : <i aria-hidden="true">{isOpen ? '–' : '+'}</i>}
                 <span>{name}</span>
                 {def.badge?.(item) && <em>{def.badge(item)}</em>}
+                {def.sheet && <u>Edit</u>}
               </button>
               <button type="button" className="adm-icon" aria-label={`Move ${name} up`} disabled={!i} onClick={() => shift(i, i - 1)}>
                 ↑
@@ -309,24 +385,25 @@ export function Items({ def, value, onChange, renderExtra }) {
                 ↓
               </button>
             </div>
-            {isOpen && (
-              <div className="adm-item-body">
-                {def.about?.(item) && <p className="adm-help">{def.about(item)}</p>}
-                <Fields schema={typeof def.of === 'function' ? def.of(item) : def.of} value={item} onChange={(v) => onChange(list.map((x, k) => (k === i ? v : x)))} />
-                {renderExtra?.(item, i)}
-                <Danger
-                  label={`Delete this ${def.noun}`}
-                  onConfirm={() => {
-                    onChange(list.filter((_, k) => k !== i))
-                    setOpen(-1)
-                  }}
-                />
-              </div>
-            )}
+            {isOpen &&
+              (def.sheet ? (
+                <Sheet title={name} kind={`Section ${i + 1} of ${list.length}: ${BLOCKS[item.type]?.label || item.type}`} onClose={close} footer={remove}>
+                  {form}
+                </Sheet>
+              ) : (
+                <div className="adm-item-body">
+                  {form}
+                  {remove}
+                </div>
+              ))}
           </div>
         )
       })}
       {!list.length && <p className="adm-empty">No {def.noun}s yet.</p>}
+      {def.adder?.((item) => {
+        onChange([...list, item])
+        setOpen(list.length)
+      })}
       {def.blank && (
         <button
           type="button"
@@ -433,13 +510,7 @@ function Field({ def, value, onChange }) {
   else if (def.type === 'media') control = <MediaField def={def} value={text} onChange={onChange} />
   else if (def.type === 'strings') control = <Strings def={def} value={value} onChange={onChange} />
   else if (def.type === 'items') control = <Items def={def} value={value} onChange={onChange} />
-  else if (def.type === 'sections')
-    control = (
-      <div className="adm-sections">
-        <Items def={SECTIONS} value={value} onChange={onChange} />
-        <AddSection onAdd={(b) => onChange([...(Array.isArray(value) ? value : []), b])} />
-      </div>
-    )
+  else if (def.type === 'sections') control = <Items def={SECTIONS} value={value} onChange={onChange} />
   else control = <input id={id} value={text} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
 
   const count = def.max && typeof text === 'string' ? text.length : null
@@ -455,6 +526,51 @@ function Field({ def, value, onChange }) {
   )
 }
 
+const OPTIONAL = / \(optional\)/i
+const filled = (v) => (Array.isArray(v) ? v.length > 0 : typeof v === 'string' ? v.trim() !== '' : false)
+
+// "Button text" and "Button goes to" are one thing to a person, so they sit side by side.
+function ButtonPair({ text, to, value, onChange }) {
+  return (
+    <fieldset className="adm-group adm-pair">
+      <legend>{text.label.replace(OPTIONAL, '').replace(/ text$/i, '')}</legend>
+      <Field def={{ ...text, label: 'Words on the button' }} value={value?.[text.k]} onChange={(v) => onChange({ ...value, [text.k]: v })} />
+      <Field def={{ ...to, label: 'Opens' }} value={value?.[to.k]} onChange={(v) => onChange({ ...value, [to.k]: v })} />
+    </fieldset>
+  )
+}
+
+// Draws a form. Optional and styling fields (marked "(optional)" or more: true) fold under
+// "More options", which starts open when one of them already holds something.
 export function Fields({ schema, value, onChange }) {
-  return schema.map((def) => <Field key={def.k} def={def} value={value?.[def.k]} onChange={(v) => onChange({ ...value, [def.k]: v })} />)
+  const rows = []
+  for (let i = 0; i < schema.length; i++) {
+    const def = schema[i]
+    const next = schema[i + 1]
+    const pair = def.k.endsWith('Label') && next?.k === def.k.slice(0, -5) + 'To'
+    rows.push({ def, to: pair ? next : null, more: !!def.more || OPTIONAL.test(def.label) })
+    if (pair) i++
+  }
+  const main = rows.filter((r) => !r.more)
+  const extra = main.length && rows.length > 3 ? rows.filter((r) => r.more) : []
+  // A colour always holds a value, so only typed or chosen content counts.
+  const [startOpen] = useState(() => extra.some((r) => r.def.type !== 'select' && filled(value?.[r.def.k])))
+  const draw = (r, plain) =>
+    r.to ? (
+      <ButtonPair key={r.def.k} text={r.def} to={r.to} value={value} onChange={onChange} />
+    ) : (
+      <Field key={r.def.k} def={plain ? { ...r.def, label: r.def.label.replace(OPTIONAL, '') } : r.def} value={value?.[r.def.k]} onChange={(v) => onChange({ ...value, [r.def.k]: v })} />
+    )
+  if (!extra.length) return rows.map((r) => draw(r, false))
+  return (
+    <>
+      {main.map((r) => draw(r, false))}
+      <details className="adm-more" open={startOpen}>
+        <summary>
+          More options <span>{extra.map((r) => r.def.label.replace(OPTIONAL, '').replace(/ text$/i, '').toLowerCase()).join(', ')}</span>
+        </summary>
+        <div className="adm-more-body">{extra.map((r) => draw(r, true))}</div>
+      </details>
+    </>
+  )
 }
