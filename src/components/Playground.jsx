@@ -51,7 +51,7 @@ const TOYS = [
   [null, <><Ball r={0.34} color={C.navy} /><BallCollider args={[0.34]} /></>],
 ]
 
-function useWorld() {
+function useWorld(clear) {
   const { size, camera } = useThree()
   return useMemo(() => {
     const aspect = size.width / size.height
@@ -59,8 +59,19 @@ function useWorld() {
     const h = 2 * z * Math.tan(THREE.MathUtils.degToRad(FOV / 2))
     camera.position.z = z
     camera.updateProjectionMatrix()
-    return { w: h * aspect, h, count: aspect < 1 ? 7 : aspect < 1.45 ? 9 : 12 }
-  }, [size, camera])
+    const w = h * aspect
+    // On wide screens the copy has its own column, and the toys get the space to the right of it.
+    // Narrow screens stack the copy above the toys, so they keep the full width.
+    const walled = aspect >= 1.45 && clear > 0 && clear < 0.72
+    const left = walled ? -w / 2 + clear * w : -w / 2
+    return { w, h, left, right: w / 2, count: aspect < 1 ? 7 : aspect < 1.45 ? 9 : walled ? 9 : 12 }
+  }, [size, camera, clear])
+}
+
+// A spot to drop a toy from, inside the walls.
+const dropX = (world) => {
+  const span = Math.max(1, world.right - world.left - 3.5)
+  return (world.left + world.right) / 2 + (Math.random() - 0.5) * span
 }
 
 function Toy({ name, index, world, drag, bodies, onPop, children }) {
@@ -71,7 +82,7 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
     return () => bodies.current.delete(b)
   }, [bodies])
   const [start] = useState(() => ({
-    p: [(Math.random() - 0.5) * Math.max(1, world.w - 3.5), world.h / 2 + 1.5 + index * 1.3, 0],
+    p: [dropX(world), world.h / 2 + 1.5 + index * 1.3, 0],
     r: [0, 0, Math.random() * 3],
   }))
   // A resize can move the walls past a toy; drop any stray back in from the top.
@@ -83,8 +94,8 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
     const v = b.linvel()
     const speed = Math.hypot(v.x, v.y)
     if (speed > 45) b.setLinvel({ x: (v.x * 45) / speed, y: (v.y * 45) / speed, z: 0 }, true)
-    if (p.y > -world.h / 2 - 2 && p.y < world.h / 2 + 20 && Math.abs(p.x) < world.w / 2 + 2) return
-    b.setTranslation({ x: (Math.random() - 0.5) * Math.max(1, world.w - 3.5), y: world.h / 2 + 2, z: 0 }, true)
+    if (p.y > -world.h / 2 - 2 && p.y < world.h / 2 + 20 && p.x > world.left - 2 && p.x < world.right + 2) return
+    b.setTranslation({ x: dropX(world), y: world.h / 2 + 2, z: 0 }, true)
     b.setLinvel({ x: 0, y: 0, z: 0 }, true)
   })
   const hover = (v) => {
@@ -129,8 +140,8 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
   )
 }
 
-function Scene({ onPop, shake }) {
-  const world = useWorld()
+function Scene({ onPop, shake, clear }) {
+  const world = useWorld(clear)
   const drag = useRef(null)
   const bodies = useRef(new Set())
   const lastScroll = useRef(0)
@@ -188,13 +199,13 @@ function Scene({ onPop, shake }) {
     b.setLinvel({ x: vx, y: vy, z: 0 }, true)
   })
 
-  const { w, h } = world
+  const { w, h, left, right } = world
   return (
     <>
-      <RigidBody type="fixed" colliders={false} key={`${w.toFixed(2)}x${h.toFixed(2)}`}>
+      <RigidBody type="fixed" colliders={false} key={`${w.toFixed(2)}x${h.toFixed(2)}x${left.toFixed(2)}`}>
         <CuboidCollider args={[w, 1, 4]} position={[0, -h / 2 - 0.85, 0]} />
-        <CuboidCollider args={[1, h * 3, 4]} position={[-w / 2 - 1, h, 0]} />
-        <CuboidCollider args={[1, h * 3, 4]} position={[w / 2 + 1, h, 0]} />
+        <CuboidCollider args={[1, h * 3, 4]} position={[left - 1, h, 0]} />
+        <CuboidCollider args={[1, h * 3, 4]} position={[right + 1, h, 0]} />
         <CuboidCollider args={[w, 1, 4]} position={[0, h / 2 + 24, 0]} />
       </RigidBody>
       {toys.map(([name, el], i) => (
@@ -206,7 +217,7 @@ function Scene({ onPop, shake }) {
   )
 }
 
-export default function Playground({ active, onPop, shake }) {
+export default function Playground({ active, onPop, shake, clear = 0 }) {
   return (
     <Canvas
       flat
@@ -219,7 +230,7 @@ export default function Playground({ active, onPop, shake }) {
     >
       <Studio wall={-0.9} sway={0.35} />
       <Physics gravity={[0, -28, 0]} paused={!active}>
-        <Scene onPop={onPop} shake={shake} />
+        <Scene onPop={onPop} shake={shake} clear={clear} />
       </Physics>
     </Canvas>
   )

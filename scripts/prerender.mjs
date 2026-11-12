@@ -14,8 +14,9 @@ const dist = join(root, 'dist')
 copyFileSync(join(dist, 'index.html'), join(dist, '_template.html'))
 const template = readFileSync(join(dist, '_template.html'), 'utf8')
 const site = createSite(root)
-// With LIVE_CONTENT the pages fetch the content from /api/content on every visit instead of carrying a copy.
-const page = (route) => site.page(template, route, { inline: !process.env.LIVE_CONTENT }).html
+// The pages fetch the content from /api/content on every visit, so admin saves show at once.
+// LIVE_CONTENT=0 bakes a copy into each page instead (only for hosting with no API at all).
+const page = (route) => site.page(template, route, { inline: process.env.LIVE_CONTENT === '0' }).html
 
 setContent(site.read())
 const all = routes()

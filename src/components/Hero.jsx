@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import gsap from 'gsap'
 
@@ -16,6 +16,30 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
   const [label, setLabel] = useState(null)
   const [inView, setInView] = useState(true)
   const [shake, setShake] = useState(0)
+  // How far the copy reaches across the hero (0 to 1). The toys stay to the right of it, so they
+  // never pile up under the buttons or the text.
+  const [clear, setClear] = useState(0)
+
+  useLayoutEffect(() => {
+    const el = root.current
+    if (!el) return
+    const measure = () => {
+      const box = el.getBoundingClientRect()
+      if (!box.width) return
+      // Every rotating word is measured up front, so the wall does not jump when a longer word comes round.
+      const parts = el.querySelectorAll('.hero-copy .rise, .hero-copy .chip-measure .chip, .hero-copy .lede, .hero-copy .status-line, .hero-actions > *')
+      let right = 0
+      parts.forEach((n) => {
+        right = Math.max(right, n.getBoundingClientRect().right)
+      })
+      setClear(right ? Math.min(1, (right - box.left + 48) / box.width) : 0)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    document.fonts?.ready?.then(measure)
+    return () => ro.disconnect()
+  }, [before, after, text, WORDS.map((w) => w[0]).join('|')])
 
   useEffect(() => {
     if (reduce) return
@@ -53,7 +77,7 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
       {!reduce && (
         <div className="hero-canvas">
           <Suspense fallback={null}>
-            <Playground active={inView} shake={shake} onPop={(name) => setLabel({ name, k: Date.now() })} />
+            <Playground active={inView} shake={shake} clear={clear} onPop={(name) => setLabel({ name, k: Date.now() })} />
           </Suspense>
         </div>
       )}
@@ -64,6 +88,13 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
             <span className="rise">{before}</span>
           </span>
           <span className="line chip-line" aria-hidden="true">
+            <span className="chip-measure">
+              {WORDS.map(([w, c]) => (
+                <span key={w} className={`chip bg-${c}`}>
+                  {w}
+                </span>
+              ))}
+            </span>
             <span className="chip-wrap">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span

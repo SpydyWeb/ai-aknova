@@ -160,6 +160,18 @@ h2 {
 .chip-wrap {
   display: inline-block;
 }
+/* Invisible copies of every rotating word, so the hero can measure the widest one. */
+.chip-measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.chip-measure .chip {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 .chip {
   display: inline-block;
   padding: 0.06em 0.34em 0.14em;
