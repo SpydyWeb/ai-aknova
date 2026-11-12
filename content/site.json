@@ -1,2109 +1,2109 @@
 {
-  "site": {
-    "name": "Aknova Tech",
-    "tagline": "Powering what's next.",
-    "url": "https://www.aknovatech.com",
-    "city": "Delhi",
-    "email": "official.aknovatech@gmail.com",
-    "phone": "+91 93184 86435",
-    "address": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn, Delhi 110059",
-    "street": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn",
-    "locality": "Delhi",
-    "postcode": "110059",
-    "country": "IN",
-    "social": [],
-    "web3formsKey": "",
-    "popup": {
-      "show": true,
-      "title": "Tell us what you need",
-      "text": "We reply within one working day."
-    },
-    "status": {
-      "show": true,
-      "queue": 2,
-      "minDays": 3,
-      "maxDays": 5
-    },
-    "reviews": {
-      "title": "What people say on Google",
-      "embed": "",
-      "url": ""
-    },
-    "closing": {
-      "title": "Got something to build?",
-      "button": "Start a project"
-    },
-    "notFound": {
-      "title": "This page is not here",
-      "text": "The link may be old or mistyped. The home page has everything.",
-      "button": "Go to the home page"
-    },
-    "buddyTips": [
-      {
-        "text": "Spin a 3D model.",
-        "to": "/services"
-      },
-      {
-        "text": "Fling the project cards.",
-        "to": "/#work"
-      },
-      {
-        "text": "Ring up an order on the till.",
-        "to": "/contact#order"
-      },
-      {
-        "text": "Throw the toys around.",
-        "to": "/"
-      }
-    ]
-  },
-  "seo": {
-    "indexing": true,
-    "image": "/og.png",
-    "keywords": "",
-    "googleVerification": "",
-    "bingVerification": "",
-    "founded": "",
-    "priceRange": "",
-    "hours": "",
-    "areaServed": "India",
-    "ai": {
-      "summary": "",
-      "facts": [],
-      "answers": true,
-      "training": true
-    }
-  },
-  "pages": [
-    {
-      "path": "/",
-      "title": "Home",
-      "inNav": false,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
-        {
-          "id": "b1",
-          "type": "hero",
-          "before": "We build",
-          "words": [
+    "site": {
+        "name": "Aknova Tech",
+        "tagline": "Powering what's next.",
+        "url": "https://www.aknovatech.com",
+        "city": "Delhi",
+        "email": "official.aknovatech@gmail.com",
+        "phone": "+91 93184 86435",
+        "address": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn, Delhi 110059",
+        "street": "E-110, First Floor, Jeewan Park, Uttam Nagar East, Opp Hotel Plazzo Inn",
+        "locality": "Delhi",
+        "postcode": "110059",
+        "country": "IN",
+        "social": [],
+        "web3formsKey": "",
+        "popup": {
+            "show": true,
+            "title": "Tell us what you need",
+            "text": "We reply within one working day."
+        },
+        "status": {
+            "show": true,
+            "queue": 2,
+            "minDays": 3,
+            "maxDays": 5
+        },
+        "reviews": {
+            "title": "What people say on Google",
+            "embed": "",
+            "url": ""
+        },
+        "closing": {
+            "title": "Got something to build?",
+            "button": "Start a project"
+        },
+        "notFound": {
+            "title": "This page is not here",
+            "text": "The link may be old or mistyped. The home page has everything.",
+            "button": "Go to the home page"
+        },
+        "buddyTips": [
             {
-              "text": "websites",
-              "tone": "sun"
+                "text": "Spin a 3D model.",
+                "to": "/services"
             },
             {
-              "text": "mobile apps",
-              "tone": "sky"
+                "text": "Fling the project cards.",
+                "to": "/#work"
             },
             {
-              "text": "AI automations",
-              "tone": "navy"
+                "text": "Ring up an order on the till.",
+                "to": "/contact#order"
             },
             {
-              "text": "campaigns",
-              "tone": "blue"
-            },
-            {
-              "text": "CRM systems",
-              "tone": "sun"
-            },
-            {
-              "text": "POS systems",
-              "tone": "sky"
+                "text": "Throw the toys around.",
+                "to": "/"
             }
-          ],
-          "after": "people enjoy using.",
-          "text": "Aknova Tech is one team for design, development and marketing. Ten services, from your first website to the software that runs your shop.",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "b2",
-          "type": "marquee"
-        },
-        {
-          "id": "b3",
-          "type": "services",
-          "title": "What we do",
-          "text": "Pick a service. Drag the model to turn it, tap it to spin it."
-        },
-        {
-          "id": "b4",
-          "type": "work",
-          "title": "Ten projects we're proud of",
-          "text": "Fling the top card away to see the next one. Tap it to turn it over."
-        },
-        {
-          "id": "b5",
-          "type": "story",
-          "title": "How a project runs"
-        },
-        {
-          "id": "b6",
-          "type": "why",
-          "title": "Why work with us",
-          "text": "Tap a card to turn it over."
-        },
-        {
-          "id": "b20",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": "The kinds of businesses we build for most often."
-        },
-        {
-          "id": "b7",
-          "type": "pricing",
-          "title": "Pick a plan, or build your own",
-          "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
-        },
-        {
-          "id": "b8",
-          "type": "voices",
-          "title": "What clients say",
-          "text": "Drag the notes around. Tap one to bring it to the front."
-        },
-        {
-          "id": "b21",
-          "type": "reviews"
-        },
-        {
-          "id": "b9",
-          "type": "till",
-          "title": "Ring up what you need",
-          "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
-        },
-        {
-          "id": "b10",
-          "type": "blog",
-          "title": "From the blog"
-        },
-        {
-          "id": "b11",
-          "type": "faq",
-          "title": "Questions people ask first",
-          "video": "faq.mp4"
-        }
-      ]
+        ]
     },
-    {
-      "path": "/services",
-      "title": "Services",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
-        {
-          "id": "b12",
-          "type": "pageHero",
-          "title": "Ten services, one team",
-          "text": "Take one, or put several together. Add what you need to your order and send it when you are ready.",
-          "tone": "paper",
-          "models": [
-            "browser",
-            "robot",
-            "magnifier",
-            "phone",
-            "coin"
-          ]
-        },
-        {
-          "id": "b13",
-          "type": "serviceGrid"
-        },
-        {
-          "id": "b14",
-          "type": "process",
-          "title": "How a project runs"
+    "seo": {
+        "indexing": true,
+        "image": "/og.png",
+        "keywords": "",
+        "googleVerification": "<meta name=\"google-site-verification\" content=\"neahDjascQlroXoBPw9RKxMOvIGCnurNNLpEvUFOSbE\" />",
+        "bingVerification": "",
+        "founded": "",
+        "priceRange": "",
+        "hours": "",
+        "areaServed": "India",
+        "ai": {
+            "summary": "",
+            "facts": [],
+            "answers": true,
+            "training": true
         }
-      ]
     },
-    {
-      "path": "/work",
-      "title": "Work",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
+    "pages": [
         {
-          "id": "b15",
-          "type": "pageHero",
-          "title": "Ten projects we're proud of",
-          "text": "Filter by the kind of work, then tap a project to open it.",
-          "tone": "navy",
-          "models": [
-            "browser",
-            "phone",
-            "heart",
-            "cursor",
-            "pawn"
-          ]
+            "path": "/",
+            "title": "Home",
+            "inNav": false,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b1",
+                    "type": "hero",
+                    "before": "We build",
+                    "words": [
+                        {
+                            "text": "websites",
+                            "tone": "sun"
+                        },
+                        {
+                            "text": "mobile apps",
+                            "tone": "sky"
+                        },
+                        {
+                            "text": "AI automations",
+                            "tone": "navy"
+                        },
+                        {
+                            "text": "campaigns",
+                            "tone": "blue"
+                        },
+                        {
+                            "text": "CRM systems",
+                            "tone": "sun"
+                        },
+                        {
+                            "text": "POS systems",
+                            "tone": "sky"
+                        }
+                    ],
+                    "after": "people enjoy using.",
+                    "text": "Aknova Tech is one team for design, development and marketing. Ten services, from your first website to the software that runs your shop.",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "b2",
+                    "type": "marquee"
+                },
+                {
+                    "id": "b3",
+                    "type": "services",
+                    "title": "What we do",
+                    "text": "Pick a service. Drag the model to turn it, tap it to spin it."
+                },
+                {
+                    "id": "b4",
+                    "type": "work",
+                    "title": "Ten projects we're proud of",
+                    "text": "Fling the top card away to see the next one. Tap it to turn it over."
+                },
+                {
+                    "id": "b5",
+                    "type": "story",
+                    "title": "How a project runs"
+                },
+                {
+                    "id": "b6",
+                    "type": "why",
+                    "title": "Why work with us",
+                    "text": "Tap a card to turn it over."
+                },
+                {
+                    "id": "b20",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": "The kinds of businesses we build for most often."
+                },
+                {
+                    "id": "b7",
+                    "type": "pricing",
+                    "title": "Pick a plan, or build your own",
+                    "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
+                },
+                {
+                    "id": "b8",
+                    "type": "voices",
+                    "title": "What clients say",
+                    "text": "Drag the notes around. Tap one to bring it to the front."
+                },
+                {
+                    "id": "b21",
+                    "type": "reviews"
+                },
+                {
+                    "id": "b9",
+                    "type": "till",
+                    "title": "Ring up what you need",
+                    "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
+                },
+                {
+                    "id": "b10",
+                    "type": "blog",
+                    "title": "From the blog"
+                },
+                {
+                    "id": "b11",
+                    "type": "faq",
+                    "title": "Questions people ask first",
+                    "video": "faq.mp4"
+                }
+            ]
         },
         {
-          "id": "b16",
-          "type": "workGrid"
+            "path": "/services",
+            "title": "Services",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b12",
+                    "type": "pageHero",
+                    "title": "Ten services, one team",
+                    "text": "Take one, or put several together. Add what you need to your order and send it when you are ready.",
+                    "tone": "paper",
+                    "models": [
+                        "browser",
+                        "robot",
+                        "magnifier",
+                        "phone",
+                        "coin"
+                    ]
+                },
+                {
+                    "id": "b13",
+                    "type": "serviceGrid"
+                },
+                {
+                    "id": "b14",
+                    "type": "process",
+                    "title": "How a project runs"
+                }
+            ]
+        },
+        {
+            "path": "/work",
+            "title": "Work",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b15",
+                    "type": "pageHero",
+                    "title": "Ten projects we're proud of",
+                    "text": "Filter by the kind of work, then tap a project to open it.",
+                    "tone": "navy",
+                    "models": [
+                        "browser",
+                        "phone",
+                        "heart",
+                        "cursor",
+                        "pawn"
+                    ]
+                },
+                {
+                    "id": "b16",
+                    "type": "workGrid"
+                }
+            ]
+        },
+        {
+            "path": "/pricing",
+            "title": "Pricing",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b17",
+                    "type": "pageHero",
+                    "title": "Clear prices before we start",
+                    "text": "Three starting points. Tell us what you need and we shape the plan and the price around it.",
+                    "tone": "sun",
+                    "models": [
+                        "coin",
+                        "browser",
+                        "pawn",
+                        "megaphone",
+                        "robot"
+                    ]
+                },
+                {
+                    "id": "b18",
+                    "type": "pricing",
+                    "title": "Pick a plan, or build your own",
+                    "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
+                },
+                {
+                    "id": "b19",
+                    "type": "faq",
+                    "title": "Questions people ask first",
+                    "video": "faq.mp4"
+                }
+            ]
+        },
+        {
+            "path": "/blog",
+            "title": "Blog",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b20",
+                    "type": "pageHero",
+                    "title": "Plain advice on websites, marketing and software",
+                    "text": "Short articles for business owners. No jargon, and nothing you need a developer to understand.",
+                    "tone": "sky",
+                    "models": [
+                        "magnifier",
+                        "megaphone",
+                        "robot",
+                        "pawn",
+                        "browser"
+                    ]
+                },
+                {
+                    "id": "b21",
+                    "type": "blogGrid"
+                }
+            ]
+        },
+        {
+            "path": "/about",
+            "title": "About",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b22",
+                    "type": "pageHero",
+                    "title": "One team for the whole job",
+                    "text": "Aknova Tech is a service company. We design, build and market digital products, and set up the software that runs a business day to day.",
+                    "tone": "sky",
+                    "models": [
+                        "mark",
+                        "robot",
+                        "pawn",
+                        "heart",
+                        "cursor"
+                    ]
+                },
+                {
+                    "id": "b23",
+                    "type": "text",
+                    "title": "Why we work this way",
+                    "body": "Most businesses end up with one company for the website, another for the app, a freelancer for ads and a separate vendor for billing software. Things get lost between them.\n\nWe put those jobs under one roof. The people who design your screens sit next to the people who build them and the people who bring customers to them."
+                },
+                {
+                    "id": "b24",
+                    "type": "why",
+                    "title": "Why work with us",
+                    "text": "Tap a card to turn it over."
+                },
+                {
+                    "id": "b25",
+                    "type": "process",
+                    "title": "How a project runs"
+                },
+                {
+                    "id": "b26",
+                    "type": "voices",
+                    "title": "What clients say",
+                    "text": "Drag the notes around. Tap one to bring it to the front."
+                }
+            ]
+        },
+        {
+            "path": "/contact",
+            "title": "Contact",
+            "inNav": true,
+            "core": true,
+            "seo": {
+                "title": "",
+                "description": "",
+                "image": "",
+                "noindex": false
+            },
+            "blocks": [
+                {
+                    "id": "b27",
+                    "type": "contact",
+                    "title": "Tell us what you're building"
+                },
+                {
+                    "id": "b28",
+                    "type": "till",
+                    "title": "Ring up what you need",
+                    "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
+                },
+                {
+                    "id": "b29",
+                    "type": "faq",
+                    "title": "Questions people ask first",
+                    "video": "faq.mp4"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "path": "/pricing",
-      "title": "Pricing",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
+    ],
+    "services": [
         {
-          "id": "b17",
-          "type": "pageHero",
-          "title": "Clear prices before we start",
-          "text": "Three starting points. Tell us what you need and we shape the plan and the price around it.",
-          "tone": "sun",
-          "models": [
-            "coin",
-            "browser",
-            "pawn",
-            "megaphone",
-            "robot"
-          ]
+            "name": "Web development",
+            "line": "Fast websites and web apps that are easy for you to update.",
+            "items": [
+                "Company websites",
+                "Online stores",
+                "Web apps"
+            ],
+            "model": "browser",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s001web",
+                    "type": "svcHero",
+                    "title": "Website designs that make your brand",
+                    "highlight": "stand out",
+                    "tone": "sun",
+                    "text": "We create custom, responsive and conversion-focused website designs that combine a strong visual identity, intuitive UX and business-focused strategy.",
+                    "ticks": [
+                        "Custom design",
+                        "Mobile-first",
+                        "Conversion focused"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Get a custom design",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "View our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s002web",
+                    "type": "intro",
+                    "title": "Custom website design built around your business",
+                    "body": "Your website should do more than look good. It should communicate your brand, guide visitors through the right journey and encourage them to take action.\n\nAt Aknova Tech, we create business-specific website designs instead of relying on generic templates. Every layout, section and interaction is planned around your audience, brand and business objectives.",
+                    "tone": "paper"
+                },
+                {
+                    "id": "s003web",
+                    "type": "features",
+                    "look": "cards",
+                    "tone": "paper",
+                    "title": "Our website design services",
+                    "text": "From business websites to focused landing pages, we design for different business goals.",
+                    "items": [
+                        {
+                            "title": "Custom website design",
+                            "text": "Unique designs created around your brand, audience and business objectives.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Business website design",
+                            "text": "Professional websites that build credibility and turn visitors into potential customers.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Corporate website design",
+                            "text": "Structured, professional designs for established businesses and corporate brands.",
+                            "to": ""
+                        },
+                        {
+                            "title": "E-commerce website design",
+                            "text": "Shopping experiences that make finding and buying products easier.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Landing page design",
+                            "text": "Focused pages built around one campaign, offer or conversion goal.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Responsive website design",
+                            "text": "A consistent experience across desktop, tablet and phone.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Website redesign",
+                            "text": "Outdated websites rebuilt with better visuals, navigation and layouts that convert.",
+                            "to": ""
+                        },
+                        {
+                            "title": "UI/UX design",
+                            "text": "Interfaces designed around the people using them, so sites are easier to navigate.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Conversion-focused design",
+                            "text": "Layouts, calls to action and user journeys that lead visitors to act.",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s004web",
+                    "type": "features",
+                    "look": "cells",
+                    "tone": "sky",
+                    "title": "Website designs for different business needs",
+                    "text": "",
+                    "items": [
+                        {
+                            "title": "Small business websites",
+                            "text": "A professional online presence for growing businesses.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Startup websites",
+                            "text": "Modern designs that help new brands earn credibility.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Corporate websites",
+                            "text": "Structured experiences for established companies and organisations.",
+                            "to": ""
+                        },
+                        {
+                            "title": "B2B websites",
+                            "text": "Designs that support lead generation and trust.",
+                            "to": ""
+                        },
+                        {
+                            "title": "E-commerce websites",
+                            "text": "Shopping experiences designed around ease of use.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Lead generation websites",
+                            "text": "Layouts planned to bring in enquiries and leads.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Portfolio websites",
+                            "text": "Visual showcases for your work and capabilities.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Service-based websites",
+                            "text": "Clear, conversion-focused designs for service businesses.",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s005web",
+                    "type": "timeline",
+                    "tone": "navy",
+                    "title": "Our website design process",
+                    "text": "A structured process keeps the design visually strong, easy to use and aligned with your goals.",
+                    "steps": [
+                        {
+                            "title": "Understanding your business",
+                            "text": "We learn about your brand, audience, goals and requirements."
+                        },
+                        {
+                            "title": "Audience and competitor research",
+                            "text": "We study your market and competitors to find design opportunities."
+                        },
+                        {
+                            "title": "Structure and sitemap",
+                            "text": "We organise your content into a clear, logical structure."
+                        },
+                        {
+                            "title": "Wireframing",
+                            "text": "We lay out each page and the visitor’s journey before any visual design."
+                        },
+                        {
+                            "title": "UI/UX design",
+                            "text": "We turn the approved structure into a polished user experience."
+                        },
+                        {
+                            "title": "Visual design and branding",
+                            "text": "Colours, type, imagery and visual details bring the brand to life."
+                        }
+                    ]
+                },
+                {
+                    "id": "s006web",
+                    "type": "features",
+                    "look": "cells",
+                    "tone": "paper",
+                    "title": "What makes our website designs different?",
+                    "text": "We combine design thinking, user experience and business goals to create websites that have a purpose, not just a look.",
+                    "items": [
+                        {
+                            "title": "User-centred design",
+                            "text": "Every design decision starts with the people who will use your website.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Mobile-first approach",
+                            "text": "We plan for phones from the start of the design process.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Conversion-focused layouts",
+                            "text": "Pages are structured to guide visitors toward important actions.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Clear navigation",
+                            "text": "Information is organised so visitors find what they need quickly.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Consistent brand identity",
+                            "text": "Your colours, type and visual language stay consistent throughout.",
+                            "to": ""
+                        },
+                        {
+                            "title": "SEO-friendly structure",
+                            "text": "We plan content hierarchy and usability with search in mind.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Fast, lightweight design",
+                            "text": "Visuals are designed with performance in mind.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Accessibility-focused design",
+                            "text": "We make interfaces easier to understand and navigate for everyone.",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s007web",
+                    "type": "features",
+                    "look": "list",
+                    "tone": "blue",
+                    "title": "We design websites with a purpose",
+                    "text": "We don’t design websites just to look good. We design experiences that guide visitors toward meaningful actions.",
+                    "items": [
+                        {
+                            "title": "Strategic call-to-action placement",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Lead generation sections",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Trust signals and social proof",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Optimised user journeys",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Above-the-fold strategy",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Focused landing page structure",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s008web",
+                    "type": "features",
+                    "look": "cells",
+                    "tone": "sun",
+                    "title": "SEO-friendly website design",
+                    "text": "Good design supports both visitors and search visibility, so we plan layouts with SEO in mind.",
+                    "items": [
+                        {
+                            "title": "SEO-friendly site structure",
+                            "text": "Logical page organisation helps visitors and search engines understand your site.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Search-friendly navigation",
+                            "text": "Clear navigation improves the experience and helps pages get found.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Content hierarchy",
+                            "text": "Important content is placed so it gets the attention it deserves.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Heading structure",
+                            "text": "Each page is planned around a clear, logical order of headings.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Image and visual optimisation",
+                            "text": "Visuals are planned for usability and speed.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Mobile-friendly design",
+                            "text": "Responsive layouts help visitors use your site on any device.",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s009web",
+                    "type": "split",
+                    "title": "Give your existing website a modern experience",
+                    "body": "If your current website looks outdated, feels difficult to use or isn’t bringing the results you expect, a strategic redesign can create a better experience for your visitors.",
+                    "media": "",
+                    "alt": "",
+                    "points": [
+                        "Outdated website redesign",
+                        "Poor UX improvement",
+                        "Mobile experience improvement",
+                        "Conversion-focused redesign",
+                        "Brand refresh",
+                        "Visual modernisation"
+                    ],
+                    "flip": false,
+                    "tone": "paper",
+                    "buttonLabel": "Plan a redesign",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s00aweb",
+                    "type": "projects",
+                    "title": "Website design portfolio",
+                    "text": "Selected website projects for different industries, audiences and business goals.",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s00bweb",
+                    "type": "industries",
+                    "title": "Industries we design websites for",
+                    "text": ""
+                },
+                {
+                    "id": "s00cweb",
+                    "type": "features",
+                    "look": "list",
+                    "tone": "navy",
+                    "title": "Design that connects your brand with your audience",
+                    "text": "We combine website design, UI/UX thinking and digital marketing knowledge to build experiences that support your wider business goals. Every design is made for your brand, audience and requirements, never from a generic template.",
+                    "items": [
+                        {
+                            "title": "Custom design approach",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Business-focused strategy",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "UI/UX expertise",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Conversion-focused layouts",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Mobile-first design",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "SEO-aware design",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Transparent design process",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Design and marketing understanding",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "Start your project",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s00dweb",
+                    "type": "features",
+                    "look": "cards",
+                    "tone": "paper",
+                    "title": "How much does website design cost?",
+                    "text": "Pricing depends on the scope, complexity and requirements of each project. These are what move it.",
+                    "items": [
+                        {
+                            "title": "Number of pages",
+                            "text": "More pages need more planning and design work.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Design complexity",
+                            "text": "Custom layouts and advanced visual experiences affect cost.",
+                            "to": ""
+                        },
+                        {
+                            "title": "UI/UX requirements",
+                            "text": "Complex user journeys need deeper UX planning.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Custom graphics",
+                            "text": "Custom illustrations and visual assets change the scope.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Revisions",
+                            "text": "The number of review rounds affects the timeline.",
+                            "to": ""
+                        },
+                        {
+                            "title": "Branding requirements",
+                            "text": "Brand identity work may need extra design time.",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "Get a quote",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s00eweb",
+                    "type": "questions",
+                    "title": "Questions about website design",
+                    "text": "",
+                    "items": [
+                        {
+                            "q": "What is website design?",
+                            "a": "Website design is planning how your site looks and works: the layout of each page, the colours and type, and the path a visitor takes from arriving to getting in touch."
+                        },
+                        {
+                            "q": "How much does website design cost?",
+                            "a": "It depends on the number of pages, how custom the design is, and whether you need branding or illustrations. Tell us what you need and we send a fixed quote before any work starts."
+                        },
+                        {
+                            "q": "How long does website design take?",
+                            "a": "It depends on the size of the site and how quickly feedback comes back. You get a timeline together with the quote, before the project starts."
+                        },
+                        {
+                            "q": "Do you create custom website designs?",
+                            "a": "Yes. Every design is made for your brand and audience. We do not resell templates."
+                        },
+                        {
+                            "q": "Do you design mobile-responsive websites?",
+                            "a": "Yes. Every page is designed for phones, tablets and desktops, starting with the phone."
+                        },
+                        {
+                            "q": "Do you provide UI/UX design services?",
+                            "a": "Yes. We plan user journeys and wireframes before visual design, so the site is easy to use as well as good to look at."
+                        },
+                        {
+                            "q": "Can you redesign my existing website?",
+                            "a": "Yes. We keep what already works on your site and fix what holds it back, such as dated visuals, confusing navigation or a weak mobile experience."
+                        },
+                        {
+                            "q": "Do you provide landing page design?",
+                            "a": "Yes. We design single pages built around one campaign, offer or action."
+                        },
+                        {
+                            "q": "Can you design a website according to my brand?",
+                            "a": "Yes. We work from your logo, colours and tone of voice. If you do not have brand guidelines yet, we can create them with you."
+                        },
+                        {
+                            "q": "Will I get the source design files?",
+                            "a": "Yes. Once the project is paid for, the design files are yours."
+                        },
+                        {
+                            "q": "Do you provide website development after design?",
+                            "a": "Yes. Our team builds the site we design, so nothing gets lost between design and development."
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "id": "b18",
-          "type": "pricing",
-          "title": "Pick a plan, or build your own",
-          "text": "Every plan can be changed to fit. Choosing one adds its services to your order."
+            "name": "UI/UX design",
+            "line": "Screens people understand the first time they see them.",
+            "items": [
+                "Wireframes",
+                "App and web design",
+                "Design systems"
+            ],
+            "model": "cursor",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0uiuxde",
+                    "type": "svcHero",
+                    "title": "UI/UX design",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Screens people understand the first time they see them.",
+                    "ticks": [
+                        "Wireframes",
+                        "App and web design",
+                        "Design systems"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1uiuxde",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Wireframes",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "App and web design",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Design systems",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2uiuxde",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3uiuxde",
+                    "type": "projects",
+                    "title": "UI/UX design projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4uiuxde",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5uiuxde",
+                    "type": "questions",
+                    "title": "Questions about UI/UX design",
+                    "text": "",
+                    "items": []
+                }
+            ]
         },
         {
-          "id": "b19",
-          "type": "faq",
-          "title": "Questions people ask first",
-          "video": "faq.mp4"
+            "name": "SEO",
+            "line": "Help the right people find you on Google.",
+            "items": [
+                "Site audits",
+                "Keyword plans",
+                "Content and links"
+            ],
+            "model": "magnifier",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0seo",
+                    "type": "svcHero",
+                    "title": "SEO",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Help the right people find you on Google.",
+                    "ticks": [
+                        "Site audits",
+                        "Keyword plans",
+                        "Content and links"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1seo",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Site audits",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Keyword plans",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Content and links",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2seo",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3seo",
+                    "type": "projects",
+                    "title": "SEO projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4seo",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5seo",
+                    "type": "questions",
+                    "title": "Questions about SEO",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "Digital marketing",
+            "line": "Ads and campaigns that are measured, not guessed.",
+            "items": [
+                "Google and Meta ads",
+                "Email campaigns",
+                "Landing pages"
+            ],
+            "model": "megaphone",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0digita",
+                    "type": "svcHero",
+                    "title": "Digital marketing",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Ads and campaigns that are measured, not guessed.",
+                    "ticks": [
+                        "Google and Meta ads",
+                        "Email campaigns",
+                        "Landing pages"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1digita",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Google and Meta ads",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Email campaigns",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Landing pages",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2digita",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3digita",
+                    "type": "projects",
+                    "title": "Digital marketing projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4digita",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5digita",
+                    "type": "questions",
+                    "title": "Questions about Digital marketing",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "Social media marketing",
+            "line": "A feed that looks like you and posts on time.",
+            "items": [
+                "Content calendars",
+                "Reels and creatives",
+                "Community replies"
+            ],
+            "model": "heart",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0social",
+                    "type": "svcHero",
+                    "title": "Social media marketing",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "A feed that looks like you and posts on time.",
+                    "ticks": [
+                        "Content calendars",
+                        "Reels and creatives",
+                        "Community replies"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1social",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Content calendars",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Reels and creatives",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Community replies",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2social",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3social",
+                    "type": "projects",
+                    "title": "Social media marketing projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4social",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5social",
+                    "type": "questions",
+                    "title": "Questions about Social media marketing",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "Mobile app development",
+            "line": "Android and iPhone apps, from idea to store listing.",
+            "items": [
+                "Android apps",
+                "iOS apps",
+                "App store launch"
+            ],
+            "model": "phone",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0mobile",
+                    "type": "svcHero",
+                    "title": "Mobile app development",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Android and iPhone apps, from idea to store listing.",
+                    "ticks": [
+                        "Android apps",
+                        "iOS apps",
+                        "App store launch"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1mobile",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Android apps",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "iOS apps",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "App store launch",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2mobile",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3mobile",
+                    "type": "projects",
+                    "title": "Mobile app development projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4mobile",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5mobile",
+                    "type": "questions",
+                    "title": "Questions about Mobile app development",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "AI automation",
+            "line": "Let software handle the repetitive work.",
+            "items": [
+                "Chatbots",
+                "WhatsApp automation",
+                "Workflow automation"
+            ],
+            "model": "robot",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0aiauto",
+                    "type": "svcHero",
+                    "title": "AI automation",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Let software handle the repetitive work.",
+                    "ticks": [
+                        "Chatbots",
+                        "WhatsApp automation",
+                        "Workflow automation"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1aiauto",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Chatbots",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "WhatsApp automation",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Workflow automation",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2aiauto",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3aiauto",
+                    "type": "projects",
+                    "title": "AI automation projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4aiauto",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5aiauto",
+                    "type": "questions",
+                    "title": "Questions about AI automation",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "CRM systems",
+            "line": "Every lead and customer in one place.",
+            "items": [
+                "Lead tracking",
+                "Sales pipelines",
+                "Follow-up reminders"
+            ],
+            "model": "pawn",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0crmsys",
+                    "type": "svcHero",
+                    "title": "CRM systems",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Every lead and customer in one place.",
+                    "ticks": [
+                        "Lead tracking",
+                        "Sales pipelines",
+                        "Follow-up reminders"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1crmsys",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Lead tracking",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Sales pipelines",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Follow-up reminders",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2crmsys",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3crmsys",
+                    "type": "projects",
+                    "title": "CRM systems projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4crmsys",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5crmsys",
+                    "type": "questions",
+                    "title": "Questions about CRM systems",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "HRM systems",
+            "line": "Attendance, leave and payroll without spreadsheets.",
+            "items": [
+                "Attendance",
+                "Leave and payroll",
+                "Employee records"
+            ],
+            "model": "badge",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0hrmsys",
+                    "type": "svcHero",
+                    "title": "HRM systems",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Attendance, leave and payroll without spreadsheets.",
+                    "ticks": [
+                        "Attendance",
+                        "Leave and payroll",
+                        "Employee records"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1hrmsys",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Attendance",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Leave and payroll",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Employee records",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2hrmsys",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3hrmsys",
+                    "type": "projects",
+                    "title": "HRM systems projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4hrmsys",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5hrmsys",
+                    "type": "questions",
+                    "title": "Questions about HRM systems",
+                    "text": "",
+                    "items": []
+                }
+            ]
+        },
+        {
+            "name": "POS systems",
+            "line": "Billing and stock for shops and restaurants.",
+            "items": [
+                "Billing",
+                "Inventory",
+                "Sales reports"
+            ],
+            "model": "coin",
+            "seo": {
+                "title": "",
+                "description": ""
+            },
+            "image": "",
+            "blocks": [
+                {
+                    "id": "s0possys",
+                    "type": "svcHero",
+                    "title": "POS systems",
+                    "highlight": "",
+                    "tone": "sun",
+                    "text": "Billing and stock for shops and restaurants.",
+                    "ticks": [
+                        "Billing",
+                        "Inventory",
+                        "Sales reports"
+                    ],
+                    "image": "",
+                    "primaryLabel": "Start a project",
+                    "primaryTo": "/contact",
+                    "secondaryLabel": "See our work",
+                    "secondaryTo": "/work"
+                },
+                {
+                    "id": "s1possys",
+                    "type": "features",
+                    "title": "What is included",
+                    "text": "",
+                    "tone": "paper",
+                    "look": "cards",
+                    "items": [
+                        {
+                            "title": "Billing",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Inventory",
+                            "text": "",
+                            "to": ""
+                        },
+                        {
+                            "title": "Sales reports",
+                            "text": "",
+                            "to": ""
+                        }
+                    ],
+                    "buttonLabel": "",
+                    "buttonTo": "/contact"
+                },
+                {
+                    "id": "s2possys",
+                    "type": "timeline",
+                    "title": "How a project runs",
+                    "text": "",
+                    "tone": "navy",
+                    "steps": []
+                },
+                {
+                    "id": "s3possys",
+                    "type": "projects",
+                    "title": "POS systems projects",
+                    "text": "",
+                    "service": "",
+                    "max": 3
+                },
+                {
+                    "id": "s4possys",
+                    "type": "industries",
+                    "title": "Industries we serve",
+                    "text": ""
+                },
+                {
+                    "id": "s5possys",
+                    "type": "questions",
+                    "title": "Questions about POS systems",
+                    "text": "",
+                    "items": []
+                }
+            ]
         }
-      ]
-    },
-    {
-      "path": "/blog",
-      "title": "Blog",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
+    ],
+    "projects": [
         {
-          "id": "b20",
-          "type": "pageHero",
-          "title": "Plain advice on websites, marketing and software",
-          "text": "Short articles for business owners. No jargon, and nothing you need a developer to understand.",
-          "tone": "sky",
-          "models": [
-            "magnifier",
-            "megaphone",
-            "robot",
-            "pawn",
-            "browser"
-          ]
+            "name": "Clinic booking app",
+            "type": "Mobile app development",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
         },
         {
-          "id": "b21",
-          "type": "blogGrid"
+            "name": "Furniture store",
+            "type": "Web development",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Restaurant POS",
+            "type": "POS systems",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Sales pipeline CRM",
+            "type": "CRM systems",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Staff attendance portal",
+            "type": "HRM systems",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Support chatbot",
+            "type": "AI automation",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Travel brand launch",
+            "type": "Social media marketing",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Real estate search ranking",
+            "type": "SEO",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Fitness app redesign",
+            "type": "UI/UX design",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
+        },
+        {
+            "name": "Festival sale campaign",
+            "type": "Digital marketing",
+            "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+            "tag": "Sample",
+            "image": "",
+            "link": ""
         }
-      ]
-    },
-    {
-      "path": "/about",
-      "title": "About",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
+    ],
+    "steps": [
         {
-          "id": "b22",
-          "type": "pageHero",
-          "title": "One team for the whole job",
-          "text": "Aknova Tech is a service company. We design, build and market digital products, and set up the software that runs a business day to day.",
-          "tone": "sky",
-          "models": [
-            "mark",
-            "robot",
-            "pawn",
-            "heart",
-            "cursor"
-          ]
+            "name": "Brief",
+            "text": "Tell us what you need. One call or one email is enough to start."
         },
         {
-          "id": "b23",
-          "type": "text",
-          "title": "Why we work this way",
-          "body": "Most businesses end up with one company for the website, another for the app, a freelancer for ads and a separate vendor for billing software. Things get lost between them.\n\nWe put those jobs under one roof. The people who design your screens sit next to the people who build them and the people who bring customers to them."
+            "name": "Design",
+            "text": "You see the screens before we write code, and change what you want."
         },
         {
-          "id": "b24",
-          "type": "why",
-          "title": "Why work with us",
-          "text": "Tap a card to turn it over."
+            "name": "Build",
+            "text": "We build it and show you progress as we go."
         },
         {
-          "id": "b25",
-          "type": "process",
-          "title": "How a project runs"
-        },
-        {
-          "id": "b26",
-          "type": "voices",
-          "title": "What clients say",
-          "text": "Drag the notes around. Tap one to bring it to the front."
+            "name": "Launch",
+            "text": "We put it live, then stay around for fixes and upgrades."
         }
-      ]
-    },
-    {
-      "path": "/contact",
-      "title": "Contact",
-      "inNav": true,
-      "core": true,
-      "seo": {
-        "title": "",
-        "description": "",
-        "image": "",
-        "noindex": false
-      },
-      "blocks": [
+    ],
+    "reasons": [
         {
-          "id": "b27",
-          "type": "contact",
-          "title": "Tell us what you're building"
+            "title": "One team",
+            "text": "Design, code and marketing sit together, so nothing gets lost between vendors.",
+            "tone": "sun",
+            "video": "why-1.mp4"
         },
         {
-          "id": "b28",
-          "type": "till",
-          "title": "Ring up what you need",
-          "text": "Press the services you're after. The till prints your order, and the big button sends it to us."
+            "title": "Built to be used",
+            "text": "Big buttons, fast pages and plain words, because your customers are busy.",
+            "tone": "sky",
+            "video": "why-2.mp4"
         },
         {
-          "id": "b29",
-          "type": "faq",
-          "title": "Questions people ask first",
-          "video": "faq.mp4"
+            "title": "Software that fits",
+            "text": "CRM, HRM and POS shaped around how your staff already work.",
+            "tone": "blue",
+            "video": "why-3.mp4"
+        },
+        {
+            "title": "Here after launch",
+            "text": "Fixes, updates and new ideas once the project is live.",
+            "tone": "navy",
+            "video": "why-4.mp4"
         }
-      ]
-    }
-  ],
-  "services": [
-    {
-      "name": "Web development",
-      "line": "Fast websites and web apps that are easy for you to update.",
-      "items": [
-        "Company websites",
-        "Online stores",
-        "Web apps"
-      ],
-      "model": "browser",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
+    ],
+    "industries": [
         {
-          "id": "s001web",
-          "type": "svcHero",
-          "title": "Website designs that make your brand",
-          "highlight": "stand out",
-          "tone": "sun",
-          "text": "We create custom, responsive and conversion-focused website designs that combine a strong visual identity, intuitive UX and business-focused strategy.",
-          "ticks": [
-            "Custom design",
-            "Mobile-first",
-            "Conversion focused"
-          ],
-          "image": "",
-          "primaryLabel": "Get a custom design",
-          "primaryTo": "/contact",
-          "secondaryLabel": "View our work",
-          "secondaryTo": "/work"
+            "name": "Real estate",
+            "text": "",
+            "image": ""
         },
         {
-          "id": "s002web",
-          "type": "intro",
-          "title": "Custom website design built around your business",
-          "body": "Your website should do more than look good. It should communicate your brand, guide visitors through the right journey and encourage them to take action.\n\nAt Aknova Tech, we create business-specific website designs instead of relying on generic templates. Every layout, section and interaction is planned around your audience, brand and business objectives.",
-          "tone": "paper"
+            "name": "Technology",
+            "text": "",
+            "image": ""
         },
         {
-          "id": "s003web",
-          "type": "features",
-          "look": "cards",
-          "tone": "paper",
-          "title": "Our website design services",
-          "text": "From business websites to focused landing pages, we design for different business goals.",
-          "items": [
-            {
-              "title": "Custom website design",
-              "text": "Unique designs created around your brand, audience and business objectives.",
-              "to": ""
-            },
-            {
-              "title": "Business website design",
-              "text": "Professional websites that build credibility and turn visitors into potential customers.",
-              "to": ""
-            },
-            {
-              "title": "Corporate website design",
-              "text": "Structured, professional designs for established businesses and corporate brands.",
-              "to": ""
-            },
-            {
-              "title": "E-commerce website design",
-              "text": "Shopping experiences that make finding and buying products easier.",
-              "to": ""
-            },
-            {
-              "title": "Landing page design",
-              "text": "Focused pages built around one campaign, offer or conversion goal.",
-              "to": ""
-            },
-            {
-              "title": "Responsive website design",
-              "text": "A consistent experience across desktop, tablet and phone.",
-              "to": ""
-            },
-            {
-              "title": "Website redesign",
-              "text": "Outdated websites rebuilt with better visuals, navigation and layouts that convert.",
-              "to": ""
-            },
-            {
-              "title": "UI/UX design",
-              "text": "Interfaces designed around the people using them, so sites are easier to navigate.",
-              "to": ""
-            },
-            {
-              "title": "Conversion-focused design",
-              "text": "Layouts, calls to action and user journeys that lead visitors to act.",
-              "to": ""
+            "name": "Healthcare",
+            "text": "",
+            "image": ""
+        },
+        {
+            "name": "Education",
+            "text": "",
+            "image": ""
+        },
+        {
+            "name": "Professional services",
+            "text": "",
+            "image": ""
+        },
+        {
+            "name": "E-commerce",
+            "text": "",
+            "image": ""
+        },
+        {
+            "name": "Construction and architecture",
+            "text": "",
+            "image": ""
+        },
+        {
+            "name": "B2B businesses",
+            "text": "",
+            "image": ""
+        }
+    ],
+    "voices": [
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        },
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        },
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        },
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        },
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        },
+        {
+            "quote": "Sample note. A real client quote goes here.",
+            "who": "Client name, business"
+        }
+    ],
+    "faqs": [
+        {
+            "q": "How do we start?",
+            "a": "Ring up the services you need on the till and email the order. We reply with questions, a plan and a price."
+        },
+        {
+            "q": "Can you work on a website or app we already have?",
+            "a": "Yes. Send us the link and tell us what is not working."
+        },
+        {
+            "q": "Do you only build, or also run the marketing?",
+            "a": "Both. The same team handles design, development, SEO, ads and social media."
+        },
+        {
+            "q": "Will the CRM, HRM or POS fit how we work?",
+            "a": "We set it up around your process and show your staff how to use it."
+        },
+        {
+            "q": "What happens after launch?",
+            "a": "We stay for fixes, updates and new features."
+        }
+    ],
+    "plans": [
+        {
+            "best": false,
+            "name": "Starter",
+            "line": "A clean website that gets you found.",
+            "once": "XX,XXX",
+            "hourly": "X,XXX",
+            "items": [
+                "Up to five pages",
+                "Works on every phone",
+                "Contact form",
+                "Basic SEO setup"
+            ],
+            "services": [
+                "Web development",
+                "SEO"
+            ]
+        },
+        {
+            "best": true,
+            "name": "Growth",
+            "line": "The website, plus the marketing that fills it.",
+            "once": "XX,XXX",
+            "hourly": "X,XXX",
+            "items": [
+                "Everything in Starter",
+                "Online store or booking",
+                "Ads and social media setup",
+                "A report every month"
+            ],
+            "services": [
+                "Web development",
+                "SEO",
+                "Digital marketing",
+                "Social media marketing"
+            ]
+        },
+        {
+            "best": false,
+            "name": "Business suite",
+            "line": "Software built around how you run things.",
+            "once": "X,XX,XXX",
+            "hourly": "X,XXX",
+            "items": [
+                "CRM, HRM or POS",
+                "AI automation",
+                "Staff training",
+                "Ongoing tech support"
+            ],
+            "services": [
+                "CRM systems",
+                "HRM systems",
+                "POS systems",
+                "AI automation"
+            ]
+        }
+    ],
+    "posts": [
+        {
+            "id": "how-to-brief-a-web-team",
+            "title": "How to brief a web team in ten minutes",
+            "topic": "Websites",
+            "tone": "blue",
+            "minutes": 3,
+            "intro": "A short, clear brief saves weeks. You do not need a long document, only honest answers to four questions.",
+            "body": [
+                {
+                    "heading": "Who is it for?",
+                    "text": "Describe one real customer: what they do, what they are looking for, and what device they are probably holding. A site built for everyone works for no one."
+                },
+                {
+                    "heading": "What should they do?",
+                    "text": "Pick one main action. Call you, book a slot, buy a product, or fill in a form. Every page should make that one action easy."
+                },
+                {
+                    "heading": "What do you already have?",
+                    "text": "List your logo, photos, text, domain and any old site. Knowing what exists tells the team what must be made from scratch."
+                },
+                {
+                    "heading": "How will you know it worked?",
+                    "text": "Choose a number you can check in three months: enquiries per week, orders per day, or calls from the site. That number guides every decision after launch."
+                }
+            ],
+            "cover": "",
+            "seo": {
+                "title": "",
+                "description": ""
             }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
         },
         {
-          "id": "s004web",
-          "type": "features",
-          "look": "cells",
-          "tone": "sky",
-          "title": "Website designs for different business needs",
-          "text": "",
-          "items": [
-            {
-              "title": "Small business websites",
-              "text": "A professional online presence for growing businesses.",
-              "to": ""
-            },
-            {
-              "title": "Startup websites",
-              "text": "Modern designs that help new brands earn credibility.",
-              "to": ""
-            },
-            {
-              "title": "Corporate websites",
-              "text": "Structured experiences for established companies and organisations.",
-              "to": ""
-            },
-            {
-              "title": "B2B websites",
-              "text": "Designs that support lead generation and trust.",
-              "to": ""
-            },
-            {
-              "title": "E-commerce websites",
-              "text": "Shopping experiences designed around ease of use.",
-              "to": ""
-            },
-            {
-              "title": "Lead generation websites",
-              "text": "Layouts planned to bring in enquiries and leads.",
-              "to": ""
-            },
-            {
-              "title": "Portfolio websites",
-              "text": "Visual showcases for your work and capabilities.",
-              "to": ""
-            },
-            {
-              "title": "Service-based websites",
-              "text": "Clear, conversion-focused designs for service businesses.",
-              "to": ""
+            "id": "spreadsheet-or-crm",
+            "title": "When a spreadsheet stops being enough",
+            "topic": "Business software",
+            "tone": "sun",
+            "minutes": 3,
+            "intro": "Most businesses start by tracking customers in a spreadsheet, and that is fine. These are the signs it is time for a CRM.",
+            "body": [
+                {
+                    "heading": "Leads are slipping",
+                    "text": "If someone enquired last week and nobody followed up, the sheet is not reminding anyone. A CRM does."
+                },
+                {
+                    "heading": "Two people edit the same row",
+                    "text": "Once more than one person handles customers, you need to see who spoke to whom and when, without asking around."
+                },
+                {
+                    "heading": "You cannot answer simple questions",
+                    "text": "How many enquiries came in this month? Where did they come from? How many became sales? If that takes an afternoon to work out, you have outgrown the sheet."
+                },
+                {
+                    "heading": "Start small",
+                    "text": "A CRM does not need fifty fields. Begin with name, need, next step and date. Add more only when someone asks for it twice."
+                }
+            ],
+            "cover": "",
+            "seo": {
+                "title": "",
+                "description": ""
             }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
         },
         {
-          "id": "s005web",
-          "type": "timeline",
-          "tone": "navy",
-          "title": "Our website design process",
-          "text": "A structured process keeps the design visually strong, easy to use and aligned with your goals.",
-          "steps": [
-            {
-              "title": "Understanding your business",
-              "text": "We learn about your brand, audience, goals and requirements."
-            },
-            {
-              "title": "Audience and competitor research",
-              "text": "We study your market and competitors to find design opportunities."
-            },
-            {
-              "title": "Structure and sitemap",
-              "text": "We organise your content into a clear, logical structure."
-            },
-            {
-              "title": "Wireframing",
-              "text": "We lay out each page and the visitor’s journey before any visual design."
-            },
-            {
-              "title": "UI/UX design",
-              "text": "We turn the approved structure into a polished user experience."
-            },
-            {
-              "title": "Visual design and branding",
-              "text": "Colours, type, imagery and visual details bring the brand to life."
+            "id": "what-to-automate-first",
+            "title": "What to automate first in a small business",
+            "topic": "AI automation",
+            "tone": "sky",
+            "minutes": 4,
+            "intro": "Automation pays off fastest on jobs that are frequent, boring and follow the same steps every time.",
+            "body": [
+                {
+                    "heading": "Answering the same questions",
+                    "text": "Opening hours, prices, delivery areas. A chatbot on your site or WhatsApp can answer these at any hour and hand over to a person when it gets stuck."
+                },
+                {
+                    "heading": "Following up",
+                    "text": "A message the day after an enquiry, a reminder before an appointment, a thank-you after a purchase. These are easy to automate and easy to forget by hand."
+                },
+                {
+                    "heading": "Moving data between tools",
+                    "text": "If someone copies orders from a form into a sheet and then into billing, that is three chances for a typo. Connect the tools once and the copying stops."
+                },
+                {
+                    "heading": "Keep a person in the loop",
+                    "text": "Automate the routine, not the judgement. Complaints, refunds and unusual requests should still reach a human quickly."
+                }
+            ],
+            "cover": "",
+            "seo": {
+                "title": "",
+                "description": ""
             }
-          ]
-        },
-        {
-          "id": "s006web",
-          "type": "features",
-          "look": "cells",
-          "tone": "paper",
-          "title": "What makes our website designs different?",
-          "text": "We combine design thinking, user experience and business goals to create websites that have a purpose, not just a look.",
-          "items": [
-            {
-              "title": "User-centred design",
-              "text": "Every design decision starts with the people who will use your website.",
-              "to": ""
-            },
-            {
-              "title": "Mobile-first approach",
-              "text": "We plan for phones from the start of the design process.",
-              "to": ""
-            },
-            {
-              "title": "Conversion-focused layouts",
-              "text": "Pages are structured to guide visitors toward important actions.",
-              "to": ""
-            },
-            {
-              "title": "Clear navigation",
-              "text": "Information is organised so visitors find what they need quickly.",
-              "to": ""
-            },
-            {
-              "title": "Consistent brand identity",
-              "text": "Your colours, type and visual language stay consistent throughout.",
-              "to": ""
-            },
-            {
-              "title": "SEO-friendly structure",
-              "text": "We plan content hierarchy and usability with search in mind.",
-              "to": ""
-            },
-            {
-              "title": "Fast, lightweight design",
-              "text": "Visuals are designed with performance in mind.",
-              "to": ""
-            },
-            {
-              "title": "Accessibility-focused design",
-              "text": "We make interfaces easier to understand and navigate for everyone.",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s007web",
-          "type": "features",
-          "look": "list",
-          "tone": "blue",
-          "title": "We design websites with a purpose",
-          "text": "We don’t design websites just to look good. We design experiences that guide visitors toward meaningful actions.",
-          "items": [
-            {
-              "title": "Strategic call-to-action placement",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Lead generation sections",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Trust signals and social proof",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Optimised user journeys",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Above-the-fold strategy",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Focused landing page structure",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s008web",
-          "type": "features",
-          "look": "cells",
-          "tone": "sun",
-          "title": "SEO-friendly website design",
-          "text": "Good design supports both visitors and search visibility, so we plan layouts with SEO in mind.",
-          "items": [
-            {
-              "title": "SEO-friendly site structure",
-              "text": "Logical page organisation helps visitors and search engines understand your site.",
-              "to": ""
-            },
-            {
-              "title": "Search-friendly navigation",
-              "text": "Clear navigation improves the experience and helps pages get found.",
-              "to": ""
-            },
-            {
-              "title": "Content hierarchy",
-              "text": "Important content is placed so it gets the attention it deserves.",
-              "to": ""
-            },
-            {
-              "title": "Heading structure",
-              "text": "Each page is planned around a clear, logical order of headings.",
-              "to": ""
-            },
-            {
-              "title": "Image and visual optimisation",
-              "text": "Visuals are planned for usability and speed.",
-              "to": ""
-            },
-            {
-              "title": "Mobile-friendly design",
-              "text": "Responsive layouts help visitors use your site on any device.",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s009web",
-          "type": "split",
-          "title": "Give your existing website a modern experience",
-          "body": "If your current website looks outdated, feels difficult to use or isn’t bringing the results you expect, a strategic redesign can create a better experience for your visitors.",
-          "media": "",
-          "alt": "",
-          "points": [
-            "Outdated website redesign",
-            "Poor UX improvement",
-            "Mobile experience improvement",
-            "Conversion-focused redesign",
-            "Brand refresh",
-            "Visual modernisation"
-          ],
-          "flip": false,
-          "tone": "paper",
-          "buttonLabel": "Plan a redesign",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s00aweb",
-          "type": "projects",
-          "title": "Website design portfolio",
-          "text": "Selected website projects for different industries, audiences and business goals.",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s00bweb",
-          "type": "industries",
-          "title": "Industries we design websites for",
-          "text": ""
-        },
-        {
-          "id": "s00cweb",
-          "type": "features",
-          "look": "list",
-          "tone": "navy",
-          "title": "Design that connects your brand with your audience",
-          "text": "We combine website design, UI/UX thinking and digital marketing knowledge to build experiences that support your wider business goals. Every design is made for your brand, audience and requirements, never from a generic template.",
-          "items": [
-            {
-              "title": "Custom design approach",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Business-focused strategy",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "UI/UX expertise",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Conversion-focused layouts",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Mobile-first design",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "SEO-aware design",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Transparent design process",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Design and marketing understanding",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "Start your project",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s00dweb",
-          "type": "features",
-          "look": "cards",
-          "tone": "paper",
-          "title": "How much does website design cost?",
-          "text": "Pricing depends on the scope, complexity and requirements of each project. These are what move it.",
-          "items": [
-            {
-              "title": "Number of pages",
-              "text": "More pages need more planning and design work.",
-              "to": ""
-            },
-            {
-              "title": "Design complexity",
-              "text": "Custom layouts and advanced visual experiences affect cost.",
-              "to": ""
-            },
-            {
-              "title": "UI/UX requirements",
-              "text": "Complex user journeys need deeper UX planning.",
-              "to": ""
-            },
-            {
-              "title": "Custom graphics",
-              "text": "Custom illustrations and visual assets change the scope.",
-              "to": ""
-            },
-            {
-              "title": "Revisions",
-              "text": "The number of review rounds affects the timeline.",
-              "to": ""
-            },
-            {
-              "title": "Branding requirements",
-              "text": "Brand identity work may need extra design time.",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "Get a quote",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s00eweb",
-          "type": "questions",
-          "title": "Questions about website design",
-          "text": "",
-          "items": [
-            {
-              "q": "What is website design?",
-              "a": "Website design is planning how your site looks and works: the layout of each page, the colours and type, and the path a visitor takes from arriving to getting in touch."
-            },
-            {
-              "q": "How much does website design cost?",
-              "a": "It depends on the number of pages, how custom the design is, and whether you need branding or illustrations. Tell us what you need and we send a fixed quote before any work starts."
-            },
-            {
-              "q": "How long does website design take?",
-              "a": "It depends on the size of the site and how quickly feedback comes back. You get a timeline together with the quote, before the project starts."
-            },
-            {
-              "q": "Do you create custom website designs?",
-              "a": "Yes. Every design is made for your brand and audience. We do not resell templates."
-            },
-            {
-              "q": "Do you design mobile-responsive websites?",
-              "a": "Yes. Every page is designed for phones, tablets and desktops, starting with the phone."
-            },
-            {
-              "q": "Do you provide UI/UX design services?",
-              "a": "Yes. We plan user journeys and wireframes before visual design, so the site is easy to use as well as good to look at."
-            },
-            {
-              "q": "Can you redesign my existing website?",
-              "a": "Yes. We keep what already works on your site and fix what holds it back, such as dated visuals, confusing navigation or a weak mobile experience."
-            },
-            {
-              "q": "Do you provide landing page design?",
-              "a": "Yes. We design single pages built around one campaign, offer or action."
-            },
-            {
-              "q": "Can you design a website according to my brand?",
-              "a": "Yes. We work from your logo, colours and tone of voice. If you do not have brand guidelines yet, we can create them with you."
-            },
-            {
-              "q": "Will I get the source design files?",
-              "a": "Yes. Once the project is paid for, the design files are yours."
-            },
-            {
-              "q": "Do you provide website development after design?",
-              "a": "Yes. Our team builds the site we design, so nothing gets lost between design and development."
-            }
-          ]
         }
-      ]
-    },
-    {
-      "name": "UI/UX design",
-      "line": "Screens people understand the first time they see them.",
-      "items": [
-        "Wireframes",
-        "App and web design",
-        "Design systems"
-      ],
-      "model": "cursor",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0uiuxde",
-          "type": "svcHero",
-          "title": "UI/UX design",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Screens people understand the first time they see them.",
-          "ticks": [
-            "Wireframes",
-            "App and web design",
-            "Design systems"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1uiuxde",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Wireframes",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "App and web design",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Design systems",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2uiuxde",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3uiuxde",
-          "type": "projects",
-          "title": "UI/UX design projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4uiuxde",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5uiuxde",
-          "type": "questions",
-          "title": "Questions about UI/UX design",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "SEO",
-      "line": "Help the right people find you on Google.",
-      "items": [
-        "Site audits",
-        "Keyword plans",
-        "Content and links"
-      ],
-      "model": "magnifier",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0seo",
-          "type": "svcHero",
-          "title": "SEO",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Help the right people find you on Google.",
-          "ticks": [
-            "Site audits",
-            "Keyword plans",
-            "Content and links"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1seo",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Site audits",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Keyword plans",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Content and links",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2seo",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3seo",
-          "type": "projects",
-          "title": "SEO projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4seo",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5seo",
-          "type": "questions",
-          "title": "Questions about SEO",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "Digital marketing",
-      "line": "Ads and campaigns that are measured, not guessed.",
-      "items": [
-        "Google and Meta ads",
-        "Email campaigns",
-        "Landing pages"
-      ],
-      "model": "megaphone",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0digita",
-          "type": "svcHero",
-          "title": "Digital marketing",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Ads and campaigns that are measured, not guessed.",
-          "ticks": [
-            "Google and Meta ads",
-            "Email campaigns",
-            "Landing pages"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1digita",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Google and Meta ads",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Email campaigns",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Landing pages",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2digita",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3digita",
-          "type": "projects",
-          "title": "Digital marketing projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4digita",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5digita",
-          "type": "questions",
-          "title": "Questions about Digital marketing",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "Social media marketing",
-      "line": "A feed that looks like you and posts on time.",
-      "items": [
-        "Content calendars",
-        "Reels and creatives",
-        "Community replies"
-      ],
-      "model": "heart",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0social",
-          "type": "svcHero",
-          "title": "Social media marketing",
-          "highlight": "",
-          "tone": "sun",
-          "text": "A feed that looks like you and posts on time.",
-          "ticks": [
-            "Content calendars",
-            "Reels and creatives",
-            "Community replies"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1social",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Content calendars",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Reels and creatives",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Community replies",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2social",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3social",
-          "type": "projects",
-          "title": "Social media marketing projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4social",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5social",
-          "type": "questions",
-          "title": "Questions about Social media marketing",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "Mobile app development",
-      "line": "Android and iPhone apps, from idea to store listing.",
-      "items": [
-        "Android apps",
-        "iOS apps",
-        "App store launch"
-      ],
-      "model": "phone",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0mobile",
-          "type": "svcHero",
-          "title": "Mobile app development",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Android and iPhone apps, from idea to store listing.",
-          "ticks": [
-            "Android apps",
-            "iOS apps",
-            "App store launch"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1mobile",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Android apps",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "iOS apps",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "App store launch",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2mobile",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3mobile",
-          "type": "projects",
-          "title": "Mobile app development projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4mobile",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5mobile",
-          "type": "questions",
-          "title": "Questions about Mobile app development",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "AI automation",
-      "line": "Let software handle the repetitive work.",
-      "items": [
-        "Chatbots",
-        "WhatsApp automation",
-        "Workflow automation"
-      ],
-      "model": "robot",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0aiauto",
-          "type": "svcHero",
-          "title": "AI automation",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Let software handle the repetitive work.",
-          "ticks": [
-            "Chatbots",
-            "WhatsApp automation",
-            "Workflow automation"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1aiauto",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Chatbots",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "WhatsApp automation",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Workflow automation",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2aiauto",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3aiauto",
-          "type": "projects",
-          "title": "AI automation projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4aiauto",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5aiauto",
-          "type": "questions",
-          "title": "Questions about AI automation",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "CRM systems",
-      "line": "Every lead and customer in one place.",
-      "items": [
-        "Lead tracking",
-        "Sales pipelines",
-        "Follow-up reminders"
-      ],
-      "model": "pawn",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0crmsys",
-          "type": "svcHero",
-          "title": "CRM systems",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Every lead and customer in one place.",
-          "ticks": [
-            "Lead tracking",
-            "Sales pipelines",
-            "Follow-up reminders"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1crmsys",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Lead tracking",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Sales pipelines",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Follow-up reminders",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2crmsys",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3crmsys",
-          "type": "projects",
-          "title": "CRM systems projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4crmsys",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5crmsys",
-          "type": "questions",
-          "title": "Questions about CRM systems",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "HRM systems",
-      "line": "Attendance, leave and payroll without spreadsheets.",
-      "items": [
-        "Attendance",
-        "Leave and payroll",
-        "Employee records"
-      ],
-      "model": "badge",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0hrmsys",
-          "type": "svcHero",
-          "title": "HRM systems",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Attendance, leave and payroll without spreadsheets.",
-          "ticks": [
-            "Attendance",
-            "Leave and payroll",
-            "Employee records"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1hrmsys",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Attendance",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Leave and payroll",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Employee records",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2hrmsys",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3hrmsys",
-          "type": "projects",
-          "title": "HRM systems projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4hrmsys",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5hrmsys",
-          "type": "questions",
-          "title": "Questions about HRM systems",
-          "text": "",
-          "items": []
-        }
-      ]
-    },
-    {
-      "name": "POS systems",
-      "line": "Billing and stock for shops and restaurants.",
-      "items": [
-        "Billing",
-        "Inventory",
-        "Sales reports"
-      ],
-      "model": "coin",
-      "seo": {
-        "title": "",
-        "description": ""
-      },
-      "image": "",
-      "blocks": [
-        {
-          "id": "s0possys",
-          "type": "svcHero",
-          "title": "POS systems",
-          "highlight": "",
-          "tone": "sun",
-          "text": "Billing and stock for shops and restaurants.",
-          "ticks": [
-            "Billing",
-            "Inventory",
-            "Sales reports"
-          ],
-          "image": "",
-          "primaryLabel": "Start a project",
-          "primaryTo": "/contact",
-          "secondaryLabel": "See our work",
-          "secondaryTo": "/work"
-        },
-        {
-          "id": "s1possys",
-          "type": "features",
-          "title": "What is included",
-          "text": "",
-          "tone": "paper",
-          "look": "cards",
-          "items": [
-            {
-              "title": "Billing",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Inventory",
-              "text": "",
-              "to": ""
-            },
-            {
-              "title": "Sales reports",
-              "text": "",
-              "to": ""
-            }
-          ],
-          "buttonLabel": "",
-          "buttonTo": "/contact"
-        },
-        {
-          "id": "s2possys",
-          "type": "timeline",
-          "title": "How a project runs",
-          "text": "",
-          "tone": "navy",
-          "steps": []
-        },
-        {
-          "id": "s3possys",
-          "type": "projects",
-          "title": "POS systems projects",
-          "text": "",
-          "service": "",
-          "max": 3
-        },
-        {
-          "id": "s4possys",
-          "type": "industries",
-          "title": "Industries we serve",
-          "text": ""
-        },
-        {
-          "id": "s5possys",
-          "type": "questions",
-          "title": "Questions about POS systems",
-          "text": "",
-          "items": []
-        }
-      ]
-    }
-  ],
-  "projects": [
-    {
-      "name": "Clinic booking app",
-      "type": "Mobile app development",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Furniture store",
-      "type": "Web development",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Restaurant POS",
-      "type": "POS systems",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Sales pipeline CRM",
-      "type": "CRM systems",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Staff attendance portal",
-      "type": "HRM systems",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Support chatbot",
-      "type": "AI automation",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Travel brand launch",
-      "type": "Social media marketing",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Real estate search ranking",
-      "type": "SEO",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Fitness app redesign",
-      "type": "UI/UX design",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    },
-    {
-      "name": "Festival sale campaign",
-      "type": "Digital marketing",
-      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
-      "tag": "Sample",
-      "image": "",
-      "link": ""
-    }
-  ],
-  "steps": [
-    {
-      "name": "Brief",
-      "text": "Tell us what you need. One call or one email is enough to start."
-    },
-    {
-      "name": "Design",
-      "text": "You see the screens before we write code, and change what you want."
-    },
-    {
-      "name": "Build",
-      "text": "We build it and show you progress as we go."
-    },
-    {
-      "name": "Launch",
-      "text": "We put it live, then stay around for fixes and upgrades."
-    }
-  ],
-  "reasons": [
-    {
-      "title": "One team",
-      "text": "Design, code and marketing sit together, so nothing gets lost between vendors.",
-      "tone": "sun",
-      "video": "why-1.mp4"
-    },
-    {
-      "title": "Built to be used",
-      "text": "Big buttons, fast pages and plain words, because your customers are busy.",
-      "tone": "sky",
-      "video": "why-2.mp4"
-    },
-    {
-      "title": "Software that fits",
-      "text": "CRM, HRM and POS shaped around how your staff already work.",
-      "tone": "blue",
-      "video": "why-3.mp4"
-    },
-    {
-      "title": "Here after launch",
-      "text": "Fixes, updates and new ideas once the project is live.",
-      "tone": "navy",
-      "video": "why-4.mp4"
-    }
-  ],
-  "industries": [
-    {
-      "name": "Real estate",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "Technology",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "Healthcare",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "Education",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "Professional services",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "E-commerce",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "Construction and architecture",
-      "text": "",
-      "image": ""
-    },
-    {
-      "name": "B2B businesses",
-      "text": "",
-      "image": ""
-    }
-  ],
-  "voices": [
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    },
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    },
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    },
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    },
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    },
-    {
-      "quote": "Sample note. A real client quote goes here.",
-      "who": "Client name, business"
-    }
-  ],
-  "faqs": [
-    {
-      "q": "How do we start?",
-      "a": "Ring up the services you need on the till and email the order. We reply with questions, a plan and a price."
-    },
-    {
-      "q": "Can you work on a website or app we already have?",
-      "a": "Yes. Send us the link and tell us what is not working."
-    },
-    {
-      "q": "Do you only build, or also run the marketing?",
-      "a": "Both. The same team handles design, development, SEO, ads and social media."
-    },
-    {
-      "q": "Will the CRM, HRM or POS fit how we work?",
-      "a": "We set it up around your process and show your staff how to use it."
-    },
-    {
-      "q": "What happens after launch?",
-      "a": "We stay for fixes, updates and new features."
-    }
-  ],
-  "plans": [
-    {
-      "best": false,
-      "name": "Starter",
-      "line": "A clean website that gets you found.",
-      "once": "XX,XXX",
-      "hourly": "X,XXX",
-      "items": [
-        "Up to five pages",
-        "Works on every phone",
-        "Contact form",
-        "Basic SEO setup"
-      ],
-      "services": [
-        "Web development",
-        "SEO"
-      ]
-    },
-    {
-      "best": true,
-      "name": "Growth",
-      "line": "The website, plus the marketing that fills it.",
-      "once": "XX,XXX",
-      "hourly": "X,XXX",
-      "items": [
-        "Everything in Starter",
-        "Online store or booking",
-        "Ads and social media setup",
-        "A report every month"
-      ],
-      "services": [
-        "Web development",
-        "SEO",
-        "Digital marketing",
-        "Social media marketing"
-      ]
-    },
-    {
-      "best": false,
-      "name": "Business suite",
-      "line": "Software built around how you run things.",
-      "once": "X,XX,XXX",
-      "hourly": "X,XXX",
-      "items": [
-        "CRM, HRM or POS",
-        "AI automation",
-        "Staff training",
-        "Ongoing tech support"
-      ],
-      "services": [
-        "CRM systems",
-        "HRM systems",
-        "POS systems",
-        "AI automation"
-      ]
-    }
-  ],
-  "posts": [
-    {
-      "id": "how-to-brief-a-web-team",
-      "title": "How to brief a web team in ten minutes",
-      "topic": "Websites",
-      "tone": "blue",
-      "minutes": 3,
-      "intro": "A short, clear brief saves weeks. You do not need a long document, only honest answers to four questions.",
-      "body": [
-        {
-          "heading": "Who is it for?",
-          "text": "Describe one real customer: what they do, what they are looking for, and what device they are probably holding. A site built for everyone works for no one."
-        },
-        {
-          "heading": "What should they do?",
-          "text": "Pick one main action. Call you, book a slot, buy a product, or fill in a form. Every page should make that one action easy."
-        },
-        {
-          "heading": "What do you already have?",
-          "text": "List your logo, photos, text, domain and any old site. Knowing what exists tells the team what must be made from scratch."
-        },
-        {
-          "heading": "How will you know it worked?",
-          "text": "Choose a number you can check in three months: enquiries per week, orders per day, or calls from the site. That number guides every decision after launch."
-        }
-      ],
-      "cover": "",
-      "seo": {
-        "title": "",
-        "description": ""
-      }
-    },
-    {
-      "id": "spreadsheet-or-crm",
-      "title": "When a spreadsheet stops being enough",
-      "topic": "Business software",
-      "tone": "sun",
-      "minutes": 3,
-      "intro": "Most businesses start by tracking customers in a spreadsheet, and that is fine. These are the signs it is time for a CRM.",
-      "body": [
-        {
-          "heading": "Leads are slipping",
-          "text": "If someone enquired last week and nobody followed up, the sheet is not reminding anyone. A CRM does."
-        },
-        {
-          "heading": "Two people edit the same row",
-          "text": "Once more than one person handles customers, you need to see who spoke to whom and when, without asking around."
-        },
-        {
-          "heading": "You cannot answer simple questions",
-          "text": "How many enquiries came in this month? Where did they come from? How many became sales? If that takes an afternoon to work out, you have outgrown the sheet."
-        },
-        {
-          "heading": "Start small",
-          "text": "A CRM does not need fifty fields. Begin with name, need, next step and date. Add more only when someone asks for it twice."
-        }
-      ],
-      "cover": "",
-      "seo": {
-        "title": "",
-        "description": ""
-      }
-    },
-    {
-      "id": "what-to-automate-first",
-      "title": "What to automate first in a small business",
-      "topic": "AI automation",
-      "tone": "sky",
-      "minutes": 4,
-      "intro": "Automation pays off fastest on jobs that are frequent, boring and follow the same steps every time.",
-      "body": [
-        {
-          "heading": "Answering the same questions",
-          "text": "Opening hours, prices, delivery areas. A chatbot on your site or WhatsApp can answer these at any hour and hand over to a person when it gets stuck."
-        },
-        {
-          "heading": "Following up",
-          "text": "A message the day after an enquiry, a reminder before an appointment, a thank-you after a purchase. These are easy to automate and easy to forget by hand."
-        },
-        {
-          "heading": "Moving data between tools",
-          "text": "If someone copies orders from a form into a sheet and then into billing, that is three chances for a typo. Connect the tools once and the copying stops."
-        },
-        {
-          "heading": "Keep a person in the loop",
-          "text": "Automate the routine, not the judgement. Complaints, refunds and unusual requests should still reach a human quickly."
-        }
-      ],
-      "cover": "",
-      "seo": {
-        "title": "",
-        "description": ""
-      }
-    }
-  ],
-  "certificates": []
+    ],
+    "certificates": []
 }
