@@ -16,6 +16,8 @@ import BlogCards, { PostCard } from './BlogCards.jsx'
 import Faq from './Faq.jsx'
 import ContactForm from './ContactForm.jsx'
 import PageHero from './PageHero.jsx'
+import Reviews from './Reviews.jsx'
+import { Features, Industries, Intro, Projects, Questions, SvcHero, Timeline } from './ServiceBlocks.jsx'
 import { CardsBlock, CtaBlock, GalleryBlock, ImageBlock, SplitBlock, TextBlock, VideoBlock } from './ContentBlocks.jsx'
 
 function Story(props) {
@@ -59,12 +61,21 @@ const DRAW = {
   blogGrid: BlogGrid,
   faq: Faq,
   contact: ContactForm,
+  svcHero: SvcHero,
+  intro: Intro,
+  features: Features,
+  timeline: Timeline,
+  projects: Projects,
+  industries: Industries,
+  questions: Questions,
+  reviews: Reviews,
 }
 
 // A page is a list of sections, drawn in the order set in the admin panel.
-export default function Blocks({ blocks }) {
+// `owner` is the service whose page this is, when it is one.
+export default function Blocks({ blocks, owner }) {
   return blocks.map(({ type, id, ...props }, i) => {
     const Draw = DRAW[type]
-    return Draw ? <Draw key={id || i} {...props} /> : null
+    return Draw ? <Draw key={id || i} {...props} owner={owner} /> : null
   })
 }

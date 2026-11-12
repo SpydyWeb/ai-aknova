@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { SERVICE_INFO } from '../data.js'
+import { SERVICE_INFO, mediaUrl } from '../data.js'
 import { MLink, press, slug, useOrder } from '../ui.jsx'
 import ModelStage from './ModelStage.jsx'
 
@@ -37,7 +37,23 @@ export default function Services({ title, text }) {
       </ul>
 
       <div className="svc-panel">
-        <ModelStage name={s.name} spot={SPOT[i % 4]} />
+        {s.image ? (
+          <div className="svc-stage svc-photo">
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={s.image}
+                src={mediaUrl(s.image)}
+                alt={s.name}
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+            </AnimatePresence>
+          </div>
+        ) : (
+          <ModelStage name={s.name} spot={SPOT[i % 4]} />
+        )}
         <div className="svc-text" aria-live="polite">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

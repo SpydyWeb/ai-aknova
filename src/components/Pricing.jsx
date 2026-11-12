@@ -9,7 +9,9 @@ import CoinStack from './CoinStack.jsx'
 const MODES = [
   ['once', 'One-time project', 'one-time'],
   ['monthly', 'Monthly care', 'per month'],
+  ['hourly', 'Hourly', 'per hour'],
 ]
+const COINS = { once: 8, monthly: 3, hourly: 1 }
 
 export default function Pricing({ title, text }) {
   const [mode, setMode] = useState('once')
@@ -25,7 +27,7 @@ export default function Pricing({ title, text }) {
   return (
     <section id="pricing" className="pricing">
       <div className="pricing-head">
-        <CoinStack count={mode === 'once' ? 8 : 3} />
+        <CoinStack count={COINS[mode]} />
         <h2>{title}</h2>
         {text && <p>{text}</p>}
         <div className="switch" role="group" aria-label="How you pay">
@@ -46,9 +48,9 @@ export default function Pricing({ title, text }) {
             <p className="line">{p.line}</p>
             <p className="price">
               <motion.strong key={mode} initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.2 }}>
-                ₹{p[mode]}
+                {p[mode] ? `₹${p[mode]}` : 'Ask us'}
               </motion.strong>
-              <span>{unit}</span>
+              {p[mode] && <span>{unit}</span>}
             </p>
             <ul>
               {p.items.map((t) => (

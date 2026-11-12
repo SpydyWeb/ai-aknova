@@ -35,6 +35,8 @@ export let VOICES = []
 export let FAQS = []
 export let PLANS = []
 export let POSTS = []
+export let CERTS = []
+export let INDUSTRIES = []
 
 const list = (v) => (Array.isArray(v) ? v.filter((x) => x && typeof x === 'object') : [])
 const strings = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : [])
@@ -52,6 +54,9 @@ export function setContent(json) {
     closing: site.closing || {},
     notFound: site.notFound || {},
     buddyTips: list(site.buddyTips).filter((t) => t.text && t.to),
+    status: { show: true, queue: 2, minDays: 3, maxDays: 5, ...site.status },
+    reviews: site.reviews || {},
+    popup: { show: true, ...site.popup },
   }
   EMAIL = site.email || ''
   TAGLINE = site.tagline || ''
@@ -69,7 +74,7 @@ export function setContent(json) {
     .map((p) => ({ ...p, seo: p.seo || {}, blocks: list(p.blocks).filter((b) => b.type) }))
   SERVICE_INFO = list(j.services)
     .filter((s) => s.name)
-    .map((s) => ({ line: '', ...s, items: strings(s.items), seo: s.seo || {} }))
+    .map((s) => ({ line: '', ...s, items: strings(s.items), seo: s.seo || {}, blocks: list(s.blocks).filter((b) => b.type) }))
   SERVICES = SERVICE_INFO.map((s) => s.name)
   PROJECTS = list(j.projects).filter((p) => p.name)
   STEPS = list(j.steps).map((s) => [s.name || '', s.text || ''])
@@ -82,6 +87,8 @@ export function setContent(json) {
   POSTS = list(j.posts)
     .filter((p) => p.title)
     .map((p) => ({ tone: 'blue', topic: '', intro: '', ...p, id: p.id || slug(p.title), body: list(p.body), seo: p.seo || {} }))
+  CERTS = list(j.certificates).filter((c) => c.image || c.name)
+  INDUSTRIES = list(j.industries).filter((x) => x.name)
 }
 
 export const findPage = (pathname) => {

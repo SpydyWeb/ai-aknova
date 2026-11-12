@@ -2,8 +2,8 @@
 // descriptions, structured data, the plain-HTML version of each page, sitemap, robots and llms.txt.
 // It all comes from the content the admin panel edits. The browser uses it on every page change,
 // the server uses it for every page it sends, and scripts/prerender.mjs uses it at build time.
-import { CONTACT, EMAIL, FAQS, PAGES, PLANS, POSTS, PROJECTS, REASONS, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, mediaUrl, slug } from './data.js'
-import { embedUrl, isVideo, paragraphs } from './blocks.js'
+import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, REASONS, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, mediaUrl, slug } from './data.js'
+import { embedUrl, isVideo, paragraphs, serviceBlocks } from './blocks.js'
 
 export { slug }
 
@@ -62,9 +62,12 @@ function organization() {
   }
 }
 const website = () => ({ '@type': 'WebSite', '@id': `${SITE_INFO.url}/#website`, url: SITE_INFO.url, name: SITE_INFO.name, publisher: { '@id': orgId() }, inLanguage: 'en' })
-const faqPage = () => ({
+const sectionsOf = (s) => (s.blocks.length ? s.blocks : serviceBlocks(s))
+// Questions written into a page's own "Questions for this page" sections.
+const ownQuestions = (blocks) => blocks.filter((b) => b.type === 'questions').flatMap((b) => (b.items || []).filter((x) => x?.q).map((x) => [x.q, x.a || '']))
+const faqPage = (list = FAQS) => ({
   '@type': 'FAQPage',
-  mainEntity: FAQS.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  mainEntity: list.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
 })
 const crumbs = (...items) => ({
   '@type': 'BreadcrumbList',
@@ -113,6 +116,8 @@ export function seoFor(pathname) {
       org,
       crumbs(['Services', '/services'], [service.name, path]),
     ]
+    const qs = ownQuestions(sectionsOf(service))
+    if (qs.length) data.push(faqPage(qs))
   } else if (post) {
     own = post.seo
     image = post.cover
@@ -145,6 +150,7 @@ export function seoFor(pathname) {
     if (has(page, 'blogGrid'))
       data.push({ '@type': 'Blog', name: `${SITE_INFO.name} blog`, url: abs(path), publisher: { '@id': orgId() }, blogPost: POSTS.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: abs(`/blog/${p.id}`) })) })
     if (has(page, 'faq') && FAQS.length) data.push(faqPage())
+    else if (ownQuestions(page.blocks).length) data.push(faqPage(ownQuestions(page.blocks)))
     data.push(org)
     if (path !== '/') data.push(crumbs([page.title, path]))
   } else {
@@ -216,7 +222,7 @@ const BLOCK_HTML = {
   hero: (b) => `<h1>${esc([b.before, sentence((b.words || []).map((w) => w.text)), b.after].filter(Boolean).join(' '))}</h1>${p(b.text)}`,
   pageHero: (b) => `<h1>${esc(b.title)}</h1>${p(b.text)}`,
   text: (b) => h2(b.title) + paragraphs(b.body).map(p).join(''),
-  split: (b) => h2(b.title) + paragraphs(b.body).map(p).join('') + (isVideo(b.media) ? '' : img(b.media, b.alt)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
+  split: (b) => h2(b.title) + paragraphs(b.body).map(p).join('') + ul((b.points || []).filter(Boolean).map(esc)) + (isVideo(b.media) ? '' : img(b.media, b.alt)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
   image: (b) => (b.src ? `<figure>${img(b.src, b.alt)}${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>` : ''),
   gallery: (b) => h2(b.title) + (b.images || []).map((i) => img(i.src, i.alt)).join(''),
   video: (b) => h2(b.title) + (embedUrl(b.embed) ? `<p>${link(b.embed, b.caption || b.title || 'Watch the video')}</p>` : p(b.caption)),
@@ -235,6 +241,14 @@ const BLOCK_HTML = {
   blogGrid: () => postsHtml(POSTS),
   faq: (b) => h2(b.title) + `<dl>${FAQS.map(([q, a]) => `<dt><strong>${esc(q)}</strong></dt><dd>${esc(a)}</dd>`).join('')}</dl>`,
   contact: (b) => `<h1>${esc(b.title)}</h1>${contactHtml()}`,
+  svcHero: (b, owner) => `<h1>${esc([b.title || owner?.name, b.highlight].filter(Boolean).join(' '))}</h1>${p(b.text)}${ul((b.ticks || []).map(esc))}`,
+  intro: (b) => h2(b.title) + paragraphs(b.body).map(p).join(''),
+  features: (b) => h2(b.title) + p(b.text) + ul((b.items || []).filter((x) => x?.title).map((x) => `<strong>${esc(x.title)}.</strong> ${esc(x.text)}`)),
+  timeline: (b) => h2(b.title) + p(b.text) + ((b.steps || []).some((x) => x?.title) ? `<ol>${b.steps.map((x) => `<li><strong>${esc(x.title)}.</strong> ${esc(x.text)}</li>`).join('')}</ol>` : stepsHtml()),
+  projects: (b, owner) => h2(b.title) + p(b.text) + ul(PROJECTS.filter((x) => x.type === (b.service || owner?.name)).map((x) => `<strong>${esc(x.name)}</strong>. ${esc(x.blurb)}`)),
+  industries: (b) => h2(b.title) + p(b.text) + ul(INDUSTRIES.map((x) => `<strong>${esc(x.name)}</strong>${x.text ? `. ${esc(x.text)}` : ''}`)),
+  questions: (b) => h2(b.title) + `<dl>${(b.items || []).filter((x) => x?.q).map((x) => `<dt><strong>${esc(x.q)}</strong></dt><dd>${esc(x.a)}</dd>`).join('')}</dl>`,
+  reviews: () => (SITE_INFO.reviews?.url ? `<p>${link(SITE_INFO.reviews.url, 'Read our reviews on Google')}</p>` : ''),
 }
 
 export const navPages = () => PAGES.filter((x) => x.inNav)
@@ -247,8 +261,8 @@ export function bodyHtml(pathname) {
   let main = ''
 
   if (service) {
-    main = `<p>${link('/services', 'All services')}</p><h1>${esc(service.name)}</h1>${p(service.line)}
-<h2>What you get</h2>${ul(service.items.map(esc))}<h2>How it runs</h2>${stepsHtml()}<p>${link('/contact', 'Start a project')}</p>`
+    main = `<p>${link('/services', 'All services')}</p>${sectionsOf(service).map((b) => BLOCK_HTML[b.type]?.(b, service) || '').join('\n')}<p>${link('/contact', 'Start a project')}</p>`
+    if (!/<h1/.test(main)) main = `<h1>${esc(service.name)}</h1>${main}`
   } else if (post) {
     main = `<article><p>${link('/blog', 'All articles')}</p><h1>${esc(post.title)}</h1>${img(post.cover, post.title)}${p(post.intro)}
 ${post.body.map((s) => `${h2(s.heading)}${paragraphs(s.text).map(p).join('')}`).join('')}</article>`

@@ -15,7 +15,8 @@ import NotFound from './pages/NotFound.jsx'
 import { Link } from 'react-router-dom'
 import BlogPost from './pages/BlogPost.jsx'
 import Logo from './components/Logo.jsx'
-import { CONTACT, EMAIL, PAGES, SITE_INFO, TAGLINE, findPage } from './data.js'
+import EnquiryPopup from './components/EnquiryPopup.jsx'
+import { CERTS, CONTACT, EMAIL, PAGES, SITE_INFO, TAGLINE, findPage, mediaUrl } from './data.js'
 import { OrderProvider } from './ui.jsx'
 import './styles.css'
 
@@ -113,8 +114,27 @@ function Shell() {
             </span>
           )}
         </address>
+        {CERTS.length > 0 && (
+          <ul className="certs" aria-label="Certificates">
+            {CERTS.map((c, i) => {
+              const badge = c.image ? <img src={mediaUrl(c.image)} alt={c.name || 'Certificate'} loading="lazy" /> : <span>{c.name}</span>
+              return (
+                <li key={i} title={c.name || undefined}>
+                  {c.link ? (
+                    <a href={c.link} target="_blank" rel="noreferrer">
+                      {badge}
+                    </a>
+                  ) : (
+                    badge
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </footer>
       <Buddy />
+      <EnquiryPopup />
     </>
   )
 }

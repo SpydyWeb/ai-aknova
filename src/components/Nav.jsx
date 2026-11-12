@@ -24,6 +24,9 @@ export default function Nav() {
       <Logo />
 
       <nav className="nav-wide">
+        <NavLink to="/" end>
+          Home
+        </NavLink>
         {LINKS.filter(([to]) => to !== '/contact').map(([to, label]) => (
           <NavLink key={to} to={to}>
             {label}

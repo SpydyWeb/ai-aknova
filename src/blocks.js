@@ -27,6 +27,11 @@ export const MODEL_OPTIONS = [
 const title = { k: 'title', label: 'Heading', type: 'text' }
 const text = { k: 'text', label: 'Line under the heading', type: 'area', rows: 2 }
 const tone = { k: 'tone', label: 'Background colour', type: 'select', options: TONES }
+const LOOKS = [
+  ['cards', 'Separate cards'],
+  ['cells', 'Joined boxes'],
+  ['list', 'Compact list'],
+]
 
 export const BLOCKS = {
   /* ---------- sections you write yourself ---------- */
@@ -58,12 +63,13 @@ export const BLOCKS = {
       { k: 'body', label: 'Text', type: 'area', rows: 5 },
       { k: 'media', label: 'Photo or video', type: 'media', kind: 'any' },
       { k: 'alt', label: 'Describe the picture (for search engines and screen readers)', type: 'text' },
+      { k: 'points', label: 'Bullet points (optional)', type: 'strings', noun: 'point' },
       { k: 'flip', label: 'Put the picture on the left', type: 'bool' },
       tone,
       { k: 'buttonLabel', label: 'Button text (optional)', type: 'text' },
       { k: 'buttonTo', label: 'Button goes to', type: 'link' },
     ],
-    blank: { title: 'Heading', body: '', media: '', alt: '', flip: false, tone: 'paper', buttonLabel: '', buttonTo: '/contact' },
+    blank: { title: 'Heading', body: '', media: '', alt: '', points: [], flip: false, tone: 'paper', buttonLabel: '', buttonTo: '/contact' },
   },
   image: {
     label: 'Photo',
@@ -143,6 +149,126 @@ export const BLOCKS = {
     blank: { title: 'Ready to start?', text: '', tone: 'sun', buttonLabel: 'Start a project', buttonTo: '/contact' },
   },
 
+  /* ---------- sections a service page is built from (they work on any page) ---------- */
+  svcHero: {
+    label: 'Service header',
+    group: 'Write your own',
+    about: 'The opening of a service page: heading, introduction, buttons and a photo or the service’s 3D model. On a service page it also gets an "Add to order" button.',
+    fields: [
+      { k: 'title', label: 'Heading', type: 'text' },
+      { k: 'highlight', label: 'Second line, on a coloured label (optional)', type: 'text' },
+      { k: 'tone', label: 'Label colour', type: 'select', options: TONES.slice(1) },
+      { k: 'text', label: 'Introduction', type: 'area', rows: 3 },
+      { k: 'ticks', label: 'Short promises under the buttons', type: 'strings', noun: 'promise' },
+      { k: 'image', label: 'Photo (optional)', type: 'media', kind: 'image', help: 'Leave empty to show the service’s 3D model.' },
+      { k: 'primaryLabel', label: 'Main button text', type: 'text' },
+      { k: 'primaryTo', label: 'Main button goes to', type: 'link' },
+      { k: 'secondaryLabel', label: 'Second button text (optional)', type: 'text' },
+      { k: 'secondaryTo', label: 'Second button goes to', type: 'link' },
+    ],
+    blank: { title: 'Service name', highlight: '', tone: 'sun', text: '', ticks: [], image: '', primaryLabel: 'Start a project', primaryTo: '/contact', secondaryLabel: 'See our work', secondaryTo: '/work' },
+  },
+  intro: {
+    label: 'Heading beside text',
+    group: 'Write your own',
+    about: 'A heading on the left and a few paragraphs on the right.',
+    fields: [title, { k: 'body', label: 'Text', type: 'area', rows: 6, help: 'Leave an empty line between paragraphs.' }, tone],
+    blank: { title: 'Heading', body: '', tone: 'paper' },
+  },
+  features: {
+    label: 'Feature grid',
+    group: 'Write your own',
+    about: 'A heading and a set of short points, shown as cards, joined boxes or a compact list.',
+    fields: [
+      title,
+      text,
+      tone,
+      { k: 'look', label: 'Look', type: 'select', options: LOOKS },
+      {
+        k: 'items',
+        label: 'Points',
+        type: 'items',
+        noun: 'point',
+        name: (x) => x.title,
+        of: [
+          { k: 'title', label: 'Heading', type: 'text' },
+          { k: 'text', label: 'Text (optional)', type: 'area', rows: 2 },
+          { k: 'to', label: 'Opens this page when tapped (optional)', type: 'link' },
+        ],
+        blank: { title: '', text: '', to: '' },
+      },
+      { k: 'buttonLabel', label: 'Button text (optional)', type: 'text' },
+      { k: 'buttonTo', label: 'Button goes to', type: 'link' },
+    ],
+    blank: { title: 'Heading', text: '', tone: 'paper', look: 'cards', items: [], buttonLabel: '', buttonTo: '/contact' },
+  },
+  timeline: {
+    label: 'Numbered steps',
+    group: 'Write your own',
+    about: 'Steps in order, numbered and joined by a line. Leave the steps empty to use the ones on the Process steps screen.',
+    fields: [
+      title,
+      text,
+      tone,
+      {
+        k: 'steps',
+        label: 'Steps',
+        type: 'items',
+        noun: 'step',
+        name: (x) => x.title,
+        of: [
+          { k: 'title', label: 'Step name', type: 'text' },
+          { k: 'text', label: 'What happens', type: 'area', rows: 2 },
+        ],
+        blank: { title: '', text: '' },
+      },
+    ],
+    blank: { title: 'How a project runs', text: '', tone: 'navy', steps: [] },
+  },
+  projects: {
+    label: 'Projects of one kind',
+    group: 'Write your own',
+    about: 'Projects from the Projects screen, picked by kind of work. On a service page, leave the kind empty to show that service’s projects.',
+    fields: [title, text, { k: 'service', label: 'Kind of work', type: 'service' }, { k: 'max', label: 'How many to show', type: 'number' }],
+    blank: { title: 'Projects', text: '', service: '', max: 3 },
+  },
+  questions: {
+    label: 'Questions for this page',
+    group: 'Write your own',
+    about: 'Questions and answers written for this page only. Search engines read them as an FAQ.',
+    fields: [
+      title,
+      text,
+      {
+        k: 'items',
+        label: 'Questions',
+        type: 'items',
+        noun: 'question',
+        name: (x) => x.q,
+        of: [
+          { k: 'q', label: 'Question', type: 'text' },
+          { k: 'a', label: 'Answer', type: 'area', rows: 3 },
+        ],
+        blank: { q: '', a: '' },
+      },
+    ],
+    blank: { title: 'Questions people ask', text: '', items: [] },
+  },
+  industries: {
+    label: 'Industries we serve',
+    group: 'Ready-made',
+    about: 'Uses the list on the Industries screen.',
+    fields: [title, text],
+    blank: { title: 'Industries we serve', text: '' },
+  },
+  reviews: {
+    label: 'Google reviews',
+    group: 'Ready-made',
+    about: 'The reviews widget and link set under Site details.',
+    fields: [],
+    blank: {},
+  },
+
   /* ---------- ready-made interactive sections ---------- */
   hero: {
     label: 'Home hero with throwable toys',
@@ -211,3 +337,16 @@ export function embedUrl(link) {
 }
 
 export const isVideo = (f) => /\.(mp4|webm|mov|m4v)$/i.test(String(f || ''))
+
+let n = 0
+const bid = () => `s${Date.now().toString(36)}${(n++).toString(36)}`
+
+// The sections a service page starts with, built only from what the Services screen already holds.
+export const serviceBlocks = (s) => [
+  { id: bid(), type: 'svcHero', ...BLOCKS.svcHero.blank, title: s.name, text: s.line || '', ticks: [...(s.items || [])] },
+  { id: bid(), type: 'features', ...BLOCKS.features.blank, title: 'What is included', items: (s.items || []).map((t) => ({ title: t, text: '', to: '' })) },
+  { id: bid(), type: 'timeline', ...BLOCKS.timeline.blank },
+  { id: bid(), type: 'projects', ...BLOCKS.projects.blank, title: s.name ? `${s.name} projects` : 'Our work' },
+  { id: bid(), type: 'industries', ...BLOCKS.industries.blank },
+  { id: bid(), type: 'questions', ...BLOCKS.questions.blank, title: s.name ? `Questions about ${s.name}` : 'Questions people ask' },
+]

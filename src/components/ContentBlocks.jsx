@@ -10,7 +10,7 @@ import Tilt from './Tilt.jsx'
 const dark = (tone) => (tone === 'navy' || tone === 'blue' ? 'on-dark' : '')
 const outside = (to) => /^(https?:|mailto:|tel:)/.test(to || '')
 
-function Button({ to, label, className }) {
+export function Button({ to, label, className }) {
   if (!label || !to) return null
   return outside(to) ? (
     <motion.a className={className} href={to} target={to.startsWith('http') ? '_blank' : undefined} rel="noreferrer" {...press}>
@@ -43,7 +43,7 @@ export function TextBlock({ title, body }) {
   )
 }
 
-export function SplitBlock({ title, body, media, alt, flip, tone = 'paper', buttonLabel, buttonTo }) {
+export function SplitBlock({ title, body, media, alt, points, flip, tone = 'paper', buttonLabel, buttonTo }) {
   return (
     <section className={`split bg-${tone} ${dark(tone)} ${flip ? 'flip' : ''}`}>
       <div className="split-copy">
@@ -51,6 +51,13 @@ export function SplitBlock({ title, body, media, alt, flip, tone = 'paper', butt
         {paragraphs(body).map((t, i) => (
           <p key={i}>{t}</p>
         ))}
+        {points?.filter(Boolean).length > 0 && (
+          <ul className="ticks">
+            {points.filter(Boolean).map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        )}
         <Button className={`btn ${tone === 'sun' ? 'btn-ink' : 'btn-sun'}`} to={buttonTo} label={buttonLabel} />
       </div>
       {media && (

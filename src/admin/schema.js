@@ -1,5 +1,5 @@
 // What each admin screen edits, and the form fields it shows. Field types are drawn by fields.jsx.
-import { MODEL_OPTIONS, TONES } from '../blocks.js'
+import { MODEL_OPTIONS, TONES, serviceBlocks } from '../blocks.js'
 
 const COLOURS = TONES.slice(1)
 
@@ -15,8 +15,10 @@ export const LISTS = {
       { k: 'line', label: 'One-line description', type: 'area', rows: 2 },
       { k: 'items', label: 'What is included', type: 'strings', noun: 'item' },
       { k: 'model', label: '3D model', type: 'select', options: MODEL_OPTIONS },
+      { k: 'image', label: 'Photo in "What we do" (optional)', type: 'media', kind: 'image', help: 'Shown in place of the 3D model when a visitor points at this service on the home page.' },
+      { k: 'blocks', label: 'Sections of this service’s page', type: 'sections', help: 'The page shows these from top to bottom. Open one to edit it, use the arrows to reorder, or add new ones.' },
     ],
-    blank: { name: 'New service', line: '', items: [], model: 'mark', seo: { title: '', description: '' } },
+    blank: { name: 'New service', line: '', items: [], model: 'mark', image: '', blocks: serviceBlocks({ name: '' }), seo: { title: '', description: '' } },
   },
   projects: {
     title: 'Projects',
@@ -42,12 +44,13 @@ export const LISTS = {
       { k: 'name', label: 'Plan name', type: 'text' },
       { k: 'line', label: 'One-line description', type: 'text' },
       { k: 'once', label: 'One-time price', type: 'text', help: 'Only the number, for example 25,000. The ₹ sign is added for you.' },
-      { k: 'monthly', label: 'Monthly price', type: 'text' },
+      { k: 'monthly', label: 'Monthly care price', type: 'text' },
+      { k: 'hourly', label: 'Hourly price', type: 'text', help: 'Shown when a visitor picks "Hourly". Leave empty to show "Ask us".' },
       { k: 'items', label: 'What is included', type: 'strings', noun: 'item' },
       { k: 'services', label: 'Services added to the order', type: 'services' },
       { k: 'best', label: 'Mark as "Most chosen"', type: 'bool' },
     ],
-    blank: { name: 'New plan', line: '', once: '', monthly: '', items: [], services: [], best: false },
+    blank: { name: 'New plan', line: '', once: '', monthly: '', hourly: '', items: [], services: [], best: false },
   },
   posts: {
     title: 'Blog articles',
@@ -114,6 +117,30 @@ export const LISTS = {
     ],
     blank: { title: '', text: '', tone: 'sun', video: '' },
   },
+  industries: {
+    title: 'Industries',
+    intro: 'The industries you work with. Shown wherever an "Industries we serve" section is placed, on the home page and service pages.',
+    noun: 'industry',
+    name: (x) => x.name,
+    of: [
+      { k: 'name', label: 'Industry', type: 'text', placeholder: 'Real estate' },
+      { k: 'text', label: 'One line about your work for them (optional)', type: 'text' },
+      { k: 'image', label: 'Small photo or icon (optional)', type: 'media', kind: 'image' },
+    ],
+    blank: { name: '', text: '', image: '' },
+  },
+  certificates: {
+    title: 'Certificates',
+    intro: 'Badges and certificates shown in the footer of every page.',
+    noun: 'certificate',
+    name: (x) => x.name,
+    of: [
+      { k: 'name', label: 'Name', type: 'text', placeholder: 'ISO 9001:2015', help: 'Read out to screen readers and shown when there is no picture.' },
+      { k: 'image', label: 'Badge or certificate picture', type: 'media', kind: 'image' },
+      { k: 'link', label: 'Link to check it (optional)', type: 'text', placeholder: 'https://' },
+    ],
+    blank: { name: '', image: '', link: '' },
+  },
   steps: {
     title: 'Process steps',
     intro: 'How a project runs, in order. Used by both Process sections and on every service page.',
@@ -153,6 +180,37 @@ export const SITE_FIELDS = [
     blank: { label: '', url: '' },
   },
   { k: 'web3formsKey', label: 'Web3Forms access key', type: 'text', help: 'Get a free key at web3forms.com using the inbox that should receive enquiries, and paste it here. Without it, the contact form opens the visitor’s own email app instead.' },
+  {
+    k: 'popup',
+    label: 'Enquiry pop-up',
+    type: 'group',
+    of: [
+      { k: 'show', label: 'Show the pop-up', type: 'bool', help: 'Opens once per visitor, 10 seconds after they arrive. Never on the contact page.' },
+      { k: 'title', label: 'Heading', type: 'text', placeholder: 'Tell us what you need' },
+      { k: 'text', label: 'Line under the heading', type: 'text', placeholder: 'We reply within one working day.' },
+    ],
+  },
+  {
+    k: 'status',
+    label: 'Delivery status line',
+    type: 'group',
+    of: [
+      { k: 'show', label: 'Show the status line', type: 'bool', help: 'Shown on the home page and the pop-up, for example "Last project delivered 4 days ago. 2 projects in the queue."' },
+      { k: 'queue', label: 'Projects in the queue', type: 'number' },
+      { k: 'minDays', label: 'Last delivery: fewest days ago', type: 'number', help: 'Each visitor sees a number of days picked between these two.' },
+      { k: 'maxDays', label: 'Last delivery: most days ago', type: 'number' },
+    ],
+  },
+  {
+    k: 'reviews',
+    label: 'Google reviews, above the footer',
+    type: 'group',
+    of: [
+      { k: 'title', label: 'Heading', type: 'text', placeholder: 'What people say on Google' },
+      { k: 'embed', label: 'Embed code', type: 'area', rows: 5, help: 'Paste the code from your reviews widget (Elfsight, Trustindex, EmbedSocial and others), or the <iframe> from Google Maps > Share > Embed a map. It runs on every page, so only paste code from a service you trust.' },
+      { k: 'url', label: 'Link to all your Google reviews', type: 'text', placeholder: 'https://g.page/r/...' },
+    ],
+  },
   {
     k: 'closing',
     label: 'Band above the footer',

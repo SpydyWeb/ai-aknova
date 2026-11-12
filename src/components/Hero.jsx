@@ -5,6 +5,7 @@ import gsap from 'gsap'
 const Playground = lazy(() => import('./Playground.jsx'))
 
 import { MLink, press } from '../ui.jsx'
+import Status from './Status.jsx'
 
 export default function Hero({ before, words, after, text, primaryLabel, primaryTo, secondaryLabel, secondaryTo }) {
   const WORDS = (words || []).filter((w) => w?.text).map((w) => [w.text, w.tone || 'sun'])
@@ -85,6 +86,7 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
 
         <div className="hero-sub">
           {text && <p className="lede">{text}</p>}
+          <Status />
           <div className="hero-actions">
             {primaryLabel && (
               <MLink className="btn btn-blue" to={primaryTo || '/contact'} {...press}>

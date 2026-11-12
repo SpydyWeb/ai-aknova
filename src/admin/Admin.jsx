@@ -5,19 +5,18 @@ import { setContent, slug } from '../data.js'
 import { llmsTxt, robotsTxt, seoFor } from '../seo.js'
 import logo from '../assets/logo-light.png'
 import { api } from './api.js'
-import { AdminContext, Danger, Fields, Items, MediaLibrary } from './fields.jsx'
+import { AddSection, AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, newId } from './fields.jsx'
 import { AI_FIELDS, LISTS, SEO_FIELDS, SITE_FIELDS } from './schema.js'
 import './admin.css'
 
 const MENU = [
   ['Website', [['pages', 'Pages']]],
-  ['Content', [['services', 'Services'], ['projects', 'Projects'], ['plans', 'Pricing plans'], ['posts', 'Blog articles'], ['voices', 'Client reviews'], ['faqs', 'FAQs'], ['reasons', 'Why-us cards'], ['steps', 'Process steps']]],
+  ['Content', [['services', 'Services'], ['projects', 'Projects'], ['plans', 'Pricing plans'], ['posts', 'Blog articles'], ['voices', 'Client reviews'], ['faqs', 'FAQs'], ['reasons', 'Why-us cards'], ['steps', 'Process steps'], ['industries', 'Industries'], ['certificates', 'Certificates']]],
   ['Library', [['media', 'Photos and videos']]],
   ['Settings', [['site', 'Site details'], ['seo', 'SEO'], ['ai', 'AI SEO'], ['account', 'Account and backups']]],
 ]
 const VIEWS = MENU.flatMap(([, items]) => items.map(([id]) => id))
 const RESERVED = ['/admin', '/api', '/uploads', '/assets', '/services/', '/blog/', '/videos']
-const newId = () => `b${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
 const cleanPath = (s) => '/' + String(s).split('/').map(slug).filter(Boolean).join('/')
 const when = (t) => new Date(t).toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 
@@ -123,56 +122,6 @@ function SeoBox({ path, value, onChange, noindex = true }) {
 }
 
 /* ---------- pages ---------- */
-function AddSection({ onAdd }) {
-  const [open, setOpen] = useState(false)
-  if (!open)
-    return (
-      <button type="button" className="adm-btn primary" onClick={() => setOpen(true)}>
-        Add a section
-      </button>
-    )
-  return (
-    <div className="adm-add">
-      <div className="adm-add-head">
-        <h3>Choose a section to add</h3>
-        <button type="button" className="adm-btn" onClick={() => setOpen(false)}>
-          Cancel
-        </button>
-      </div>
-      {['Write your own', 'Ready-made'].map((group) => (
-        <div key={group}>
-          <h4>{group === 'Ready-made' ? 'Ready-made interactive sections' : 'Sections you write yourself'}</h4>
-          <ul>
-            {Object.entries(BLOCKS)
-              .filter(([, b]) => b.group === group)
-              .map(([type, b]) => (
-                <li key={type}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onAdd({ id: newId(), type, ...structuredClone(b.blank) })
-                      setOpen(false)
-                    }}
-                  >
-                    <strong>{b.label}</strong>
-                    <span>{b.about}</span>
-                  </button>
-                </li>
-              ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-const SECTIONS = {
-  noun: 'section',
-  name: (b) => [BLOCKS[b.type]?.label || b.type, b.title || b.before].filter(Boolean).join(': '),
-  about: (b) => BLOCKS[b.type]?.about,
-  of: (b) => BLOCKS[b.type]?.fields || [],
-}
-
 function PageEditor({ page, onChange, onDelete, onBack, taken }) {
   const set = (k) => (v) => onChange({ ...page, [k]: v })
   const clash = taken.includes(page.path)

@@ -1,12 +1,65 @@
 // Form fields for the admin panel. A screen describes what it edits as a list of field
 // definitions (see schema.js and ../blocks.js) and <Fields> draws the form.
 import { createContext, useContext, useEffect, useId, useRef, useState } from 'react'
-import { isVideo } from '../blocks.js'
+import { BLOCKS, isVideo } from '../blocks.js'
 import { mediaUrl, slug } from '../data.js'
 import { api } from './api.js'
 
 // Gives fields the whole site content (for lists of services and pages) and a way to open the media library.
 export const AdminContext = createContext({ doc: {}, pickMedia: async () => null, me: {} })
+
+export const newId = () => `b${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
+
+/* ---------- sections of a page: the same picker for pages and service pages ---------- */
+export function AddSection({ onAdd }) {
+  const [open, setOpen] = useState(false)
+  if (!open)
+    return (
+      <button type="button" className="adm-btn primary" onClick={() => setOpen(true)}>
+        Add a section
+      </button>
+    )
+  return (
+    <div className="adm-add">
+      <div className="adm-add-head">
+        <h3>Choose a section to add</h3>
+        <button type="button" className="adm-btn" onClick={() => setOpen(false)}>
+          Cancel
+        </button>
+      </div>
+      {['Write your own', 'Ready-made'].map((group) => (
+        <div key={group}>
+          <h4>{group === 'Ready-made' ? 'Ready-made interactive sections' : 'Sections you write yourself'}</h4>
+          <ul>
+            {Object.entries(BLOCKS)
+              .filter(([, b]) => b.group === group)
+              .map(([type, b]) => (
+                <li key={type}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onAdd({ id: newId(), type, ...structuredClone(b.blank) })
+                      setOpen(false)
+                    }}
+                  >
+                    <strong>{b.label}</strong>
+                    <span>{b.about}</span>
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export const SECTIONS = {
+  noun: 'section',
+  name: (b) => [BLOCKS[b.type]?.label || b.type, b.title || b.before].filter(Boolean).join(': '),
+  about: (b) => BLOCKS[b.type]?.about,
+  of: (b) => BLOCKS[b.type]?.fields || [],
+}
 
 export const move = (list, from, to) => {
   const next = [...list]
@@ -380,6 +433,13 @@ function Field({ def, value, onChange }) {
   else if (def.type === 'media') control = <MediaField def={def} value={text} onChange={onChange} />
   else if (def.type === 'strings') control = <Strings def={def} value={value} onChange={onChange} />
   else if (def.type === 'items') control = <Items def={def} value={value} onChange={onChange} />
+  else if (def.type === 'sections')
+    control = (
+      <div className="adm-sections">
+        <Items def={SECTIONS} value={value} onChange={onChange} />
+        <AddSection onAdd={(b) => onChange([...(Array.isArray(value) ? value : []), b])} />
+      </div>
+    )
   else control = <input id={id} value={text} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
 
   const count = def.max && typeof text === 'string' ? text.length : null
