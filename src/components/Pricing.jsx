@@ -8,10 +8,9 @@ import CoinStack from './CoinStack.jsx'
 
 const MODES = [
   ['once', 'One-time project', 'one-time'],
-  ['monthly', 'Monthly care', 'per month'],
   ['hourly', 'Hourly', 'per hour'],
 ]
-const COINS = { once: 8, monthly: 3, hourly: 1 }
+const COINS = { once: 8, hourly: 1 }
 
 export default function Pricing({ title, text }) {
   const [mode, setMode] = useState('once')

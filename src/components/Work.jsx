@@ -107,7 +107,7 @@ export default function Work({ title, text }) {
                 <div className={`face front bg-${SKINS[i % 4]}`}>
                   {p.image ? (
                     <div className="shot photo">
-                      <img src={mediaUrl(p.image)} alt="" draggable="false" />
+                      <img src={mediaUrl(p.image)} alt={p.imageAlt || p.name} draggable="false" />
                     </div>
                   ) : (
                     <div className={`shot ${i % 2 ? 'flip' : ''}`}>

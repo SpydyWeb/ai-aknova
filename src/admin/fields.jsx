@@ -542,7 +542,17 @@ function ButtonPair({ text, to, value, onChange }) {
 
 // Draws a form. Optional and styling fields (marked "(optional)" or more: true) fold under
 // "More options", which starts open when one of them already holds something.
-export function Fields({ schema, value, onChange }) {
+// Every chosen photo gets a box to describe it, stored beside it as <key>Alt, unless the form
+// already has its own "alt" field or the picture needs none (alt: false, e.g. a logo or badge).
+const withAlt = (schema, value) =>
+  schema.flatMap((def) =>
+    def.type === 'media' && def.kind === 'image' && def.alt !== false && value?.[def.k] && !schema.some((d) => d.k === 'alt')
+      ? [def, { k: `${def.k}Alt`, label: 'Describe the photo', type: 'text', placeholder: 'For example: Team planning a website on a whiteboard', help: 'Read out to people who cannot see it, and used by Google Images. Leave empty to use the name or heading.', more: !!def.more || OPTIONAL.test(def.label) }]
+      : [def],
+  )
+
+export function Fields({ schema: given, value, onChange }) {
+  const schema = withAlt(given, value)
   const rows = []
   for (let i = 0; i < schema.length; i++) {
     const def = schema[i]

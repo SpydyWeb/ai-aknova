@@ -21,7 +21,7 @@ function Head({ title, text }) {
   )
 }
 
-export function SvcHero({ owner: service, title, highlight, tone = 'sun', text, ticks, image, primaryLabel, primaryTo, secondaryLabel, secondaryTo }) {
+export function SvcHero({ owner: service, title, highlight, tone = 'sun', text, ticks, image, imageAlt, primaryLabel, primaryTo, secondaryLabel, secondaryTo }) {
   const { picked, toggle } = useOrder()
   const on = service && picked.includes(service.name)
   const list = (ticks || []).filter(Boolean)
@@ -62,7 +62,7 @@ export function SvcHero({ owner: service, title, highlight, tone = 'sun', text, 
       <div className="svc-panel">
         {image ? (
           <div className="svc-stage tall svc-photo">
-            <img src={mediaUrl(image)} alt={title || service?.name || ''} />
+            <img src={mediaUrl(image)} alt={imageAlt || title || service?.name || ''} />
           </div>
         ) : (
           <ModelStage name={service?.name || title} spot={tone} className="tall" />
@@ -160,7 +160,7 @@ export function Projects({ owner, service, title, text, max = 3 }) {
             <article className={`proj proj-card bg-${SKINS[p.i % 4]}`}>
               {p.image ? (
                 <span className="shot photo">
-                  <img src={mediaUrl(p.image)} alt="" loading="lazy" />
+                  <img src={mediaUrl(p.image)} alt={p.imageAlt || p.name} loading="lazy" />
                 </span>
               ) : (
                 <span className={`shot ${p.i % 2 ? 'flip' : ''}`} aria-hidden="true">
@@ -207,7 +207,7 @@ export function Industries({ title, text }) {
       <ul>
         {INDUSTRIES.map((x, i) => (
           <li key={i} className={`bg-${STICKERS[i % 8]} ${dark(STICKERS[i % 8])}`} style={{ rotate: `${TURNS[i % 8]}deg` }}>
-            {x.image && <img src={mediaUrl(x.image)} alt="" loading="lazy" />}
+            {x.image && <img src={mediaUrl(x.image)} alt={x.imageAlt || x.name} loading="lazy" />}
             <span>
               <strong>{x.name}</strong>
               {x.text && <small>{x.text}</small>}

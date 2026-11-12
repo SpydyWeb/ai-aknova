@@ -1959,7 +1959,6 @@
       "name": "Starter",
       "line": "A clean website that gets you found.",
       "once": "XX,XXX",
-      "monthly": "X,XXX",
       "hourly": "X,XXX",
       "items": [
         "Up to five pages",
@@ -1977,7 +1976,6 @@
       "name": "Growth",
       "line": "The website, plus the marketing that fills it.",
       "once": "XX,XXX",
-      "monthly": "XX,XXX",
       "hourly": "X,XXX",
       "items": [
         "Everything in Starter",
@@ -1997,7 +1995,6 @@
       "name": "Business suite",
       "line": "Software built around how you run things.",
       "once": "X,XX,XXX",
-      "monthly": "XX,XXX",
       "hourly": "X,XXX",
       "items": [
         "CRM, HRM or POS",

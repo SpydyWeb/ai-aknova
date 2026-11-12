@@ -62,7 +62,7 @@ export function SplitBlock({ title, body, media, alt, points, flip, tone = 'pape
       </div>
       {media && (
         <Tilt className="frame" max={7}>
-          <Media src={media} alt={alt} />
+          <Media src={media} alt={alt || title} />
         </Tilt>
       )}
     </section>
@@ -74,7 +74,7 @@ export function ImageBlock({ src, alt, caption }) {
   return (
     <section className="photo-block">
       <figure className="frame">
-        <img src={mediaUrl(src)} alt={alt || ''} loading="lazy" />
+        <img src={mediaUrl(src)} alt={alt || caption || ''} loading="lazy" />
         {caption && <figcaption>{caption}</figcaption>}
       </figure>
     </section>
@@ -174,7 +174,7 @@ export function CardsBlock({ title, text, cards }) {
         {list.map((c, i) => {
           const inner = (
             <>
-              {c.image && <img src={mediaUrl(c.image)} alt="" loading="lazy" />}
+              {c.image && <img src={mediaUrl(c.image)} alt={c.imageAlt || c.title || ''} loading="lazy" />}
               {c.title && <h3>{c.title}</h3>}
               {c.text && <p>{c.text}</p>}
             </>

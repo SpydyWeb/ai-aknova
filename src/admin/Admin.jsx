@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BLOCKS } from '../blocks.js'
 import { setContent, slug } from '../data.js'
-import { llmsTxt, robotsTxt, seoFor } from '../seo.js'
+import { analyticsId, llmsTxt, robotsTxt, seoFor } from '../seo.js'
 import logo from '../assets/logo-light.png'
 import { api } from './api.js'
 import { AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, newId } from './fields.jsx'
@@ -104,7 +104,7 @@ function SeoBox({ path, value, onChange, noindex = true }) {
   const fields = [
     { k: 'title', label: 'Title in search results', type: 'text', max: 60, placeholder: m.auto?.title },
     { k: 'description', label: 'Description in search results', type: 'area', rows: 3, max: 160, placeholder: m.auto?.description },
-    { k: 'image', label: 'Picture when this page is shared', type: 'media', kind: 'image' },
+    { k: 'image', label: 'Picture when this page is shared', type: 'media', kind: 'image', alt: false },
     ...(noindex ? [{ k: 'noindex', label: 'Hide this page from search engines', type: 'bool' }] : []),
   ]
   return (
@@ -291,6 +291,16 @@ function SeoView({ doc, setDoc }) {
       <div className="adm-panel">
         <h2>Whole site</h2>
         <Fields schema={SEO_FIELDS} value={doc.seo} onChange={(seo) => setDoc({ ...doc, seo })} />
+        {doc.seo.analytics?.trim() &&
+          (analyticsId(doc.seo.analytics) ? (
+            <p className="adm-ok" role="status">
+              Google Analytics is on with ID {analyticsId(doc.seo.analytics)}. Visits show in Analytics after you save and the site updates.
+            </p>
+          ) : (
+            <p className="adm-error" role="status">
+              No measurement ID found in the Google Analytics box. It starts with G-, for example G-ABC123XYZ.
+            </p>
+          ))}
         <p className="adm-help">
           The site makes these for you and keeps them up to date: <a href="/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a>, <a href="/robots.txt" target="_blank" rel="noreferrer">robots.txt</a>, a canonical link on every page, sharing pictures, and structured data for your business, services, articles, FAQs and breadcrumbs. After going live, submit the sitemap in Google Search Console.
         </p>

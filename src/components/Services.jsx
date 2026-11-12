@@ -43,7 +43,7 @@ export default function Services({ title, text }) {
               <motion.img
                 key={s.image}
                 src={mediaUrl(s.image)}
-                alt={s.name}
+                alt={s.imageAlt || s.name}
                 initial={{ opacity: 0, scale: 1.06 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}

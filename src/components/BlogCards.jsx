@@ -8,7 +8,7 @@ export function PostCard({ post }) {
     <Tilt as="li" max={10} className="post-card">
       <Link to={`/blog/${post.id}`} data-cursor="Read">
         <span className={`post-cover bg-${post.tone}`}>
-          {post.cover && <img src={mediaUrl(post.cover)} alt="" loading="lazy" />}
+          {post.cover && <img src={mediaUrl(post.cover)} alt={post.coverAlt || post.title} loading="lazy" />}
           {post.topic && <span>{post.topic}</span>}
         </span>
         <h3>{post.title}</h3>

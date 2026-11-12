@@ -44,13 +44,12 @@ export const LISTS = {
       { k: 'name', label: 'Plan name', type: 'text' },
       { k: 'line', label: 'One-line description', type: 'text' },
       { k: 'once', label: 'One-time price', type: 'text', help: 'Only the number, for example 25,000. The ₹ sign is added for you.' },
-      { k: 'monthly', label: 'Monthly care price', type: 'text' },
       { k: 'hourly', label: 'Hourly price', type: 'text', help: 'Shown when a visitor picks "Hourly". Leave empty to show "Ask us".' },
       { k: 'items', label: 'What is included', type: 'strings', noun: 'item' },
       { k: 'services', label: 'Services added to the order', type: 'services' },
       { k: 'best', label: 'Mark as "Most chosen"', type: 'bool' },
     ],
-    blank: { name: 'New plan', line: '', once: '', monthly: '', hourly: '', items: [], services: [], best: false },
+    blank: { name: 'New plan', line: '', once: '', hourly: '', items: [], services: [], best: false },
   },
   posts: {
     title: 'Blog articles',
@@ -136,7 +135,7 @@ export const LISTS = {
     name: (x) => x.name,
     of: [
       { k: 'name', label: 'Name', type: 'text', placeholder: 'ISO 9001:2015', help: 'Read out to screen readers and shown when there is no picture.' },
-      { k: 'image', label: 'Badge or certificate picture', type: 'media', kind: 'image' },
+      { k: 'image', label: 'Badge or certificate picture', type: 'media', kind: 'image', alt: false },
       { k: 'link', label: 'Link to check it (optional)', type: 'text', placeholder: 'https://' },
     ],
     blank: { name: '', image: '', link: '' },
@@ -157,6 +156,9 @@ export const LISTS = {
 export const SITE_FIELDS = [
   { k: 'name', label: 'Company name', type: 'text' },
   { k: 'tagline', label: 'Tagline', type: 'text' },
+  { k: 'logo', label: 'Logo', type: 'media', kind: 'image', alt: false, help: 'Shown in the menu and given to Google. A wide PNG or SVG with a see-through background works best. Leave empty to keep the current one.' },
+  { k: 'logoDark', label: 'Logo for dark backgrounds', type: 'media', kind: 'image', alt: false, help: 'A light version, for the footer and other dark areas.' },
+  { k: 'favicon', label: 'Icon in the browser tab', type: 'media', kind: 'image', alt: false, help: 'A square picture, at least 48 by 48 pixels.' },
   { k: 'url', label: 'Website address', type: 'text', placeholder: 'https://www.example.com', help: 'The address the site is live on. Search engines are told every page lives under it.' },
   { k: 'email', label: 'Email', type: 'text' },
   { k: 'phone', label: 'Phone', type: 'text' },
@@ -246,7 +248,8 @@ export const SITE_FIELDS = [
 
 export const SEO_FIELDS = [
   { k: 'indexing', label: 'Let search engines list this site', type: 'bool', help: 'Switch off while the site is unfinished. Every page is then marked "do not list".' },
-  { k: 'image', label: 'Picture shown when a link is shared', type: 'media', kind: 'image', help: 'Used on WhatsApp, LinkedIn and others for any page without its own. Best at 1200 by 630 pixels.' },
+  { k: 'analytics', label: 'Google Analytics', type: 'area', rows: 2, placeholder: 'G-XXXXXXXXXX', help: 'Paste your measurement ID, or the whole Google tag from Analytics > Admin > Data streams. The tag is added to the header of every page, but not to this admin panel.' },
+  { k: 'image', label: 'Picture shown when a link is shared', type: 'media', kind: 'image', alt: false, help: 'Used on WhatsApp, LinkedIn and others for any page without its own. Best at 1200 by 630 pixels.' },
   { k: 'googleVerification', label: 'Google Search Console code', type: 'text', help: 'In Search Console choose the "HTML tag" method and paste only the code inside content="...".' },
   { k: 'bingVerification', label: 'Bing Webmaster code', type: 'text' },
   { k: 'keywords', label: 'Keywords (optional)', type: 'text', help: 'Comma separated. Google ignores this; a few smaller engines still read it.' },

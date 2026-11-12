@@ -23,14 +23,14 @@ export default function BlogPost() {
         </div>
         <h1>{post.title}</h1>
         <p className="lede">{post.intro}</p>
-        {post.cover && <img className="post-photo" src={mediaUrl(post.cover)} alt="" />}
+        {post.cover && <img className="post-photo" src={mediaUrl(post.cover)} alt={post.coverAlt || post.title} />}
         {post.body.map((s, i) => (
           <section key={i}>
             {s.heading && <h2>{s.heading}</h2>}
             {paragraphs(s.text).map((t, k) => (
               <p key={k}>{t}</p>
             ))}
-            {s.image && <img className="post-photo" src={mediaUrl(s.image)} alt="" loading="lazy" />}
+            {s.image && <img className="post-photo" src={mediaUrl(s.image)} alt={s.imageAlt || s.heading || ''} loading="lazy" />}
           </section>
         ))}
         <div className="post-end">

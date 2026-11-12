@@ -28,13 +28,13 @@ const orgId = () => `${SITE_INFO.url}/#organization`
 function organization() {
   const s = SEO_SETTINGS
   return {
-    '@type': 'ProfessionalService',
+    '@type': ['Organization', 'ProfessionalService'],
     '@id': orgId(),
     name: SITE_INFO.name,
     url: SITE_INFO.url,
     slogan: TAGLINE || undefined,
     description: summary(),
-    logo: `${SITE_INFO.url}/logo.png`,
+    logo: { '@type': 'ImageObject', url: abs(mediaUrl(SITE_INFO.logo) || '/logo.png') },
     image: abs(mediaUrl(s.image) || '/og.png'),
     email: EMAIL || undefined,
     telephone: CONTACT.tel || undefined,
@@ -61,11 +61,20 @@ function organization() {
     },
   }
 }
-const website = () => ({ '@type': 'WebSite', '@id': `${SITE_INFO.url}/#website`, url: SITE_INFO.url, name: SITE_INFO.name, publisher: { '@id': orgId() }, inLanguage: 'en' })
+const website = () => ({ '@type': 'WebSite', '@id': `${SITE_INFO.url}/#website`, url: SITE_INFO.url, name: SITE_INFO.name, description: summary(), publisher: { '@id': orgId() }, inLanguage: 'en' })
+// The page with the "All articles" section is the blog every article belongs to.
+const blogId = () => `${abs(PAGES.find((p) => has(p, 'blogGrid'))?.path || '/blog')}#blog`
 const sectionsOf = (s) => (s.blocks.length ? s.blocks : serviceBlocks(s))
-// Questions written into a page's own "Questions for this page" sections.
-const ownQuestions = (blocks) => blocks.filter((b) => b.type === 'questions').flatMap((b) => (b.items || []).filter((x) => x?.q).map((x) => [x.q, x.a || '']))
-const faqPage = (list = FAQS) => ({
+// Every question a page shows: the FAQs screen's list where a "Questions and answers" section sits,
+// plus its own "Questions for this page" sections. Each question once.
+const questionsOn = (blocks) => {
+  const all = [
+    ...(blocks.some((b) => b.type === 'faq') ? FAQS : []),
+    ...blocks.filter((b) => b.type === 'questions').flatMap((b) => (b.items || []).filter((x) => x?.q).map((x) => [x.q, x.a || ''])),
+  ]
+  return all.filter(([q], i) => all.findIndex(([x]) => x.trim().toLowerCase() === q.trim().toLowerCase()) === i)
+}
+const faqPage = (list) => ({
   '@type': 'FAQPage',
   mainEntity: list.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
 })
@@ -79,7 +88,7 @@ const AUTO = {
   '/': () => [`${SITE_INFO.name} | Websites, apps, marketing and software${where()}`, `${summary()} One team from first idea to launch and after.`],
   '/services': () => [`Services: web, apps, SEO, marketing, AI and business software | ${SITE_INFO.name}`, `${SERVICE_INFO.length} services from one team${where()}: ${names().join(', ')}. Pick one or combine several.`],
   '/work': () => [`Our work | ${SITE_INFO.name}`, `Websites, apps, marketing campaigns and business software built by ${SITE_INFO.name}.`],
-  '/pricing': () => [`Pricing and plans | ${SITE_INFO.name}`, `Starting plans for websites, marketing and business software, as a one-time project or monthly care. Every plan is shaped to fit.`],
+  '/pricing': () => [`Pricing and plans | ${SITE_INFO.name}`, `Starting plans for websites, marketing and business software, as a one-time project or by the hour. Every plan is shaped to fit.`],
   '/blog': () => [`Blog: plain advice on websites, marketing and software | ${SITE_INFO.name}`, `Short, jargon-free articles for business owners on websites, SEO, CRM and automation.`],
   '/about': () => [`About ${SITE_INFO.name} | One team for design, development and marketing`, `${summary()} The people who design your screens sit next to the people who build and market them.`],
   '/contact': () => [`Contact ${SITE_INFO.name} | Start a project${where()}`, `Call ${CONTACT.phone}, email ${EMAIL}, or send the form. Office: ${CONTACT.address}.`],
@@ -116,7 +125,7 @@ export function seoFor(pathname) {
       org,
       crumbs(['Services', '/services'], [service.name, path]),
     ]
-    const qs = ownQuestions(sectionsOf(service))
+    const qs = questionsOn(sectionsOf(service))
     if (qs.length) data.push(faqPage(qs))
   } else if (post) {
     own = post.seo
@@ -134,8 +143,12 @@ export function seoFor(pathname) {
         mainEntityOfPage: abs(path),
         image: abs(mediaUrl(post.cover || SEO_SETTINGS.image) || '/og.png'),
         datePublished: post.date || undefined,
-        author: { '@id': orgId() },
+        dateModified: post.date || undefined,
+        timeRequired: post.minutes ? `PT${post.minutes}M` : undefined,
+        wordCount: post.body.reduce((n, s) => n + `${s.heading} ${s.text}`.split(/\s+/).filter(Boolean).length, 0) || undefined,
+        author: { '@type': 'Organization', '@id': orgId(), name: SITE_INFO.name, url: SITE_INFO.url },
         publisher: { '@id': orgId() },
+        isPartOf: { '@id': blogId() },
         inLanguage: 'en',
       },
       org,
@@ -148,9 +161,16 @@ export function seoFor(pathname) {
     if (path === '/about') data.push({ '@type': 'AboutPage', url: abs(path), about: { '@id': orgId() } })
     if (has(page, 'contact')) data.push({ '@type': 'ContactPage', url: abs(path), about: { '@id': orgId() } })
     if (has(page, 'blogGrid'))
-      data.push({ '@type': 'Blog', name: `${SITE_INFO.name} blog`, url: abs(path), publisher: { '@id': orgId() }, blogPost: POSTS.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: abs(`/blog/${p.id}`) })) })
-    if (has(page, 'faq') && FAQS.length) data.push(faqPage())
-    else if (ownQuestions(page.blocks).length) data.push(faqPage(ownQuestions(page.blocks)))
+      data.push({
+        '@type': 'Blog',
+        '@id': blogId(),
+        name: `${SITE_INFO.name} blog`,
+        url: abs(path),
+        publisher: { '@id': orgId() },
+        blogPost: POSTS.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: abs(`/blog/${p.id}`), datePublished: p.date || undefined, image: p.cover ? abs(mediaUrl(p.cover)) : undefined })),
+      })
+    const qs = questionsOn(page.blocks)
+    if (qs.length) data.push(faqPage(qs))
     data.push(org)
     if (path !== '/') data.push(crumbs([page.title, path]))
   } else {
@@ -172,11 +192,20 @@ export function seoFor(pathname) {
 
 export const robotsMeta = (m) => (m.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1')
 
+// The measurement ID from whatever was pasted: the ID itself, or the whole Google tag.
+// Only the ID is kept, so nothing else typed in that box can reach the page.
+export const analyticsId = (v) => String(v || '').match(/\b((?:G|GT|AW)-[A-Z0-9]{4,})\b/i)?.[1].toUpperCase() || ''
+const googleTag = (id) =>
+  `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>\n    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');</script>`
+
 /* ---------- <head> tags, as text ---------- */
 export function headTags(pathname) {
   const m = seoFor(pathname)
   const s = SEO_SETTINGS
+  const ga = analyticsId(s.analytics)
   return [
+    ga ? googleTag(ga) : '',
+    SITE_INFO.favicon ? `<link rel="icon" href="${esc(mediaUrl(SITE_INFO.favicon))}" />` : '',
     `<title>${esc(m.title)}</title>`,
     `<meta name="description" content="${esc(m.description)}" />`,
     s.keywords ? `<meta name="keywords" content="${esc(s.keywords)}" />` : '',
@@ -222,8 +251,8 @@ const BLOCK_HTML = {
   hero: (b) => `<h1>${esc([b.before, sentence((b.words || []).map((w) => w.text)), b.after].filter(Boolean).join(' '))}</h1>${p(b.text)}`,
   pageHero: (b) => `<h1>${esc(b.title)}</h1>${p(b.text)}`,
   text: (b) => h2(b.title) + paragraphs(b.body).map(p).join(''),
-  split: (b) => h2(b.title) + paragraphs(b.body).map(p).join('') + ul((b.points || []).filter(Boolean).map(esc)) + (isVideo(b.media) ? '' : img(b.media, b.alt)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
-  image: (b) => (b.src ? `<figure>${img(b.src, b.alt)}${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>` : ''),
+  split: (b) => h2(b.title) + paragraphs(b.body).map(p).join('') + ul((b.points || []).filter(Boolean).map(esc)) + (isVideo(b.media) ? '' : img(b.media, b.alt || b.title)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
+  image: (b) => (b.src ? `<figure>${img(b.src, b.alt || b.caption)}${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>` : ''),
   gallery: (b) => h2(b.title) + (b.images || []).map((i) => img(i.src, i.alt)).join(''),
   video: (b) => h2(b.title) + (embedUrl(b.embed) ? `<p>${link(b.embed, b.caption || b.title || 'Watch the video')}</p>` : p(b.caption)),
   cards: (b) => h2(b.title) + p(b.text) + ul((b.cards || []).map((c) => `<strong>${esc(c.title)}.</strong> ${esc(c.text)}`)),
@@ -264,7 +293,7 @@ export function bodyHtml(pathname) {
     main = `<p>${link('/services', 'All services')}</p>${sectionsOf(service).map((b) => BLOCK_HTML[b.type]?.(b, service) || '').join('\n')}<p>${link('/contact', 'Start a project')}</p>`
     if (!/<h1/.test(main)) main = `<h1>${esc(service.name)}</h1>${main}`
   } else if (post) {
-    main = `<article><p>${link('/blog', 'All articles')}</p><h1>${esc(post.title)}</h1>${img(post.cover, post.title)}${p(post.intro)}
+    main = `<article><p>${link('/blog', 'All articles')}</p><h1>${esc(post.title)}</h1>${img(post.cover, post.coverAlt || post.title)}${p(post.intro)}
 ${post.body.map((s) => `${h2(s.heading)}${paragraphs(s.text).map(p).join('')}`).join('')}</article>`
   } else if (page) {
     main = page.blocks.map((b) => BLOCK_HTML[b.type]?.(b) || '').join('\n')

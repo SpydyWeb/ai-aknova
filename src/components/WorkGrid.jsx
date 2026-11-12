@@ -58,7 +58,7 @@ export default function WorkGrid() {
                 >
                   {p.image ? (
                     <span className="shot photo">
-                      <img src={mediaUrl(p.image)} alt="" loading="lazy" />
+                      <img src={mediaUrl(p.image)} alt={p.imageAlt || p.name} loading="lazy" />
                     </span>
                   ) : (
                     <span className={`shot ${p.i % 2 ? 'flip' : ''}`}>
@@ -100,7 +100,7 @@ export default function WorkGrid() {
               <h2>{PROJECTS[open].name}</h2>
               <p className="type">{PROJECTS[open].type}</p>
               <p>{PROJECTS[open].blurb}</p>
-              {PROJECTS[open].image && <img className="sheet-photo" src={mediaUrl(PROJECTS[open].image)} alt="" />}
+              {PROJECTS[open].image && <img className="sheet-photo" src={mediaUrl(PROJECTS[open].image)} alt={PROJECTS[open].imageAlt || PROJECTS[open].name} />}
               {PROJECTS[open].link && (
                 <a className="link" href={PROJECTS[open].link} target="_blank" rel="noreferrer">
                   Visit the project
