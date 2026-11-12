@@ -444,11 +444,12 @@
                         "Mobile-first",
                         "Conversion focused"
                     ],
-                    "image": "",
+                    "image": "/uploads/about-blank-3.png",
                     "primaryLabel": "Get a custom design",
                     "primaryTo": "/contact",
                     "secondaryLabel": "View our work",
-                    "secondaryTo": "/work"
+                    "secondaryTo": "/work",
+                    "imageAlt": "web development test image"
                 },
                 {
                     "id": "s002web",
