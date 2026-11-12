@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FAQS } from '../data.js'
 import Clip from './Clip.jsx'
+import Rich from './Rich.jsx'
 import Tilt from './Tilt.jsx'
 
 export default function Faq({ title = 'Questions people ask first', video }) {
@@ -30,7 +31,7 @@ export default function Faq({ title = 'Questions people ask first', video }) {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.22 }}
                   >
-                    <p>{a}</p>
+                    <Rich text={a} />
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -2,8 +2,9 @@
 // descriptions, structured data, the plain-HTML version of each page, sitemap, robots and llms.txt.
 // It all comes from the content the admin panel edits. The browser uses it on every page change,
 // the server uses it for every page it sends, and scripts/prerender.mjs uses it at build time.
-import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, REASONS, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, mediaUrl, slug } from './data.js'
+import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, REASONS, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, fileAlt, mediaUrl, slug } from './data.js'
 import { embedUrl, isVideo, paragraphs, serviceBlocks } from './blocks.js'
+import { plainText, richHtml } from './rich.js'
 
 export { slug }
 
@@ -76,7 +77,7 @@ const questionsOn = (blocks) => {
 }
 const faqPage = (list) => ({
   '@type': 'FAQPage',
-  mainEntity: list.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+  mainEntity: list.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: plainText(a) } })),
 })
 const crumbs = (...items) => ({
   '@type': 'BreadcrumbList',
@@ -97,7 +98,7 @@ const AUTO = {
 // The first words on a page, used as its description when nothing better exists.
 function firstWords(page) {
   for (const b of page.blocks) {
-    const t = b.text || paragraphs(b.body)[0]
+    const t = b.text || plainText(paragraphs(b.body)[0])
     if (t) return t
   }
   return summary()
@@ -138,7 +139,7 @@ export function seoFor(pathname) {
         headline: post.title,
         description: post.intro,
         articleSection: post.topic || undefined,
-        articleBody: post.body.map((s) => `${s.heading}. ${s.text}`).join(' '),
+        articleBody: post.body.map((s) => `${s.heading}. ${plainText(s.text)}`).join(' '),
         url: abs(path),
         mainEntityOfPage: abs(path),
         image: abs(mediaUrl(post.cover || SEO_SETTINGS.image) || '/og.png'),
@@ -195,6 +196,8 @@ export const robotsMeta = (m) => (m.noindex ? 'noindex, nofollow' : 'index, foll
 // The measurement ID from whatever was pasted: the ID itself, or the whole Google tag.
 // Only the ID is kept, so nothing else typed in that box can reach the page.
 export const analyticsId = (v) => String(v || '').match(/\b((?:G|GT|AW)-[A-Z0-9]{4,})\b/i)?.[1].toUpperCase() || ''
+// A Search Console or Bing code: the code itself, or the whole <meta ... content="..."> tag pasted in.
+export const verifyCode = (v) => String(v || '').match(/content\s*=\s*["']([^"']+)["']/i)?.[1].trim() || String(v || '').trim()
 const googleTag = (id) =>
   `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>\n    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');</script>`
 
@@ -211,8 +214,8 @@ export function headTags(pathname) {
     s.keywords ? `<meta name="keywords" content="${esc(s.keywords)}" />` : '',
     `<link rel="canonical" href="${esc(m.url)}" />`,
     `<meta name="robots" content="${robotsMeta(m)}" />`,
-    s.googleVerification ? `<meta name="google-site-verification" content="${esc(s.googleVerification)}" />` : '',
-    s.bingVerification ? `<meta name="msvalidate.01" content="${esc(s.bingVerification)}" />` : '',
+    verifyCode(s.googleVerification) ? `<meta name="google-site-verification" content="${esc(verifyCode(s.googleVerification))}" />` : '',
+    verifyCode(s.bingVerification) ? `<meta name="msvalidate.01" content="${esc(verifyCode(s.bingVerification))}" />` : '',
     `<meta property="og:type" content="${m.article ? 'article' : 'website'}" />`,
     `<meta property="og:site_name" content="${esc(SITE_INFO.name)}" />`,
     `<meta property="og:locale" content="en_IN" />`,
@@ -238,7 +241,7 @@ const ul = (items) => (items.length ? `<ul>${items.map((i) => `<li>${i}</li>`).j
 const link = (path, text) => `<a href="${esc(path)}">${esc(text)}</a>`
 const h2 = (t) => (t ? `<h2>${esc(t)}</h2>` : '')
 const p = (t) => (t ? `<p>${esc(t)}</p>` : '')
-const img = (src, alt) => (src ? `<img src="${esc(mediaUrl(src))}" alt="${esc(alt)}" loading="lazy" />` : '')
+const img = (src, alt) => (src ? `<img src="${esc(mediaUrl(src))}" alt="${esc(alt || fileAlt(src))}" loading="lazy" />` : '')
 const servicesHtml = () => ul(SERVICE_INFO.map((s) => `${link(serviceUrl(s), s.name)}: ${esc(s.line)}`))
 const stepsHtml = () => `<ol>${STEPS.map(([n, t]) => `<li><strong>${esc(n)}.</strong> ${esc(t)}</li>`).join('')}</ol>`
 const plansHtml = () => ul(PLANS.map((x) => `<strong>${esc(x.name)}.</strong> ${esc(x.line)} ${esc(x.items.join(', '))}.`))
@@ -250,8 +253,8 @@ const contactHtml = () =>
 const BLOCK_HTML = {
   hero: (b) => `<h1>${esc([b.before, sentence((b.words || []).map((w) => w.text)), b.after].filter(Boolean).join(' '))}</h1>${p(b.text)}`,
   pageHero: (b) => `<h1>${esc(b.title)}</h1>${p(b.text)}`,
-  text: (b) => h2(b.title) + paragraphs(b.body).map(p).join(''),
-  split: (b) => h2(b.title) + paragraphs(b.body).map(p).join('') + ul((b.points || []).filter(Boolean).map(esc)) + (isVideo(b.media) ? '' : img(b.media, b.alt || b.title)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
+  text: (b) => h2(b.title) + richHtml(b.body, esc),
+  split: (b) => h2(b.title) + richHtml(b.body, esc) + ul((b.points || []).filter(Boolean).map(esc)) + (isVideo(b.media) ? '' : img(b.media, b.alt || b.title)) + (b.buttonLabel && b.buttonTo ? `<p>${link(b.buttonTo, b.buttonLabel)}</p>` : ''),
   image: (b) => (b.src ? `<figure>${img(b.src, b.alt || b.caption)}${b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : ''}</figure>` : ''),
   gallery: (b) => h2(b.title) + (b.images || []).map((i) => img(i.src, i.alt)).join(''),
   video: (b) => h2(b.title) + (embedUrl(b.embed) ? `<p>${link(b.embed, b.caption || b.title || 'Watch the video')}</p>` : p(b.caption)),
@@ -268,10 +271,10 @@ const BLOCK_HTML = {
   voices: (b) => h2(b.title) + VOICES.map((v) => `<blockquote><p>${esc(v.quote)}</p><cite>${esc(v.who)}</cite></blockquote>`).join(''),
   blog: (b) => h2(b.title) + postsHtml(POSTS.slice(0, 3)),
   blogGrid: () => postsHtml(POSTS),
-  faq: (b) => h2(b.title) + `<dl>${FAQS.map(([q, a]) => `<dt><strong>${esc(q)}</strong></dt><dd>${esc(a)}</dd>`).join('')}</dl>`,
+  faq: (b) => h2(b.title) + `<dl>${FAQS.map(([q, a]) => `<dt><strong>${esc(q)}</strong></dt><dd>${richHtml(a, esc)}</dd>`).join('')}</dl>`,
   contact: (b) => `<h1>${esc(b.title)}</h1>${contactHtml()}`,
   svcHero: (b, owner) => `<h1>${esc([b.title || owner?.name, b.highlight].filter(Boolean).join(' '))}</h1>${p(b.text)}${ul((b.ticks || []).map(esc))}`,
-  intro: (b) => h2(b.title) + paragraphs(b.body).map(p).join(''),
+  intro: (b) => h2(b.title) + richHtml(b.body, esc),
   features: (b) => h2(b.title) + p(b.text) + ul((b.items || []).filter((x) => x?.title).map((x) => `<strong>${esc(x.title)}.</strong> ${esc(x.text)}`)),
   timeline: (b) => h2(b.title) + p(b.text) + ((b.steps || []).some((x) => x?.title) ? `<ol>${b.steps.map((x) => `<li><strong>${esc(x.title)}.</strong> ${esc(x.text)}</li>`).join('')}</ol>` : stepsHtml()),
   projects: (b, owner) => h2(b.title) + p(b.text) + ul(PROJECTS.filter((x) => x.type === (b.service || owner?.name)).map((x) => `<strong>${esc(x.name)}</strong>. ${esc(x.blurb)}`)),
@@ -294,7 +297,7 @@ export function bodyHtml(pathname) {
     if (!/<h1/.test(main)) main = `<h1>${esc(service.name)}</h1>${main}`
   } else if (post) {
     main = `<article><p>${link('/blog', 'All articles')}</p><h1>${esc(post.title)}</h1>${img(post.cover, post.coverAlt || post.title)}${p(post.intro)}
-${post.body.map((s) => `${h2(s.heading)}${paragraphs(s.text).map(p).join('')}`).join('')}</article>`
+${post.body.map((s) => `${h2(s.heading)}${richHtml(s.text, esc)}`).join('')}</article>`
   } else if (page) {
     main = page.blocks.map((b) => BLOCK_HTML[b.type]?.(b) || '').join('\n')
     if (!/<h1/.test(main)) main = `<h1>${esc(page.title)}</h1>${main}`

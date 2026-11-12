@@ -16,8 +16,15 @@ return [
     // Changing it signs every device out.
     'admin_password' => '',
 
-    // A fine-grained GitHub token with "Contents: read and write" on this one repository only.
-    // Each save in the admin panel becomes a commit, and GitHub rebuilds and uploads the site.
+    // The MySQL database that holds the site content. Create it in cPanel > MySQL Databases,
+    // add a user to it with ALL PRIVILEGES, and copy the names here. The table is made on first use.
+    'db_host' => 'localhost',
+    'db_name' => '',
+    'db_user' => '',
+    'db_pass' => '',
+
+    // Optional. After each save, GitHub rebuilds the pages so search engines see the new text.
+    // A fine-grained token on this one repository with "Actions: read and write".
     'github_token' => '',
     'github_repo' => 'SpydyWeb/ai-aknova',
     'github_branch' => 'main',

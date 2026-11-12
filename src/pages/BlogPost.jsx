@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
+import Rich from '../components/Rich.jsx'
 import NotFound from './NotFound.jsx'
 import { PostCard } from '../components/BlogCards.jsx'
-import { POSTS, mediaUrl } from '../data.js'
-import { paragraphs } from '../blocks.js'
+import { POSTS, fileAlt, mediaUrl } from '../data.js'
 import { MLink, press } from '../ui.jsx'
 
 export default function BlogPost() {
@@ -27,10 +27,8 @@ export default function BlogPost() {
         {post.body.map((s, i) => (
           <section key={i}>
             {s.heading && <h2>{s.heading}</h2>}
-            {paragraphs(s.text).map((t, k) => (
-              <p key={k}>{t}</p>
-            ))}
-            {s.image && <img className="post-photo" src={mediaUrl(s.image)} alt={s.imageAlt || s.heading || ''} loading="lazy" />}
+            <Rich text={s.text} />
+            {s.image && <img className="post-photo" src={mediaUrl(s.image)} alt={s.imageAlt || s.heading || post.title || fileAlt(s.image)} loading="lazy" />}
           </section>
         ))}
         <div className="post-end">

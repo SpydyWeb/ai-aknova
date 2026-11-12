@@ -9,7 +9,7 @@ export default function Logo({ onDark = false }) {
   const custom = mediaUrl(onDark ? SITE_INFO.logoDark || SITE_INFO.logo : SITE_INFO.logo)
   return (
     <Link className={`logo ${onDark ? 'logo-on-dark' : ''}`} to="/" aria-label={`${SITE_INFO.name}, home`}>
-      {custom ? <img src={custom} alt="" /> : <img src={onDark ? dark : light} alt="" width="682" height="76" />}
+      {custom ? <img src={custom} alt={`${SITE_INFO.name} logo`} /> : <img src={onDark ? dark : light} alt={`${SITE_INFO.name} logo`} width="682" height="76" />}
     </Link>
   )
 }

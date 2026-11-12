@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useId, useRef, useSt
 import { BLOCKS, isVideo } from '../blocks.js'
 import { mediaUrl, slug } from '../data.js'
 import { api } from './api.js'
+import Rich from '../components/Rich.jsx'
 
 // Gives fields the whole site content (for lists of services and pages) and a way to open the media library.
 export const AdminContext = createContext({ doc: {}, pickMedia: async () => null, me: {} })
@@ -420,6 +421,82 @@ export function Items({ def, value, onChange }) {
   )
 }
 
+/* ---------- the text editor for long text ---------- */
+// Buttons add the same marks the site understands (src/rich.js), so what is saved is still plain text.
+function RichArea({ id, rows, value, onChange }) {
+  const box = useRef(null)
+  const [preview, setPreview] = useState(false)
+
+  // Puts marks around the selection, or around a placeholder word when nothing is selected.
+  const wrap = (before, after, word) => {
+    const el = box.current
+    const { selectionStart: a, selectionEnd: b, value: v } = el
+    const picked = v.slice(a, b) || word
+    onChange(v.slice(0, a) + before + picked + after + v.slice(b))
+    requestAnimationFrame(() => {
+      el.focus()
+      el.setSelectionRange(a + before.length, a + before.length + picked.length)
+    })
+  }
+  // Starts every selected line with a mark ("- ", "1. ", "## ").
+  const lines = (mark) => {
+    const el = box.current
+    const { selectionStart: a, selectionEnd: b, value: v } = el
+    const start = v.lastIndexOf('\n', a - 1) + 1
+    const end = v.indexOf('\n', b) === -1 ? v.length : v.indexOf('\n', b)
+    const marked = v
+      .slice(start, end)
+      .split('\n')
+      .map((l, i) => (typeof mark === 'function' ? mark(i) : mark) + l.replace(/^(\s*([-*]|\d+[.)])\s+|##\s+)/, ''))
+      .join('\n')
+    onChange(v.slice(0, start) + marked + v.slice(end))
+    requestAnimationFrame(() => {
+      el.focus()
+      el.setSelectionRange(start, start + marked.length)
+    })
+  }
+  const link = () => {
+    const url = window.prompt('Link address, for example https://example.com or /contact')
+    if (url && url.trim()) wrap('[', `](${url.trim()})`, 'link text')
+  }
+  const keys = (e) => {
+    if (!(e.ctrlKey || e.metaKey)) return
+    const k = e.key.toLowerCase()
+    if (k === 'b' || k === 'i' || k === 'k') e.preventDefault()
+    if (k === 'b') wrap('**', '**', 'bold text')
+    if (k === 'i') wrap('*', '*', 'italic text')
+    if (k === 'k') link()
+  }
+  const tools = [
+    ['Bold', 'B', () => wrap('**', '**', 'bold text'), 'Ctrl+B'],
+    ['Italic', 'I', () => wrap('*', '*', 'italic text'), 'Ctrl+I'],
+    ['Link', 'Link', link, 'Ctrl+K'],
+    ['Subheading', 'H', () => lines('## ')],
+    ['Bullet list', '• List', () => lines('- ')],
+    ['Numbered list', '1. List', () => lines((i) => `${i + 1}. `)],
+  ]
+
+  return (
+    <div className="adm-rich">
+      <div className="adm-rich-bar" role="toolbar" aria-label="Text formatting">
+        {tools.map(([label, face, run, key]) => (
+          <button key={label} type="button" className={`adm-tool tool-${label.split(' ')[0].toLowerCase()}`} aria-label={label} title={key ? `${label} (${key})` : label} disabled={preview} onMouseDown={(e) => e.preventDefault()} onClick={run}>
+            {face}
+          </button>
+        ))}
+        <button type="button" className="adm-tool adm-tool-preview" aria-pressed={preview} onClick={() => setPreview((v) => !v)}>
+          {preview ? 'Edit' : 'Preview'}
+        </button>
+      </div>
+      {preview ? (
+        <div className="adm-rich-preview">{value?.trim() ? <Rich text={value} /> : <p className="adm-help">Nothing written yet.</p>}</div>
+      ) : (
+        <textarea ref={box} id={id} rows={Math.max(rows || 3, 4)} value={value} onKeyDown={keys} onChange={(e) => onChange(e.target.value)} />
+      )}
+    </div>
+  )
+}
+
 function Field({ def, value, onChange }) {
   const { doc } = useContext(AdminContext)
   const id = useId()
@@ -447,7 +524,8 @@ function Field({ def, value, onChange }) {
     )
   }
 
-  if (def.type === 'area') control = <textarea id={id} rows={def.rows || 3} value={text} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
+  if (def.type === 'area' && def.rich) control = <RichArea id={id} rows={def.rows} value={text} onChange={onChange} />
+  else if (def.type === 'area') control = <textarea id={id} rows={def.rows || 3} value={text} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
   else if (def.type === 'number') control = <input id={id} type="number" min="0" value={text} onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))} />
   else if (def.type === 'date') control = <input id={id} type="date" value={text} onChange={(e) => onChange(e.target.value)} />
   else if (def.type === 'select')

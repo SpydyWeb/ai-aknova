@@ -1,9 +1,9 @@
 // Sections a service page is built from. Each one also works on any other page.
 import { useState } from 'react'
+import Rich from './Rich.jsx'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { paragraphs } from '../blocks.js'
-import { INDUSTRIES, PROJECTS, STEPS, mediaUrl } from '../data.js'
+import { INDUSTRIES, PROJECTS, STEPS, fileAlt, mediaUrl } from '../data.js'
 import { MLink, press, useOrder } from '../ui.jsx'
 import { Button } from './ContentBlocks.jsx'
 import ModelStage from './ModelStage.jsx'
@@ -62,7 +62,7 @@ export function SvcHero({ owner: service, title, highlight, tone = 'sun', text, 
       <div className="svc-panel">
         {image ? (
           <div className="svc-stage tall svc-photo">
-            <img src={mediaUrl(image)} alt={imageAlt || title || service?.name || ''} />
+            <img src={mediaUrl(image)} alt={imageAlt || title || service?.name || fileAlt(image)} />
           </div>
         ) : (
           <ModelStage name={service?.name || title} spot={tone} className="tall" />
@@ -77,9 +77,7 @@ export function Intro({ title, body, tone = 'paper' }) {
     <section className={`intro bg-${tone} ${dark(tone)}`}>
       {title && <h2>{title}</h2>}
       <div>
-        {paragraphs(body).map((t, i) => (
-          <p key={i}>{t}</p>
-        ))}
+        <Rich text={body} />
       </div>
     </section>
   )
@@ -240,9 +238,7 @@ export function Questions({ title, text, items }) {
               <AnimatePresence initial={false}>
                 {on && (
                   <motion.div id={`qa-${i}`} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }}>
-                    {paragraphs(a).map((t, k) => (
-                      <p key={k}>{t}</p>
-                    ))}
+                    <Rich text={a} />
                   </motion.div>
                 )}
               </AnimatePresence>

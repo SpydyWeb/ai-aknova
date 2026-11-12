@@ -14,7 +14,8 @@ const dist = join(root, 'dist')
 copyFileSync(join(dist, 'index.html'), join(dist, '_template.html'))
 const template = readFileSync(join(dist, '_template.html'), 'utf8')
 const site = createSite(root)
-const page = (route) => site.page(template, route).html
+// With LIVE_CONTENT the pages fetch the content from /api/content on every visit instead of carrying a copy.
+const page = (route) => site.page(template, route, { inline: !process.env.LIVE_CONTENT }).html
 
 setContent(site.read())
 const all = routes()
@@ -29,6 +30,9 @@ writeFileSync(join(dist, '404.html'), page('/404'))
 mkdirSync(join(dist, 'admin'), { recursive: true })
 writeFileSync(join(dist, 'admin', 'index.html'), page('/admin'))
 if (existsSync(join(site.dir, 'uploads'))) cpSync(join(site.dir, 'uploads'), join(dist, 'uploads'), { recursive: true })
+// The first content for the PHP API's database (public/api/index.php). Used once, while the table is empty.
+mkdirSync(join(dist, 'api'), { recursive: true })
+copyFileSync(join(site.dir, 'site.json'), join(dist, 'api', 'seed.json'))
 
 writeFileSync(join(dist, 'sitemap.xml'), sitemapXml(new Date().toISOString().slice(0, 10)))
 writeFileSync(join(dist, 'robots.txt'), robotsTxt())

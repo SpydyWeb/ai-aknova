@@ -1,7 +1,7 @@
 name: Deploy to MilesWeb
 
-# Every push to main rebuilds the site and uploads it. That includes each save in the admin panel,
-# which is a commit to content/site.json or content/uploads made by public/api/index.php.
+# Every push to main rebuilds the site and uploads it. The admin panel also starts this after each
+# save, so the prebuilt pages (what search engines read) catch up with the database.
 on:
   push:
     branches: [main]
@@ -25,10 +25,16 @@ jobs:
 
       - run: npm ci
 
+      # The content lives in the site's database, not in this repository. Build from the live copy;
+      # if the site cannot be reached (first deploy), the copy in content/site.json is used.
+      - name: Fetch the live content
+        run: curl -fsS --max-time 30 https://www.aknovatech.com/api/content -o live.json && mv live.json content/site.json || echo "Using content/site.json from the repository"
+
       # vite build, then scripts/prerender.mjs writes one HTML page per address from content/site.json.
       - run: npm run build
         env:
           VITE_WEB3FORMS_KEY: ${{ secrets.WEB3FORMS_KEY }}
+          LIVE_CONTENT: '1'
 
       - name: Upload to MilesWeb over FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

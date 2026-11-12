@@ -18,6 +18,8 @@ export const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').r
 
 // An uploaded file is stored as /uploads/name. A bare file name means the old public/videos folder.
 export const mediaUrl = (f) => (!f ? '' : /^(https?:)?\/\//.test(f) || f.startsWith('/') ? f : `/videos/${f}`)
+// Last-resort alt text when none was written: the file name in words ("skydot-footwear.png" -> "skydot footwear").
+export const fileAlt = (f) => String(f || '').split(/[/?#]/).filter(Boolean).pop()?.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').trim() || 'Photo'
 
 export let CONTENT = {}
 export let SITE_INFO = { name: '', tagline: '', url: '', city: '' }

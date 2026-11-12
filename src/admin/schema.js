@@ -73,7 +73,7 @@ export const LISTS = {
         name: (x) => x.heading,
         of: [
           { k: 'heading', label: 'Heading', type: 'text' },
-          { k: 'text', label: 'Text', type: 'area', rows: 6, help: 'Leave an empty line between paragraphs.' },
+          { k: 'text', label: 'Text', type: 'area', rows: 8, rich: true },
           { k: 'image', label: 'Photo under this part (optional)', type: 'media', kind: 'image' },
         ],
         blank: { heading: '', text: '', image: '' },
@@ -99,7 +99,7 @@ export const LISTS = {
     name: (x) => x.q,
     of: [
       { k: 'q', label: 'Question', type: 'text' },
-      { k: 'a', label: 'Answer', type: 'area', rows: 3 },
+      { k: 'a', label: 'Answer', type: 'area', rows: 3, rich: true },
     ],
     blank: { q: '', a: '' },
   },
@@ -250,8 +250,8 @@ export const SEO_FIELDS = [
   { k: 'indexing', label: 'Let search engines list this site', type: 'bool', help: 'Switch off while the site is unfinished. Every page is then marked "do not list".' },
   { k: 'analytics', label: 'Google Analytics', type: 'area', rows: 2, placeholder: 'G-XXXXXXXXXX', help: 'Paste your measurement ID, or the whole Google tag from Analytics > Admin > Data streams. The tag is added to the header of every page, but not to this admin panel.' },
   { k: 'image', label: 'Picture shown when a link is shared', type: 'media', kind: 'image', alt: false, help: 'Used on WhatsApp, LinkedIn and others for any page without its own. Best at 1200 by 630 pixels.' },
-  { k: 'googleVerification', label: 'Google Search Console code', type: 'text', help: 'In Search Console choose the "HTML tag" method and paste only the code inside content="...".' },
-  { k: 'bingVerification', label: 'Bing Webmaster code', type: 'text' },
+  { k: 'googleVerification', label: 'Google Search Console code', type: 'text', help: 'In Search Console choose the "HTML tag" method and paste the whole tag, or only the code inside content="...".' },
+  { k: 'bingVerification', label: 'Bing Webmaster code', type: 'text', help: 'In Bing Webmaster Tools choose "HTML Meta Tag" and paste the whole tag, or only the code inside content="...".' },
   { k: 'keywords', label: 'Keywords (optional)', type: 'text', help: 'Comma separated. Google ignores this; a few smaller engines still read it.' },
   { k: 'areaServed', label: 'Where you serve customers', type: 'text', placeholder: 'India' },
   { k: 'founded', label: 'Year the company started', type: 'text', placeholder: '2024' },

@@ -48,7 +48,9 @@ function Gate({ me, onDone }) {
       <form className="adm-card" onSubmit={submit}>
         <img src={logo} alt="Aknova Tech" width="682" height="76" />
         <h1>{creating ? 'Create your admin account' : 'Sign in to the admin panel'}</h1>
-        {me.stuck ? (
+        {me.stuck && me.hint ? (
+          <p className="adm-help">{me.hint}</p>
+        ) : me.stuck ? (
           <div className="adm-help">
             <p>This host has no disk, so the admin panel saves into your GitHub repository instead. Add these in the host&rsquo;s settings under Environment Variables, then redeploy:</p>
             <ul className="adm-steps">

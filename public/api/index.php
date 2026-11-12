@@ -1,15 +1,15 @@
 <?php
 // The admin panel's API for plain PHP hosting (MilesWeb, cPanel and the like). No Node server.
+// The content is kept in a MySQL database, so pushing code to GitHub can never overwrite it.
 // It answers the same addresses as server/core.mjs, so src/admin needs no changes:
 //
 //   GET  /api/admin/me            who is signed in, and what this host can do
 //   POST /api/admin/login|logout  sign in and out (email + password from the config file)
-//   GET  /api/content             the site content (content/site.json in the GitHub repository)
-//   PUT  /api/content             save it: a commit, which makes GitHub rebuild and upload the site
-//   GET  /api/backups             earlier saves (earlier commits of site.json)
+//   GET  /api/content             the site content (the newest row in the database)
+//   PUT  /api/content             save it, and ask GitHub to rebuild the pages for search engines
+//   GET  /api/backups             earlier saves (the 30 rows before it)
 //   POST /api/backups/restore     put an earlier save back
-//   GET|POST|DELETE /api/media    photos and videos in content/uploads
-//   GET  /uploads/<name>          (through .htaccess) an upload that is newer than the last rebuild
+//   GET|POST|DELETE /api/media    photos and videos in the website's uploads/ folder
 //
 // Settings live in aknova-config.php, one folder ABOVE the website folder, so the web can never
 // read them. See deploy/aknova-config.example.php in the repository.
@@ -22,12 +22,9 @@ const TYPES = [
     'avif' => 'image/avif', 'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'mp4' => 'video/mp4',
     'm4v' => 'video/mp4', 'webm' => 'video/webm', 'mov' => 'video/quicktime', 'pdf' => 'application/pdf',
 ];
-const SITE_FILE = 'content/site.json';
-const UPLOAD_DIR = 'content/uploads';
 const COOKIE = 'aknova_admin';
 const WEEK = 604800;
-// GitHub's contents API takes files as base64 inside JSON; past ~25 MB that becomes unreliable.
-const MAX_UPLOAD = 25 * 1048576;
+const MAX_UPLOAD = 300 * 1048576;
 const MAX_JSON = 6 * 1048576;
 
 final class StoreError extends Exception {}
@@ -44,13 +41,13 @@ function config(): array
     if ($c !== null) return $c;
     $file = getenv('AKNOVA_CONFIG') ?: dirname(__DIR__, 2) . '/aknova-config.php';
     $c = is_file($file) ? (array) (require $file) : [];
-    $c += ['admin_email' => '', 'admin_password' => '', 'github_token' => '', 'github_repo' => '', 'github_branch' => 'main', 'github_dir' => '', 'github_api' => 'https://api.github.com'];
+    $c += ['admin_email' => '', 'admin_password' => '', 'db_host' => 'localhost', 'db_name' => '', 'db_user' => '', 'db_pass' => '', 'db_dsn' => '', 'github_token' => '', 'github_repo' => '', 'github_branch' => 'main', 'github_api' => 'https://api.github.com'];
     return $c;
 }
 function tidy(?string $email): string { return strtolower(trim((string) $email)); }
 function valid_email(string $e): bool { return strlen($e) <= 200 && (bool) preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $e); }
 function has_password(): bool { $c = config(); return $c['admin_password'] !== '' && valid_email(tidy($c['admin_email'])); }
-function ready(): bool { $c = config(); return $c['github_token'] !== '' && $c['github_repo'] !== ''; }
+function ready(): bool { $c = config(); return $c['db_dsn'] !== '' || ($c['db_name'] !== '' && $c['db_user'] !== ''); }
 // A password hash ($2y$… or $argon2…) or, simpler to set up, the password itself.
 function check_password(string $given): bool
 {
@@ -132,82 +129,50 @@ function missed(): void
     @file_put_contents(tries_file(), json_encode(['count' => $fresh ? 1 : ($t['count'] + 1), 'until' => time() + 600]), LOCK_EX);
 }
 
-/* ---------------- GitHub: where the content is kept (mirrors server/github.mjs) ---------------- */
+/* ---------------- the database: where the content is kept ---------------- */
 
-function repo_path(string $p): string
+// One row per save. The newest row is the live content; the 30 before it are the "earlier versions".
+function db(): PDO
 {
-    $dir = trim((string) config()['github_dir'], '/');
-    return ltrim(($dir !== '' ? $dir . '/' : '') . $p, '/');
-}
-function api_base(): string
-{
+    static $pdo = null;
+    if ($pdo) return $pdo;
     $c = config();
-    return rtrim((string) $c['github_api'], '/') . '/repos/' . $c['github_repo'];
+    $dsn = $c['db_dsn'] !== '' ? $c['db_dsn'] : "mysql:host={$c['db_host']};dbname={$c['db_name']};charset=utf8mb4";
+    try {
+        $pdo = new PDO($dsn, $c['db_user'], $c['db_pass'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    } catch (PDOException) {
+        throw new StoreError('The database could not be reached. Check db_host, db_name, db_user and db_pass in aknova-config.php.');
+    }
+    $id = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite' ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
+    $pdo->exec("CREATE TABLE IF NOT EXISTS aknova_content (id $id, data LONGTEXT NOT NULL, saved_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)");
+    return $pdo;
 }
-function contents_url(string $p): string
+function read_content(?int $id = null): ?array
 {
-    return api_base() . '/contents/' . implode('/', array_map('rawurlencode', explode('/', repo_path($p))));
-}
-/** @return array{0:int,1:string} */
-function gh(string $url, string $method = 'GET', ?array $body = null, bool $raw = false): array
-{
-    $ch = curl_init($url);
-    $headers = [
-        'Authorization: Bearer ' . config()['github_token'],
-        'Accept: ' . ($raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json'),
-        'X-GitHub-Api-Version: 2022-11-28',
-        'User-Agent: aknova-admin',
-    ];
-    if ($body !== null) $headers[] = 'Content-Type: application/json';
-    curl_setopt_array($ch, [
-        CURLOPT_CUSTOMREQUEST => $method,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_CONNECTTIMEOUT => 10,
-        CURLOPT_TIMEOUT => 120,
-        CURLOPT_FOLLOWLOCATION => true,
-    ]);
-    if ($body !== null) curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body, JSON_UNESCAPED_SLASHES));
-    $out = curl_exec($ch);
-    $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    if ($out === false || $status === 0) throw new StoreError('GitHub could not be reached. Try again in a moment.');
-    if ($status === 404) return [404, ''];
-    if ($status === 401 || $status === 403) throw new StoreError('GitHub refused the access token. Check that github_token in aknova-config.php is current and has "Contents: read and write" on the repository.');
-    if ($status === 409 || $status === 422) throw new StoreError('The content changed somewhere else while you were editing. Reload the admin panel and try again.');
-    if ($status >= 400) throw new StoreError("GitHub answered with an error ($status). Try again in a moment.");
-    return [$status, (string) $out];
-}
-function branch(): string { return (string) config()['github_branch']; }
-function sha_of(string $p): ?string
-{
-    [$s, $out] = gh(contents_url($p) . '?ref=' . rawurlencode(branch()));
-    if ($s === 404) return null;
-    $sha = json_decode($out, true)['sha'] ?? null;
-    return is_string($sha) ? $sha : null;
-}
-function put_file(string $p, string $bytes, string $message): void
-{
-    $body = ['message' => $message, 'branch' => branch(), 'content' => base64_encode($bytes)];
-    $sha = sha_of($p);
-    if ($sha) $body['sha'] = $sha;
-    [$s] = gh(contents_url($p), 'PUT', $body);
-    if ($s === 404) throw new StoreError('The repository ' . config()['github_repo'] . ' or its branch ' . branch() . ' was not found. Check github_repo and github_branch.');
-}
-function read_content(?string $ref = null): array
-{
-    [$s, $out] = gh(contents_url(SITE_FILE) . '?ref=' . rawurlencode($ref ?? branch()), 'GET', null, true);
-    if ($s === 404) throw new StoreError('content/site.json was not found in ' . config()['github_repo'] . '. Check github_repo, github_branch and github_dir.');
-    $data = json_decode($out, true);
-    if (!is_array($data)) throw new StoreError('content/site.json in the repository could not be read.');
+    $q = $id === null
+        ? db()->query('SELECT data FROM aknova_content ORDER BY id DESC LIMIT 1')
+        : db()->prepare('SELECT data FROM aknova_content WHERE id = ?');
+    if ($id !== null) $q->execute([$id]);
+    $raw = $q->fetchColumn();
+    if ($raw === false) {
+        if ($id !== null) return null;
+        // First run: the table starts with the content the site was last built from.
+        $seed = @json_decode((string) @file_get_contents(__DIR__ . '/seed.json'), true);
+        if (!looks_right($seed)) throw new StoreError('The database is empty and api/seed.json is missing. Rebuild and upload the site once.');
+        write_content($seed);
+        return $seed;
+    }
+    $data = json_decode((string) $raw, true);
+    if (!is_array($data)) throw new StoreError('The saved content in the database could not be read.');
     return $data;
 }
-function write_content(array $data, string $message = 'Update site content from the admin panel'): void
+function write_content(array $data): void
 {
-    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-    // PHP indents with 4 spaces, the Node server and editors with 2. Writing 2 keeps each save's
-    // commit down to the lines that changed, so it merges cleanly with edits pushed from a computer.
-    $json = preg_replace_callback('/^( +)/m', fn ($m) => str_repeat(' ', intdiv(strlen($m[1]), 2)), $json);
-    put_file(SITE_FILE, $json . "\n", $message);
+    $pdo = db();
+    // Times are written in UTC by PHP, so the database's own time zone never matters.
+    $pdo->prepare('INSERT INTO aknova_content (data, saved_at) VALUES (?, ?)')->execute([json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), gmdate('Y-m-d H:i:s')]);
+    // Keep the live row and the 30 before it.
+    $pdo->exec('DELETE FROM aknova_content WHERE id < (SELECT id FROM (SELECT id FROM aknova_content ORDER BY id DESC LIMIT 1 OFFSET 30) AS keep)');
 }
 function looks_right($d): bool
 {
@@ -217,25 +182,49 @@ function looks_right($d): bool
 }
 function backups(): array
 {
-    $url = api_base() . '/commits?sha=' . rawurlencode(branch()) . '&path=' . rawurlencode(repo_path(SITE_FILE)) . '&per_page=31';
-    [$s, $out] = gh($url);
-    $list = $s === 404 ? [] : (json_decode($out, true) ?: []);
-    return array_map(fn ($c) => [
-        'name' => $c['sha'],
-        'time' => (strtotime($c['commit']['committer']['date'] ?? $c['commit']['author']['date'] ?? '') ?: 0) * 1000,
-    ], array_slice(is_array($list) ? $list : [], 1));
+    $rows = db()->query('SELECT id, saved_at FROM aknova_content ORDER BY id DESC LIMIT 30 OFFSET 1')->fetchAll(PDO::FETCH_ASSOC);
+    return array_map(fn ($r) => ['name' => (string) $r['id'], 'time' => (strtotime($r['saved_at'] . ' UTC') ?: 0) * 1000], $rows);
+}
+
+// Pages are rebuilt by GitHub so search engines see the new titles and text. The visible content
+// is already live, since every page reads it from the database, so a failure here only delays SEO.
+function rebuild(): void
+{
+    $c = config();
+    if ($c['github_token'] === '' || $c['github_repo'] === '') return;
+    $ch = curl_init(rtrim((string) $c['github_api'], '/') . '/repos/' . $c['github_repo'] . '/actions/workflows/deploy.yml/dispatches');
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $c['github_token'], 'Accept: application/vnd.github+json', 'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: aknova-admin', 'Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['ref' => (string) $c['github_branch']]),
+    ]);
+    if (curl_exec($ch) === false || curl_getinfo($ch, CURLINFO_RESPONSE_CODE) >= 300) error_log('aknova api: the rebuild could not be started on GitHub');
+}
+
+/* ---------------- photos and videos: files in the website's uploads folder ---------------- */
+
+// shortcut: uploads live in the website's own uploads/ folder. The FTP deploy only replaces files it
+// uploaded itself, so these survive. Turning on its "clean slate" option would delete them.
+function upload_dir(): string
+{
+    $dir = dirname(__DIR__) . '/uploads';
+    if (!is_dir($dir)) @mkdir($dir, 0755, true);
+    return $dir;
 }
 function ext_of(string $name): string { return strtolower(pathinfo($name, PATHINFO_EXTENSION)); }
 function kind(string $name): string { return explode('/', TYPES[ext_of($name)] ?? '')[0]; }
 function media(): array
 {
-    [$s, $out] = gh(contents_url(UPLOAD_DIR) . '?ref=' . rawurlencode(branch()));
-    $list = $s === 404 ? [] : (json_decode($out, true) ?: []);
     $files = [];
-    foreach (is_array($list) && array_is_list($list) ? $list : [] as $f) {
-        if (($f['type'] ?? '') !== 'file' || !in_array(ext_of($f['name']), UPLOADS, true)) continue;
-        $files[] = ['name' => $f['name'], 'url' => '/uploads/' . $f['name'], 'size' => $f['size'], 'time' => 0, 'type' => kind($f['name'])];
+    foreach (scandir(upload_dir()) ?: [] as $name) {
+        $path = upload_dir() . '/' . $name;
+        if ($name[0] === '.' || !is_file($path) || !in_array(ext_of($name), UPLOADS, true)) continue;
+        $files[] = ['name' => $name, 'url' => '/uploads/' . $name, 'size' => filesize($path), 'time' => filemtime($path) * 1000, 'type' => kind($name)];
     }
+    usort($files, fn ($a, $b) => $b['time'] <=> $a['time']);
     return $files;
 }
 function safe_name(string $raw, array $taken): ?string
@@ -255,35 +244,30 @@ function upload_limit(): int
     $post = match (strtolower(substr($v, -1))) { 'g' => $n << 30, 'm' => $n << 20, 'k' => $n << 10, default => $n };
     return $post > 0 ? min(MAX_UPLOAD, $post) : MAX_UPLOAD;
 }
-
-/* ---------------- an upload that is newer than the last rebuild ---------------- */
+// Streams the request body to disk, so a large video never has to fit in PHP's memory.
+function receive_upload(string $name): int
+{
+    $limit = upload_limit();
+    $tmp = upload_dir() . "/.$name.part";
+    $in = fopen('php://input', 'rb');
+    $out = fopen($tmp, 'wb');
+    $size = $in && $out ? stream_copy_to_stream($in, $out, $limit + 1) : false;
+    if ($in) fclose($in);
+    if ($out) fclose($out);
+    if ($size === false || $size === 0 || $size > $limit) {
+        @unlink($tmp);
+        if ($size > $limit) fail(413, 'That file is larger than ' . round($limit / 1048576) . ' MB.');
+        fail(400, 'The upload did not finish. Try again.');
+    }
+    rename($tmp, upload_dir() . "/$name");
+    return (int) $size;
+}
 
 function not_found(): void
 {
     http_response_code(404);
     header('Content-Type: text/plain; charset=utf-8');
     echo 'Not found';
-}
-function serve_upload(string $name): void
-{
-    $name = basename($name);
-    $ext = ext_of($name);
-    if ($name === '' || $name[0] === '.' || !in_array($ext, UPLOADS, true) || !ready()) {
-        not_found();
-        return;
-    }
-    [$s, $bytes] = gh(contents_url(UPLOAD_DIR . '/' . $name) . '?ref=' . rawurlencode(branch()), 'GET', null, true);
-    if ($s === 404) {
-        not_found();
-        return;
-    }
-    header('Content-Type: ' . TYPES[$ext]);
-    header('Content-Length: ' . strlen($bytes));
-    header('Cache-Control: public, max-age=300');
-    header('X-Content-Type-Options: nosniff');
-    // An uploaded SVG opened on its own must not be able to run scripts.
-    if ($ext === 'svg') header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox");
-    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'HEAD') echo $bytes;
 }
 
 /* ---------------- the API ---------------- */
@@ -296,13 +280,14 @@ function api(string $method, string $path): void
     if ($is('GET', '/api/admin/me')) {
         $in = has_password() && signed_in();
         $me = [
-            'stuck' => !ready(), 'remote' => true, 'maxUpload' => upload_limit(), 'hasPassword' => has_password(),
+            'stuck' => !ready(), 'remote' => false, 'maxUpload' => upload_limit(), 'hasPassword' => has_password(),
             'needsEmail' => false, 'canSetup' => false, 'signedIn' => $in, 'fixed' => true,
+            'hint' => 'The admin panel cannot save yet. In cPanel create a MySQL database and user, then add db_name, db_user and db_pass to aknova-config.php in your home folder (one level above the website).',
         ];
         if ($in) $me['email'] = tidy($c['admin_email']);
         answer(200, $me);
     }
-    if (!ready()) fail(503, 'This host has nowhere to save yet. Fill in github_token and github_repo in aknova-config.php.');
+    if (!ready()) fail(503, 'This host has nowhere to save yet. Fill in the database settings in aknova-config.php.');
     if ($is('GET', '/api/content')) answer(200, read_content());
 
     // Anything that changes something must come from the admin panel itself, not another website.
@@ -338,33 +323,30 @@ function api(string $method, string $path): void
         $data = body_json();
         if (!looks_right($data)) fail(400, 'That does not look like the site content, so nothing was saved.');
         write_content($data);
+        rebuild();
         answer(200, ['ok' => true]);
     }
     if ($is('GET', '/api/backups')) answer(200, backups());
     if ($is('POST', '/api/backups/restore')) {
         $name = (string) (body_json()['name'] ?? '');
-        if (!preg_match('/^[0-9a-f]{40}$/', $name)) fail(404, 'That saved version no longer exists.');
-        $data = read_content($name);
+        $data = ctype_digit($name) ? read_content((int) $name) : null;
+        if ($data === null) fail(404, 'That saved version no longer exists.');
         if (!looks_right($data)) fail(400, 'That saved version is damaged.');
-        write_content($data, 'Restore an earlier version from the admin panel');
+        write_content($data);
+        rebuild();
         answer(200, $data);
     }
     if ($is('GET', '/api/media')) answer(200, media());
     if ($is('POST', '/api/media')) {
         $name = safe_name((string) ($_GET['name'] ?? ''), array_column(media(), 'name'));
         if ($name === null) fail(400, 'That kind of file cannot be uploaded. Use .' . implode(', .', UPLOADS) . '.');
-        $limit = upload_limit();
-        $bytes = file_get_contents('php://input', false, null, 0, $limit + 1);
-        if ($bytes === false || $bytes === '') fail(400, 'The upload did not finish. Try again.');
-        if (strlen($bytes) > $limit) fail(413, 'That file is larger than ' . round($limit / 1048576) . ' MB.');
-        put_file(UPLOAD_DIR . '/' . $name, $bytes, "Add $name from the admin panel");
-        answer(200, ['name' => $name, 'url' => "/uploads/$name", 'size' => strlen($bytes), 'time' => time() * 1000, 'type' => kind($name)]);
+        $size = receive_upload($name);
+        answer(200, ['name' => $name, 'url' => "/uploads/$name", 'size' => $size, 'time' => time() * 1000, 'type' => kind($name)]);
     }
     if ($is('DELETE', '/api/media')) {
         $name = basename((string) ($_GET['name'] ?? ''));
-        $sha = $name !== '' ? sha_of(UPLOAD_DIR . '/' . $name) : null;
-        if (!$sha) fail(404, 'That file is not in the library.');
-        gh(contents_url(UPLOAD_DIR . '/' . $name), 'DELETE', ['message' => "Remove $name from the admin panel", 'branch' => branch(), 'sha' => $sha]);
+        if ($name === '' || $name[0] === '.' || !is_file(upload_dir() . "/$name")) fail(404, 'That file is not in the library.');
+        unlink(upload_dir() . "/$name");
         answer(200, ['ok' => true]);
     }
     fail(404, 'Not found.');
@@ -374,7 +356,7 @@ $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
 $path = '/' . ltrim((string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH), '/');
 try {
     if (str_starts_with($path, '/uploads/')) {
-        serve_upload(rawurldecode(substr($path, 9)));
+        not_found();
         exit;
     }
     api($method, rtrim($path, '/') ?: '/');

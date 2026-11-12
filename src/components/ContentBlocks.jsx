@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { embedUrl, isVideo, paragraphs } from '../blocks.js'
-import { mediaUrl } from '../data.js'
+import { embedUrl, isVideo } from '../blocks.js'
+import { fileAlt, mediaUrl } from '../data.js'
 import { MLink, press } from '../ui.jsx'
 import Tilt from './Tilt.jsx'
+import Rich from './Rich.jsx'
 
 const dark = (tone) => (tone === 'navy' || tone === 'blue' ? 'on-dark' : '')
 const outside = (to) => /^(https?:|mailto:|tel:)/.test(to || '')
@@ -26,9 +27,9 @@ export function Button({ to, label, className }) {
 function Media({ src, alt, loop = true }) {
   if (!src) return null
   return isVideo(src) ? (
-    <video src={mediaUrl(src)} aria-label={alt || undefined} autoPlay={loop} muted={loop} loop={loop} controls={!loop} playsInline preload="metadata" />
+    <video src={mediaUrl(src)} aria-label={alt || fileAlt(src)} autoPlay={loop} muted={loop} loop={loop} controls={!loop} playsInline preload="metadata" />
   ) : (
-    <img src={mediaUrl(src)} alt={alt || ''} loading="lazy" />
+    <img src={mediaUrl(src)} alt={alt || fileAlt(src)} loading="lazy" />
   )
 }
 
@@ -36,9 +37,7 @@ export function TextBlock({ title, body }) {
   return (
     <section className="story">
       {title && <h2>{title}</h2>}
-      {paragraphs(body).map((t, i) => (
-        <p key={i}>{t}</p>
-      ))}
+      <Rich text={body} />
     </section>
   )
 }
@@ -48,9 +47,7 @@ export function SplitBlock({ title, body, media, alt, points, flip, tone = 'pape
     <section className={`split bg-${tone} ${dark(tone)} ${flip ? 'flip' : ''}`}>
       <div className="split-copy">
         {title && <h2>{title}</h2>}
-        {paragraphs(body).map((t, i) => (
-          <p key={i}>{t}</p>
-        ))}
+        <Rich text={body} />
         {points?.filter(Boolean).length > 0 && (
           <ul className="ticks">
             {points.filter(Boolean).map((t) => (
@@ -74,7 +71,7 @@ export function ImageBlock({ src, alt, caption }) {
   return (
     <section className="photo-block">
       <figure className="frame">
-        <img src={mediaUrl(src)} alt={alt || caption || ''} loading="lazy" />
+        <img src={mediaUrl(src)} alt={alt || caption || fileAlt(src)} loading="lazy" />
         {caption && <figcaption>{caption}</figcaption>}
       </figure>
     </section>
@@ -129,7 +126,7 @@ export function GalleryBlock({ title, images }) {
               whileTap={{ x: 4, y: 4 }}
               onClick={() => setOpen(i)}
             >
-              <img src={mediaUrl(im.src)} alt={im.alt || ''} loading="lazy" />
+              <img src={mediaUrl(im.src)} alt={im.alt || (title ? `${title}, photo ${i + 1}` : fileAlt(im.src))} loading="lazy" />
             </motion.button>
           </li>
         ))}
@@ -148,7 +145,7 @@ export function GalleryBlock({ title, images }) {
               transition={{ type: 'spring', stiffness: 320, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <img src={mediaUrl(list[open].src)} alt={list[open].alt || ''} />
+              <img src={mediaUrl(list[open].src)} alt={list[open].alt || (title ? `${title}, photo ${open + 1}` : fileAlt(list[open].src))} />
               <figcaption>
                 <span>{list[open].alt}</span>
                 <motion.button type="button" className="btn btn-sun" data-sound="close" autoFocus onClick={() => setOpen(null)} {...press}>
@@ -174,7 +171,7 @@ export function CardsBlock({ title, text, cards }) {
         {list.map((c, i) => {
           const inner = (
             <>
-              {c.image && <img src={mediaUrl(c.image)} alt={c.imageAlt || c.title || ''} loading="lazy" />}
+              {c.image && <img src={mediaUrl(c.image)} alt={c.imageAlt || c.title || fileAlt(c.image)} loading="lazy" />}
               {c.title && <h3>{c.title}</h3>}
               {c.text && <p>{c.text}</p>}
             </>

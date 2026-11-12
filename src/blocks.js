@@ -51,7 +51,7 @@ export const BLOCKS = {
     label: 'Text',
     group: 'Write your own',
     about: 'A heading and paragraphs. Leave an empty line between paragraphs.',
-    fields: [title, { k: 'body', label: 'Text', type: 'area', rows: 8 }],
+    fields: [title, { k: 'body', label: 'Text', type: 'area', rows: 8, rich: true }],
     blank: { title: 'Heading', body: '' },
   },
   split: {
@@ -60,7 +60,7 @@ export const BLOCKS = {
     about: 'Text on one side, a photo or video on the other.',
     fields: [
       title,
-      { k: 'body', label: 'Text', type: 'area', rows: 5 },
+      { k: 'body', label: 'Text', type: 'area', rows: 5, rich: true },
       { k: 'media', label: 'Photo or video', type: 'media', kind: 'any' },
       { k: 'alt', label: 'Describe the picture (for search engines and screen readers)', type: 'text' },
       { k: 'points', label: 'Bullet points (optional)', type: 'strings', noun: 'point' },
@@ -172,7 +172,7 @@ export const BLOCKS = {
     label: 'Heading beside text',
     group: 'Write your own',
     about: 'A heading on the left and a few paragraphs on the right.',
-    fields: [title, { k: 'body', label: 'Text', type: 'area', rows: 6, help: 'Leave an empty line between paragraphs.' }, tone],
+    fields: [title, { k: 'body', label: 'Text', type: 'area', rows: 6, rich: true }, tone],
     blank: { title: 'Heading', body: '', tone: 'paper' },
   },
   features: {
@@ -247,7 +247,7 @@ export const BLOCKS = {
         name: (x) => x.q,
         of: [
           { k: 'q', label: 'Question', type: 'text' },
-          { k: 'a', label: 'Answer', type: 'area', rows: 3 },
+          { k: 'a', label: 'Answer', type: 'area', rows: 3, rich: true },
         ],
         blank: { q: '', a: '' },
       },
