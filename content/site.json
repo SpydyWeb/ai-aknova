@@ -444,7 +444,7 @@
             "Mobile-first",
             "Conversion focused"
           ],
-          "image": "/uploads/about-blank-3.png",
+          "image": "",
           "primaryLabel": "Get a custom design",
           "primaryTo": "/contact",
           "secondaryLabel": "View our work",
@@ -761,7 +761,7 @@
           "type": "projects",
           "title": "Website design portfolio",
           "text": "Selected website projects for different industries, audiences and business goals.",
-          "service": "",
+          "service": "Web development",
           "max": 3
         },
         {
@@ -1740,13 +1740,84 @@
   ],
   "projects": [
     {
-      "name": "SkyDot Footwear – Manufacturing Website",
+      "name": "Clinic booking app",
+      "type": "Mobile app development",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Furniture store",
       "type": "Web development",
-      "blurb": "Built to Showcase. Designed to Grow.\n\nWe created a professional digital platform for SkyDot Footwear, showcasing its diverse footwear collections with a modern design, seamless browsing experience, and enquiry-focused functionality.\n\nServices: UI/UX Design | Website Development | Responsive Design | SEO-Friendly Structure",
-      "image": "/uploads/skydot-footwear-ecommerce-showcase.png",
-      "link": "https://skydotfootwear.com/",
-      "tag": "Footwear",
-      "imageAlt": "skydot-footwear-ecommerce-showcase.png"
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Restaurant POS",
+      "type": "POS systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Sales pipeline CRM",
+      "type": "CRM systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Staff attendance portal",
+      "type": "HRM systems",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Support chatbot",
+      "type": "AI automation",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Travel brand launch",
+      "type": "Social media marketing",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Real estate search ranking",
+      "type": "SEO",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Fitness app redesign",
+      "type": "UI/UX design",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
+    },
+    {
+      "name": "Festival sale campaign",
+      "type": "Digital marketing",
+      "blurb": "Sample entry. Replace with what you built, the result it got, and a link.",
+      "tag": "Sample",
+      "image": "",
+      "link": ""
     }
   ],
   "steps": [
@@ -2035,16 +2106,5 @@
       }
     }
   ],
-  "certificates": [
-    {
-      "name": "MSME",
-      "image": "/uploads/msme-photo.png",
-      "link": ""
-    },
-    {
-      "name": "",
-      "image": "",
-      "link": ""
-    }
-  ]
+  "certificates": []
 }
