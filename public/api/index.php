@@ -203,7 +203,11 @@ function read_content(?string $ref = null): array
 }
 function write_content(array $data, string $message = 'Update site content from the admin panel'): void
 {
-    put_file(SITE_FILE, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n", $message);
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    // PHP indents with 4 spaces, the Node server and editors with 2. Writing 2 keeps each save's
+    // commit down to the lines that changed, so it merges cleanly with edits pushed from a computer.
+    $json = preg_replace_callback('/^( +)/m', fn ($m) => str_repeat(' ', intdiv(strlen($m[1]), 2)), $json);
+    put_file(SITE_FILE, $json . "\n", $message);
 }
 function looks_right($d): bool
 {

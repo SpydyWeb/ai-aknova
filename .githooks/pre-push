@@ -1,0 +1,20 @@
+#!/bin/sh
+# Stops a push that would erase commits already on GitHub, such as the saves the admin panel
+# makes to content/site.json. A force push does exactly that, and the site is rebuilt from main.
+# Turn it on once per clone with:  git config core.hooksPath .githooks
+zero=0000000000000000000000000000000000000000
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$local_sha" = "$zero" ] && continue   # deleting a branch
+  [ "$remote_sha" = "$zero" ] && continue  # a new branch
+  if ! git cat-file -e "$remote_sha^{commit}" 2>/dev/null || ! git merge-base --is-ancestor "$remote_sha" "$local_sha"; then
+    echo ""
+    echo "Push stopped: GitHub has commits that are not on this computer, most likely saves from the"
+    echo "admin panel. Pushing now would delete them from the website."
+    echo ""
+    echo "  Run:  git pull --rebase    then push again."
+    echo ""
+    echo "If content/site.json conflicts, keep GitHub's version of it and redo your own edit to it."
+    exit 1
+  fi
+done
+exit 0
