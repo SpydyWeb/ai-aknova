@@ -43,6 +43,13 @@ export let INDUSTRIES = []
 const list = (v) => (Array.isArray(v) ? v.filter((x) => x && typeof x === 'object') : [])
 const strings = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : [])
 
+const toReasons = (v) => list(v).filter((r) => r.title || r.text).map((r) => [r.title || '', r.text || '', r.tone || 'sun', r.video || ''])
+// A Why section's own cards, or the shared Why-us cards when it has none.
+export const reasonsFor = (cards) => {
+  const own = toReasons(cards)
+  return own.length ? own : REASONS
+}
+
 export function setContent(json) {
   const j = json && typeof json === 'object' ? json : {}
   const site = j.site || {}
@@ -80,7 +87,7 @@ export function setContent(json) {
   SERVICES = SERVICE_INFO.map((s) => s.name)
   PROJECTS = list(j.projects).filter((p) => p.name)
   STEPS = list(j.steps).map((s) => [s.name || '', s.text || ''])
-  REASONS = list(j.reasons).map((r) => [r.title || '', r.text || '', r.tone || 'sun', r.video || ''])
+  REASONS = toReasons(j.reasons)
   VOICES = list(j.voices).map((v, id) => ({ ...v, id }))
   FAQS = list(j.faqs)
     .filter((f) => f.q)

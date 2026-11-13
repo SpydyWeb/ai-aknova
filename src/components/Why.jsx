@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { REASONS } from '../data.js'
+import { reasonsFor } from '../data.js'
 import Clip from './Clip.jsx'
 
 const soft = { stiffness: 260, damping: 20 }
@@ -44,13 +44,13 @@ function Card({ title, text, color, video }) {
   )
 }
 
-export default function Why({ title = 'Why work with us', text }) {
+export default function Why({ title = 'Why work with us', text, cards }) {
   return (
     <section className="why">
       <h2>{title}</h2>
       {text && <p>{text}</p>}
       <div className="why-grid">
-        {REASONS.map(([name, body, color, video], i) => (
+        {reasonsFor(cards).map(([name, body, color, video], i) => (
           <Card key={i} title={name} text={body} color={color} video={video} />
         ))}
       </div>

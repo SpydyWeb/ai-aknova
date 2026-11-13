@@ -2,7 +2,7 @@
 // descriptions, structured data, the plain-HTML version of each page, sitemap, robots and llms.txt.
 // It all comes from the content the admin panel edits. The browser uses it on every page change,
 // the server uses it for every page it sends, and scripts/prerender.mjs uses it at build time.
-import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, REASONS, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, fileAlt, mediaUrl, slug } from './data.js'
+import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, reasonsFor, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, fileAlt, mediaUrl, slug } from './data.js'
 import { embedUrl, isVideo, paragraphs, serviceBlocks } from './blocks.js'
 import { plainText, richHtml } from './rich.js'
 
@@ -266,7 +266,7 @@ const BLOCK_HTML = {
   workGrid: () => projectsHtml(),
   story: (b) => h2(b.title) + stepsHtml(),
   process: (b) => h2(b.title) + stepsHtml(),
-  why: (b) => h2(b.title) + ul(REASONS.map(([t, d]) => `<strong>${esc(t)}.</strong> ${esc(d)}`)),
+  why: (b) => h2(b.title) + ul(reasonsFor(b.cards).map(([t, d]) => `<strong>${esc(t)}.</strong> ${esc(d)}`)),
   pricing: (b) => h2(b.title) + p(b.text) + plansHtml(),
   voices: (b) => h2(b.title) + VOICES.map((v) => `<blockquote><p>${esc(v.quote)}</p><cite>${esc(v.who)}</cite></blockquote>`).join(''),
   blog: (b) => h2(b.title) + postsHtml(POSTS.slice(0, 3)),
