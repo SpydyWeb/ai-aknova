@@ -195,11 +195,13 @@ export const robotsMeta = (m) => (m.noindex ? 'noindex, nofollow' : 'index, foll
 
 // The measurement ID from whatever was pasted: the ID itself, or the whole Google tag.
 // Only the ID is kept, so nothing else typed in that box can reach the page.
-export const analyticsId = (v) => String(v || '').match(/\b((?:G|GT|AW)-[A-Z0-9]{4,})\b/i)?.[1].toUpperCase() || ''
+export const analyticsId = (v) => String(v || '').match(/\b((?:GTM|G|GT|AW)-[A-Z0-9]{4,})\b/i)?.[1].toUpperCase() || ''
 // A Search Console or Bing code: the code itself, or the whole <meta ... content="..."> tag pasted in.
 export const verifyCode = (v) => String(v || '').match(/content\s*=\s*["']([^"']+)["']/i)?.[1].trim() || String(v || '').trim()
 const googleTag = (id) =>
-  `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>\n    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');</script>`
+  id.startsWith('GTM-')
+    ? `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${id}');</script>`
+    : `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>\n    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${id}');</script>`
 
 /* ---------- <head> tags, as text ---------- */
 export function headTags(pathname) {

@@ -300,7 +300,7 @@ function SeoView({ doc, setDoc }) {
             </p>
           ) : (
             <p className="adm-error" role="status">
-              No measurement ID found in the Google Analytics box. It starts with G-, for example G-ABC123XYZ.
+              No measurement ID found in the Google Analytics box. It starts with G- or GTM-, for example G-ABC123XYZ.
             </p>
           ))}
         <p className="adm-help">
