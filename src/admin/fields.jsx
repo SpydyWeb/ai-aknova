@@ -480,7 +480,7 @@ export function Items({ def, value, onChange }) {
     </div>
   )
   return def.page ? (
-    <div className="adm-panel">
+    <div className="adm-panel adm-listview">
       {def.intro && <p className="adm-help">{def.intro}</p>}
       {view}
     </div>
@@ -620,6 +620,8 @@ function RichArea({ id, rows, value, onChange }) {
   )
 }
 
+const SHORT = ['text', 'number', 'date', 'select', 'service', 'link', 'slug']
+
 function Field({ def, value, onChange }) {
   const { doc } = useContext(AdminContext)
   const id = useId()
@@ -629,7 +631,7 @@ function Field({ def, value, onChange }) {
 
   if (def.type === 'bool') {
     return (
-      <div className="adm-field">
+      <div className="adm-field short">
         <label className="adm-check">
           <input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} />
           <span>{def.label}</span>
@@ -716,8 +718,10 @@ function Field({ def, value, onChange }) {
   else control = <input id={id} value={text} placeholder={def.placeholder} onChange={(e) => onChange(e.target.value)} />
 
   const count = def.max && typeof text === 'string' ? text.length : null
+  // One-line fields can sit side by side on a wide screen; text boxes, lists and photos take the full row.
+  const short = !def.type || SHORT.includes(def.type)
   return (
-    <div className="adm-field">
+    <div className={`adm-field ${short ? 'short' : ''}`}>
       <label htmlFor={id}>
         {def.label}
         {count !== null && <span className={`adm-count ${count > def.max ? 'over' : ''}`}>{count} of {def.max}</span>}
@@ -773,16 +777,16 @@ export function Fields({ schema: given, value, onChange }) {
     ) : (
       <Field key={r.def.k} def={plain ? { ...r.def, label: r.def.label.replace(OPTIONAL, '') } : r.def} value={value?.[r.def.k]} onChange={(v) => onChange({ ...value, [r.def.k]: v })} />
     )
-  if (!extra.length) return rows.map((r) => draw(r, false))
+  if (!extra.length) return <div className="adm-form">{rows.map((r) => draw(r, false))}</div>
   return (
-    <>
+    <div className="adm-form">
       {main.map((r) => draw(r, false))}
       <details className="adm-more" open={startOpen}>
         <summary>
           More options <span>{extra.map((r) => r.def.label.replace(OPTIONAL, '').replace(/ text$/i, '').toLowerCase()).join(', ')}</span>
         </summary>
-        <div className="adm-more-body">{extra.map((r) => draw(r, true))}</div>
+        <div className="adm-more-body adm-form">{extra.map((r) => draw(r, true))}</div>
       </details>
-    </>
+    </div>
   )
 }

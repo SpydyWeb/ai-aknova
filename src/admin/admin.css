@@ -245,8 +245,48 @@ body {
   display: grid;
   gap: 20px;
   justify-items: start;
-  max-width: 900px;
+  max-width: 1500px;
   padding: 24px clamp(16px, 3vw, 36px) 80px;
+}
+
+/* ---------- using the width ----------
+   A form puts one-line fields side by side (up to three across); text boxes, lists, photos and
+   groups take the whole row. */
+.adm-form {
+  width: 100%;
+  display: grid;
+  gap: 16px 20px;
+  grid-template-columns: repeat(auto-fill, minmax(max(min(100%, 280px), calc((100% - 40px) / 3)), 1fr));
+  align-items: start;
+}
+.adm-form > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.adm-form > .short {
+  grid-column: auto;
+}
+/* Lists of things are a grid of cards; the one being edited spreads across the full row. */
+.adm-listview > .adm-items,
+.adm-pages,
+.adm-urls {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  align-items: start;
+}
+.adm-listview > .adm-items > :not(.adm-item) {
+  grid-column: 1 / -1;
+}
+.adm-listview > .adm-items > .adm-item.open,
+.adm-urls > li.open {
+  grid-column: 1 / -1;
+}
+/* Screens made of a few separate panels put them side by side. */
+.adm-cols {
+  width: 100%;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  align-items: start;
 }
 .adm-panel {
   width: 100%;
@@ -946,9 +986,6 @@ body {
 
 /* page editor: a header and tabs instead of one long scroll */
 /* An editor screen (page, service, article): content on the left, settings in panels on the right. */
-.adm-view:has(.adm-edit) {
-  max-width: 1500px;
-}
 .adm-edit {
   width: 100%;
   display: grid;

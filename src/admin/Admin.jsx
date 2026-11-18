@@ -325,6 +325,7 @@ function AiView({ doc, setDoc }) {
   }
   return (
     <>
+      <div className="adm-cols">
       <div className="adm-panel">
         <h2>How ready the site is to be quoted</h2>
         <p className="adm-help">AI assistants such as ChatGPT, Claude, Gemini and Perplexity quote sites that state clear facts in plain words. This list is worked out from your content.</p>
@@ -340,6 +341,7 @@ function AiView({ doc, setDoc }) {
       <div className="adm-panel">
         <h2>What you tell AI assistants</h2>
         <Fields schema={AI_FIELDS} value={ai} onChange={(next) => setDoc({ ...doc, seo: { ...doc.seo, ai: next } })} />
+      </div>
       </div>
       <div className="adm-panel">
         <h2>What they receive</h2>
@@ -382,7 +384,7 @@ function Account({ me, onSignOut, onRestore, dirty }) {
   }
 
   return (
-    <>
+    <div className="adm-cols">
       <form className="adm-panel" onSubmit={change}>
         <h2>Sign-in email and password</h2>
         {me.fixed && <p className="adm-help">This account is set on the server with ADMIN_EMAIL and ADMIN_PASSWORD, so it is changed there.</p>}
@@ -439,7 +441,7 @@ function Account({ me, onSignOut, onRestore, dirty }) {
           Sign out of the admin panel
         </button>
       </div>
-    </>
+    </div>
   )
 }
 
@@ -612,7 +614,7 @@ function Panel({ me, onSignOut }) {
             {view === 'pages' && <Pages doc={doc} setDoc={setDoc} />}
             {list?.page && <Items def={list} value={doc[view]} onChange={(next) => setDoc({ ...doc, [view]: next })} />}
             {list && !list.page && (
-              <div className="adm-panel">
+              <div className="adm-panel adm-listview">
                 <p className="adm-help">{list.intro}</p>
                 <Items def={list} value={doc[view]} onChange={(next) => setDoc({ ...doc, [view]: next })} />
               </div>
