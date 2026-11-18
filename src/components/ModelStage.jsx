@@ -37,25 +37,29 @@ function Model({ name }) {
 export default function ModelStage({ name, spot = 'sun', className = '' }) {
   const stage = useRef(null)
   const inView = useInView(stage, { margin: '200px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(stage, { once: true, margin: '400px' })
   return (
     <div className={`svc-stage ${className}`} ref={stage} data-cursor="Spin">
       <span className={`spot bg-${spot}`} />
-      <Canvas
-        flat
-        shadows
-        dpr={[1, 2]}
-        frameloop={inView ? 'always' : 'never'}
-        camera={{ fov: 35, position: [0, 0, 7.5] }}
-        gl={{ alpha: true }}
-        style={{ touchAction: 'pan-y' }}
-      >
-        <Studio wall={-1.8} sway={0.3} />
-        <PresentationControls snap polar={[-0.6, 0.6]} azimuth={[-1.2, 1.2]} cursor>
-          <Float speed={2.2} rotationIntensity={0.5} floatIntensity={0.9}>
-            <Model name={name} />
-          </Float>
-        </PresentationControls>
-      </Canvas>
+      {near && (
+        <Canvas
+          flat
+          shadows
+          dpr={[1, 1.5]}
+          frameloop={inView ? 'always' : 'never'}
+          camera={{ fov: 35, position: [0, 0, 7.5] }}
+          gl={{ alpha: true }}
+          style={{ touchAction: 'pan-y' }}
+        >
+          <Studio wall={-1.8} sway={0.3} />
+          <PresentationControls snap polar={[-0.6, 0.6]} azimuth={[-1.2, 1.2]} cursor>
+            <Float speed={2.2} rotationIntensity={0.5} floatIntensity={0.9}>
+              <Model name={name} />
+            </Float>
+          </PresentationControls>
+        </Canvas>
+      )}
     </div>
   )
 }

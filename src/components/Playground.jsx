@@ -222,7 +222,7 @@ export default function Playground({ active, onPop, shake, clear = 0 }) {
     <Canvas
       flat
       shadows
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       frameloop={active ? 'always' : 'never'}
       camera={{ fov: FOV, position: [0, 0, 15] }}
       gl={{ antialias: true, alpha: true }}

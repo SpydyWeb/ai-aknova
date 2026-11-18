@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { useInView } from 'framer-motion'
 import { TOY as C } from '../data.js'
 import Studio from './Studio.jsx'
 
@@ -91,8 +92,13 @@ function Scene({ down, enabled, burst, coins }) {
 export default function BigButton({ enabled, onPress, burst, coins, label }) {
   const [down, setDown] = useState(false)
   const up = () => setDown(false)
+  const box = useRef(null)
+  const inView = useInView(box, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(box, { once: true, margin: '400px' })
   return (
     <button
+      ref={box}
       type="button"
       className="big-btn"
       aria-disabled={!enabled}
@@ -106,9 +112,11 @@ export default function BigButton({ enabled, onPress, burst, coins, label }) {
       onBlur={up}
       onClick={onPress}
     >
-      <Canvas flat dpr={[1, 2]} camera={{ fov: 32, position: [0, 3.6, 6] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-        <Scene down={down && enabled} enabled={enabled} burst={burst} coins={coins} />
-      </Canvas>
+      {near && (
+        <Canvas flat dpr={[1, 1.5]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 32, position: [0, 3.6, 6] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
+          <Scene down={down && enabled} enabled={enabled} burst={burst} coins={coins} />
+        </Canvas>
+      )}
       <span>{label}</span>
     </button>
   )

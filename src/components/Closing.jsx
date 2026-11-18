@@ -45,13 +45,15 @@ export default function Closing() {
   const reduce = useReducedMotion()
   const root = useRef(null)
   const inView = useInView(root, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(root, { once: true, margin: '400px' })
   const TEXT = SITE_INFO.closing.title || 'Got something to build?'
 
   return (
     <section className="closing" ref={root}>
-      {!reduce && (
+      {!reduce && near && (
         <div className="closing-canvas" aria-hidden="true">
-          <Canvas flat dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 13] }} gl={{ alpha: true }}>
+          <Canvas flat dpr={[1, 1.5]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 13] }} gl={{ alpha: true }}>
             <Studio sway={0.7} />
             <Orbit />
           </Canvas>

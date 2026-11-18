@@ -155,6 +155,8 @@ export default function BuildStory({ title = 'How a project runs' }) {
   const p = useRef(0)
   const [step, setStep] = useState(0)
   const inView = useInView(root, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(root, { once: true, margin: '400px' })
 
   useEffect(() => {
     const read = () => {
@@ -179,9 +181,11 @@ export default function BuildStory({ title = 'How a project runs' }) {
       <div className="story3d-pin">
         <h2>{title}</h2>
         <div className="story3d-canvas" aria-hidden="true">
-          <Canvas flat shadows dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 11] }} gl={{ alpha: true }}>
-            <Scene p={p} />
-          </Canvas>
+          {near && (
+            <Canvas flat shadows dpr={[1, 1.5]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 11] }} gl={{ alpha: true }}>
+              <Scene p={p} />
+            </Canvas>
+          )}
         </div>
         <div className="story3d-cap" aria-live="polite">
           <AnimatePresence mode="wait">

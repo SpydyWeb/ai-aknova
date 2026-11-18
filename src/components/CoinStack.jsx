@@ -67,6 +67,8 @@ function Coins({ count, toss }) {
 export default function CoinStack({ count }) {
   const box = useRef(null)
   const inView = useInView(box, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(box, { once: true, margin: '400px' })
   const [toss, setToss] = useState(0)
   return (
     <button
@@ -81,10 +83,12 @@ export default function CoinStack({ count }) {
         play('coin')
       }}
     >
-      <Canvas flat shadows dpr={[1, 2]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 32, position: [0, 2.2, 7.5] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-        <Studio />
-        <Coins count={count} toss={toss} />
-      </Canvas>
+      {near && (
+        <Canvas flat shadows dpr={[1, 1.5]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 32, position: [0, 2.2, 7.5] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
+          <Studio />
+          <Coins count={count} toss={toss} />
+        </Canvas>
+      )}
     </button>
   )
 }

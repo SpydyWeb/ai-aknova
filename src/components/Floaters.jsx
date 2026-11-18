@@ -74,20 +74,24 @@ function Cluster({ names }) {
 export default function Floaters({ names }) {
   const box = useRef(null)
   const inView = useInView(box, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(box, { once: true, margin: '400px' })
   return (
     <div className="floaters" ref={box} data-cursor="Spin">
-      <Canvas
-        flat
-        shadows
-        dpr={[1, 2]}
-        frameloop={inView ? 'always' : 'never'}
-        camera={{ fov: 35, position: [0, 0, 9] }}
-        gl={{ alpha: true }}
-        style={{ touchAction: 'pan-y' }}
-      >
-        <Studio wall={-2.4} sway={0.5} />
-        <Cluster names={names} />
-      </Canvas>
+      {near && (
+        <Canvas
+          flat
+          shadows
+          dpr={[1, 1.5]}
+          frameloop={inView ? 'always' : 'never'}
+          camera={{ fov: 35, position: [0, 0, 9] }}
+          gl={{ alpha: true }}
+          style={{ touchAction: 'pan-y' }}
+        >
+          <Studio wall={-2.4} sway={0.5} />
+          <Cluster names={names} />
+        </Canvas>
+      )}
     </div>
   )
 }

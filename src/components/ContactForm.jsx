@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import Tilt from './Tilt.jsx'
 import { Envelope } from './models.jsx'
 import { CONTACT, EMAIL } from '../data.js'
@@ -46,6 +46,10 @@ const EMPTY = { name: '', email: '', phone: '', message: '' }
 
 export default function ContactForm({ title }) {
   const reduce = useReducedMotion()
+  const letter = useRef(null)
+  const inView = useInView(letter, { margin: '100px' })
+  // Built only once scrolled near, so the page does not set up every 3D scene at load.
+  const near = useInView(letter, { once: true, margin: '400px' })
   const { picked, toggle } = useOrder()
   const [f, setF] = useState(EMPTY)
   const [errors, setErrors] = useState({})
@@ -203,11 +207,13 @@ export default function ContactForm({ title }) {
 
         <Tilt as="aside" className="contact-side" max={8}>
           {!reduce && (
-            <div className="letter" aria-hidden="true">
-              <Canvas flat dpr={[1, 2]} camera={{ fov: 35, position: [0, 0, 7] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
-                <Studio />
-                <Letter sent={flown} />
-              </Canvas>
+            <div className="letter" aria-hidden="true" ref={letter}>
+              {near && (
+                <Canvas flat dpr={[1, 1.5]} frameloop={inView ? 'always' : 'never'} camera={{ fov: 35, position: [0, 0, 7] }} gl={{ alpha: true }} style={{ pointerEvents: 'none' }}>
+                  <Studio />
+                  <Letter sent={flown} />
+                </Canvas>
+              )}
             </div>
           )}
           <dl>
