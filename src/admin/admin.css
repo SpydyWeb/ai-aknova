@@ -945,6 +945,29 @@ body {
 }
 
 /* page editor: a header and tabs instead of one long scroll */
+/* An editor screen (page, service, article): content on the left, settings in panels on the right. */
+.adm-view:has(.adm-edit) {
+  max-width: 1500px;
+}
+.adm-edit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 440px);
+  gap: 20px;
+  align-items: start;
+}
+.adm-edit-main,
+.adm-edit-side {
+  min-width: 0;
+  display: grid;
+  gap: 20px;
+}
+@media (max-width: 1150px) {
+  .adm-edit {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .adm-pagehead {
   width: 100%;
   display: flex;

@@ -104,12 +104,6 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
   const set = (k) => (v) => onChange({ ...page, [k]: v })
   const clash = taken.includes(page.path)
   const reserved = RESERVED.some((r) => page.path === r || page.path.startsWith(r.endsWith('/') ? r : r + '/'))
-  const [tab, setTab] = useState(clash || reserved ? 'settings' : 'sections')
-  const tabs = [
-    ['sections', `Sections (${page.blocks?.length || 0})`],
-    ['settings', 'Name and address'],
-    ['seo', 'SEO and AI answers'],
-  ]
   return (
     <>
       <div className="adm-pagehead">
@@ -124,31 +118,18 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
           View page
         </a>
       </div>
-      <div className="adm-tabs adm-pagetabs" role="tablist" aria-label="Parts of this page">
-        {tabs.map(([id, label]) => (
-          <button key={id} type="button" role="tab" id={`pg-tab-${id}`} aria-selected={tab === id} aria-controls="pg-tabpanel" onClick={() => setTab(id)}>
-            {label}
-            {id === 'settings' && (clash || reserved) && <b className="adm-dot" aria-label="needs attention" />}
-          </button>
-        ))}
-      </div>
-
-      {tab === 'sections' && (
-        <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-sections">
+      <div className="adm-edit">
+      <div className="adm-edit-main">
+        <div className="adm-panel">
+          <h2>Sections ({page.blocks?.length || 0})</h2>
           <p className="adm-help">The page shows these from top to bottom. Choose one to edit it, or use the arrows to move it.</p>
           <Items def={SECTIONS} value={page.blocks} onChange={set('blocks')} />
         </div>
-      )}
+      </div>
 
-      {tab === 'seo' && (
-        <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-seo">
-          <SeoBox path={page.path} value={page.seo} onChange={set('seo')} />
-        </div>
-      )}
-
-      {tab === 'settings' && (
-      <>
-      <div className="adm-panel" role="tabpanel" id="pg-tabpanel" aria-labelledby="pg-tab-settings">
+      <div className="adm-edit-side">
+      <div className="adm-panel">
+        <h2>Name and address</h2>
         <div className="adm-field">
           <label htmlFor="pg-title">Page name</label>
           <input id="pg-title" value={page.title} onChange={(e) => set('title')(e.target.value)} />
@@ -175,6 +156,11 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
         )}
       </div>
 
+      <div className="adm-panel">
+        <h2>SEO and AI answers</h2>
+        <SeoBox path={page.path} value={page.seo} onChange={set('seo')} />
+      </div>
+
       {!page.core && (
         <div className="adm-panel">
           <h2>Delete this page</h2>
@@ -182,8 +168,8 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
           <Danger label="Delete page" sure="Really delete this page?" onConfirm={onDelete} />
         </div>
       )}
-      </>
-      )}
+      </div>
+      </div>
     </>
   )
 }

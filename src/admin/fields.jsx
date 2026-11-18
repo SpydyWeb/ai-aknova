@@ -357,6 +357,10 @@ export function Items({ def, value, onChange }) {
     const item = list[open]
     const name = (def.name?.(item) || '').trim() || `${def.noun} ${open + 1}`
     const url = def.url?.(item)
+    const schema = typeof def.of === 'function' ? def.of(item) : def.of
+    const set = (v) => onChange(list.map((x, k) => (k === open ? v : x)))
+    // Fields marked `side` sit in panels down the right, grouped under that name.
+    const groups = [...new Set(schema.filter((f) => f.side).map((f) => f.side))]
     return (
       <>
         <div className="adm-pagehead">
@@ -373,18 +377,30 @@ export function Items({ def, value, onChange }) {
             </a>
           )}
         </div>
-        <div className="adm-panel">
-          <Fields schema={typeof def.of === 'function' ? def.of(item) : def.of} value={item} onChange={(v) => onChange(list.map((x, k) => (k === open ? v : x)))} />
-        </div>
-        <div className="adm-panel">
-          <h2>Delete this {def.noun}</h2>
-          <Danger
-            label={`Delete this ${def.noun}`}
-            onConfirm={() => {
-              onChange(list.filter((_, k) => k !== open))
-              setOpen(-1)
-            }}
-          />
+        <div className="adm-edit">
+          <div className="adm-edit-main">
+            <div className="adm-panel">
+              <Fields schema={schema.filter((f) => !f.side)} value={item} onChange={set} />
+            </div>
+          </div>
+          <div className="adm-edit-side">
+            {groups.map((g) => (
+              <div key={g} className="adm-panel">
+                <h2>{g}</h2>
+                <Fields schema={schema.filter((f) => f.side === g)} value={item} onChange={set} />
+              </div>
+            ))}
+            <div className="adm-panel">
+              <h2>Delete this {def.noun}</h2>
+              <Danger
+                label={`Delete this ${def.noun}`}
+                onConfirm={() => {
+                  onChange(list.filter((_, k) => k !== open))
+                  setOpen(-1)
+                }}
+              />
+            </div>
+          </div>
         </div>
       </>
     )
@@ -622,14 +638,7 @@ function Field({ def, value, onChange }) {
       </div>
     )
   }
-  if (def.type === 'seo') {
-    return (
-      <fieldset className="adm-group">
-        <legend>{def.label}</legend>
-        <SeoBox path={def.path} value={value} onChange={onChange} />
-      </fieldset>
-    )
-  }
+  if (def.type === 'seo') return <SeoBox path={def.path} value={value} onChange={onChange} />
   if (def.type === 'group') {
     return (
       <fieldset className="adm-group">
@@ -740,7 +749,7 @@ function ButtonPair({ text, to, value, onChange }) {
 const withAlt = (schema, value) =>
   schema.flatMap((def) =>
     def.type === 'media' && def.kind === 'image' && def.alt !== false && value?.[def.k] && !schema.some((d) => d.k === 'alt')
-      ? [def, { k: `${def.k}Alt`, label: 'Describe the photo', type: 'text', placeholder: 'For example: Team planning a website on a whiteboard', help: 'Read out to people who cannot see it, and used by Google Images. Leave empty to use the name or heading.', more: !!def.more || OPTIONAL.test(def.label) }]
+      ? [def, { k: `${def.k}Alt`, side: def.side, label: 'Describe the photo', type: 'text', placeholder: 'For example: Team planning a website on a whiteboard', help: 'Read out to people who cannot see it, and used by Google Images. Leave empty to use the name or heading.', more: !!def.more || OPTIONAL.test(def.label) }]
       : [def],
   )
 
