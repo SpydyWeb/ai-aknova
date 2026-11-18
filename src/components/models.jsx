@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
-import { SERVICE_INFO, TOY as C } from '../data.js'
+import { ALL_SERVICES, TOY as C } from '../data.js'
 
 const HALF_PI = Math.PI / 2
 
@@ -140,5 +140,5 @@ export const Mark = () => (
 export const SHAPES = { mark: Mark, browser: Browser, cursor: Cursor, magnifier: Magnifier, megaphone: Megaphone, heart: Heart, phone: Phone, robot: Robot, pawn: Pawn, badge: Badge, coin: Coin, envelope: Envelope }
 
 // Accepts a shape key or a service name.
-export const shapeKey = (name) => (SHAPES[name] ? name : SERVICE_INFO.find((s) => s.name === name)?.model)
+export const shapeKey = (name) => (SHAPES[name] ? name : ALL_SERVICES.find((s) => s.name === name)?.model)
 export const shapeFor = (name) => SHAPES[shapeKey(name)] || Mark

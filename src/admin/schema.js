@@ -1,5 +1,6 @@
 // What each admin screen edits, and the form fields it shows. Field types are drawn by fields.jsx.
 import { MODEL_OPTIONS, TONES, serviceBlocks } from '../blocks.js'
+import { slug } from '../data.js'
 
 const COLOURS = TONES.slice(1)
 
@@ -10,13 +11,18 @@ export const LISTS = {
     intro: 'Each service gets its own page, a key on the order till and a 3D model. They appear everywhere services are listed.',
     noun: 'service',
     name: (x) => x.name,
-    of: [
+    page: true,
+    url: (x) => `/services/${slug(x.name || '')}`,
+    badge: (x) => (x.hidden ? 'Not shown' : ''),
+    of: (x) => [
       { k: 'name', label: 'Name', type: 'text', help: 'The page address is made from the name, so renaming a live service changes its link.' },
+      { k: 'hidden', label: 'Hide from the website', type: 'bool', help: 'Leaves this service out of every list, the order till and the menus. Its page still opens at its address.' },
       { k: 'line', label: 'One-line description', type: 'area', rows: 2 },
       { k: 'items', label: 'What is included', type: 'strings', noun: 'item' },
       { k: 'model', label: '3D model', type: 'select', options: MODEL_OPTIONS },
       { k: 'image', label: 'Photo in "What we do" (optional)', type: 'media', kind: 'image', help: 'Shown in place of the 3D model when a visitor points at this service on the home page.' },
       { k: 'blocks', label: 'Sections of this service’s page', type: 'sections', help: 'The page shows these from top to bottom. Open one to edit it, use the arrows to reorder, or add new ones.' },
+      { k: 'seo', label: 'SEO and AI answers', type: 'seo', path: `/services/${slug(x.name || '')}` },
     ],
     blank: { name: 'New service', line: '', items: [], model: 'mark', image: '', blocks: serviceBlocks({ name: '' }), seo: { title: '', description: '' } },
   },
@@ -56,9 +62,13 @@ export const LISTS = {
     intro: 'Each article gets its own page. The first three appear in the "Latest three articles" section.',
     noun: 'article',
     name: (x) => x.title,
-    of: [
+    page: true,
+    url: (x) => `/blog/${x.id || slug(x.title || '')}`,
+    badge: (x) => (x.hidden ? 'Not shown' : ''),
+    of: (x) => [
       { k: 'title', label: 'Title', type: 'text' },
       { k: 'id', label: 'Address', type: 'slug', prefix: '/blog/', help: 'Leave empty to make it from the title. Changing it later breaks old links.' },
+      { k: 'hidden', label: 'Hide from the website', type: 'bool', help: 'Leaves this article out of the blog list and the latest articles. It still opens at its address.' },
       { k: 'topic', label: 'Topic', type: 'text' },
       { k: 'tone', label: 'Card colour', type: 'select', options: COLOURS },
       { k: 'minutes', label: 'Minutes to read', type: 'number' },
@@ -78,6 +88,7 @@ export const LISTS = {
         ],
         blank: { heading: '', text: '', image: '' },
       },
+      { k: 'seo', label: 'SEO and AI answers', type: 'seo', path: `/blog/${x.id || slug(x.title || '')}` },
     ],
     blank: { id: '', title: 'New article', topic: '', tone: 'blue', minutes: 3, date: '', cover: '', intro: '', body: [], seo: { title: '', description: '' } },
   },

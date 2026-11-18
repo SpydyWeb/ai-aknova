@@ -2,12 +2,12 @@ import { Link, useParams } from 'react-router-dom'
 import Rich from '../components/Rich.jsx'
 import NotFound from './NotFound.jsx'
 import { PostCard } from '../components/BlogCards.jsx'
-import { POSTS, fileAlt, mediaUrl } from '../data.js'
+import { ALL_POSTS, POSTS, fileAlt, mediaUrl } from '../data.js'
 import { MLink, press } from '../ui.jsx'
 
 export default function BlogPost() {
   const { id } = useParams()
-  const post = POSTS.find((p) => p.id === id)
+  const post = ALL_POSTS.find((p) => p.id === id)
   if (!post) return <NotFound />
   const others = POSTS.filter((p) => p.id !== id).slice(0, 2)
 

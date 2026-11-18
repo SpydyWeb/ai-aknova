@@ -11,6 +11,23 @@ function Line({ text }) {
 // Text from the admin panel's text editor: paragraphs, lists, subheadings, bold, italic and links.
 export default function Rich({ text }) {
   return parse(text).map((b, i) => {
+    if (b.type === 'table') {
+      const [head, ...rows] = b.rows
+      return (
+        <div key={i} className="rich-table">
+          <table>
+            <thead>
+              <tr>{head.map((c, k) => <th key={k} scope="col"><Line text={c} /></th>)}</tr>
+            </thead>
+            <tbody>
+              {rows.map((r, n) => (
+                <tr key={n}>{head.map((_, k) => <td key={k}><Line text={r[k] || ''} /></td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
     if (b.type === 'h') return <h3 key={i} className="rich-h"><Line text={b.lines[0]} /></h3>
     if (b.type === 'ul' || b.type === 'ol') {
       const List = b.type

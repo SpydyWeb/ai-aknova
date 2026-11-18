@@ -2,7 +2,7 @@
 // descriptions, structured data, the plain-HTML version of each page, sitemap, robots and llms.txt.
 // It all comes from the content the admin panel edits. The browser uses it on every page change,
 // the server uses it for every page it sends, and scripts/prerender.mjs uses it at build time.
-import { CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, reasonsFor, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, fileAlt, mediaUrl, slug } from './data.js'
+import { ALL_POSTS, ALL_SERVICES, CONTACT, EMAIL, FAQS, INDUSTRIES, PAGES, PLANS, POSTS, PROJECTS, reasonsFor, SEO_SETTINGS, SERVICE_INFO, SITE_INFO, STEPS, TAGLINE, VOICES, fileAlt, mediaUrl, slug } from './data.js'
 import { embedUrl, isVideo, paragraphs, serviceBlocks } from './blocks.js'
 import { plainText, richHtml } from './rich.js'
 
@@ -22,7 +22,8 @@ export const summary = () =>
   SEO_SETTINGS.ai.summary?.trim() ||
   `${SITE_INFO.name} is a ${SITE_INFO.city ? `${SITE_INFO.city}-based ` : ''}technology company that designs, builds and markets digital products: ${sentence(names())}.`
 
-export const routes = () => [...PAGES.map((p) => p.path), ...SERVICE_INFO.map(serviceUrl), ...POSTS.map((p) => `/blog/${p.id}`)]
+// Hidden services and articles are included: they are left out of lists, not off the site.
+export const routes = () => [...PAGES.map((p) => p.path), ...ALL_SERVICES.map(serviceUrl), ...ALL_POSTS.map((p) => `/blog/${p.id}`)]
 
 /* ---------- structured data ---------- */
 const orgId = () => `${SITE_INFO.url}/#organization`
@@ -107,8 +108,8 @@ function firstWords(page) {
 /* ---------- per-page title, description and data ---------- */
 export function seoFor(pathname) {
   const path = clean(pathname)
-  const service = SERVICE_INFO.find((s) => serviceUrl(s) === path)
-  const post = POSTS.find((p) => `/blog/${p.id}` === path)
+  const service = ALL_SERVICES.find((s) => serviceUrl(s) === path)
+  const post = ALL_POSTS.find((p) => `/blog/${p.id}` === path)
   const page = PAGES.find((p) => p.path === path)
   const org = organization()
   let own = {}
@@ -178,10 +179,28 @@ export function seoFor(pathname) {
     return { path, title: `Page not found | ${SITE_INFO.name}`, description: 'This page does not exist.', url: abs('/'), image: abs('/og.png'), jsonld: null, missing: true, noindex: true }
   }
 
+  // Answer-engine data: the direct answer AI assistants can quote (structured data and llms.txt only,
+  // since it is not shown on the page itself), and the page's own keywords.
+  const answer = own.answer?.trim() || ''
+  const keywords = own.keywords?.trim() || SEO_SETTINGS.keywords || ''
+  if (answer || own.keywords?.trim())
+    data.push({
+      '@type': 'WebPage',
+      '@id': `${abs(path)}#webpage`,
+      url: abs(path),
+      name: own.title?.trim() || title,
+      abstract: answer || undefined,
+      keywords: own.keywords?.trim() || undefined,
+      isPartOf: { '@id': `${SITE_INFO.url}/#website` },
+      about: { '@id': orgId() },
+    })
+
   return {
     path,
     title: own.title?.trim() || title,
     description: own.description?.trim() || description,
+    answer,
+    keywords,
     auto: { title, description },
     url: abs(path),
     image: abs(mediaUrl(own.image || image || SEO_SETTINGS.image) || '/og.png'),
@@ -213,7 +232,7 @@ export function headTags(pathname) {
     SITE_INFO.favicon ? `<link rel="icon" href="${esc(mediaUrl(SITE_INFO.favicon))}" />` : '',
     `<title>${esc(m.title)}</title>`,
     `<meta name="description" content="${esc(m.description)}" />`,
-    s.keywords ? `<meta name="keywords" content="${esc(s.keywords)}" />` : '',
+    m.keywords ? `<meta name="keywords" content="${esc(m.keywords)}" />` : '',
     `<link rel="canonical" href="${esc(m.url)}" />`,
     `<meta name="robots" content="${robotsMeta(m)}" />`,
     verifyCode(s.googleVerification) ? `<meta name="google-site-verification" content="${esc(verifyCode(s.googleVerification))}" />` : '',
@@ -289,8 +308,8 @@ export const navPages = () => PAGES.filter((x) => x.inNav)
 
 export function bodyHtml(pathname) {
   const path = clean(pathname)
-  const service = SERVICE_INFO.find((s) => serviceUrl(s) === path)
-  const post = POSTS.find((x) => `/blog/${x.id}` === path)
+  const service = ALL_SERVICES.find((s) => serviceUrl(s) === path)
+  const post = ALL_POSTS.find((x) => `/blog/${x.id}` === path)
   const page = PAGES.find((x) => x.path === path)
   let main = ''
 
@@ -362,10 +381,10 @@ export function llmsTxt(full = false) {
 - Website: ${SITE_INFO.url}
 ${SITE_INFO.social.map((s) => `- ${s.label || 'Profile'}: ${s.url}`).join('\n')}
 ${facts.length ? `\n## Key facts\n\n${facts.map((f) => `- ${f}`).join('\n')}\n` : ''}`
-  const services = `## Services\n\n${SERVICE_INFO.map((s) => `- [${s.name}](${abs(serviceUrl(s))}): ${s.line}${s.items.length ? ` Includes ${s.items.join(', ')}.` : ''}`).join('\n')}\n`
+  const services = `## Services\n\n${SERVICE_INFO.map((s) => `- [${s.name}](${abs(serviceUrl(s))}): ${s.seo.answer?.trim() || s.line}${s.items.length ? ` Includes ${s.items.join(', ')}.` : ''}`).join('\n')}\n`
   const listed = PAGES.filter((x) => x.path !== '/' && !seoFor(x.path).noindex)
-  const pages = `## Pages\n\n${listed.map((x) => `- [${x.title}](${abs(x.path)}): ${seoFor(x.path).description}`).join('\n')}\n`
-  const blog = POSTS.length ? `## Articles\n\n${POSTS.map((x) => `- [${x.title}](${abs(`/blog/${x.id}`)}): ${x.intro}`).join('\n')}\n` : ''
+  const pages = `## Pages\n\n${listed.map((x) => `- [${x.title}](${abs(x.path)}): ${seoFor(x.path).answer || seoFor(x.path).description}`).join('\n')}\n`
+  const blog = POSTS.length ? `## Articles\n\n${POSTS.map((x) => `- [${x.title}](${abs(`/blog/${x.id}`)}): ${x.seo.answer?.trim() || x.intro}`).join('\n')}\n` : ''
   if (!full) return [head, services, pages, blog].join('\n')
 
   const process = `## How a project runs\n\n${STEPS.map(([n, t], i) => `${i + 1}. ${n}: ${t}`).join('\n')}\n`

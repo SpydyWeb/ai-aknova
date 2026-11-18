@@ -1267,3 +1267,25 @@ body {
 .adm-rich-preview h3 {
   font-size: 17px;
 }
+
+/* ---------- tables written in the text editor ---------- */
+.rich-table {
+  overflow-x: auto;
+  margin: 1.2em 0;
+}
+.rich-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+.rich-table th,
+.rich-table td {
+  border: 1.5px solid currentColor;
+  padding: 0.55em 0.8em;
+  text-align: left;
+  vertical-align: top;
+}
+.rich-table th {
+  font-weight: 700;
+  background: rgba(20, 99, 255, 0.08);
+}

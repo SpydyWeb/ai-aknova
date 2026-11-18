@@ -2,6 +2,7 @@
 // marks, so old content still reads the same:
 //   **bold**   *italic*   [link text](https://...)   "## " a subheading
 //   "- " a bullet list   "1. " a numbered list   an empty line starts a new paragraph
+//   "| a | b |" a table row; the first row is the header, and a "| --- |" row under it is skipped
 // The site draws it with components/Rich.jsx as React elements, never as raw HTML, so nothing
 // typed can run as code. This file has no JSX because the server and build scripts use it too.
 
@@ -10,6 +11,9 @@ const safeHref = (u) => (/^(https?:\/\/|mailto:|tel:|\/)/i.test(u) ? u : null)
 const BULLET = /^\s*[-*]\s+/
 const NUMBER = /^\s*\d+[.)]\s+/
 const HEADING = /^##\s+/
+const ROW = /^\s*\|/
+const RULE = /^\s*\|?[\s:|-]*-[\s:|-]*$/
+const cells = (line) => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim())
 
 // Splits text into paragraphs, lists and subheadings.
 export function parse(text) {
@@ -19,6 +23,14 @@ export function parse(text) {
     const flush = () => para.length && (out.push({ type: 'p', lines: para }), (para = []))
     for (const line of chunk.split('\n')) {
       if (!line.trim()) continue
+      if (ROW.test(line)) {
+        flush()
+        const last = out.at(-1)
+        if (last?.type === 'table' && last.open) {
+          if (!RULE.test(line)) last.rows.push(cells(line))
+        } else out.push({ type: 'table', rows: [cells(line)], lines: [], open: true })
+        continue
+      }
       const kind = HEADING.test(line) ? 'h' : BULLET.test(line) ? 'ul' : NUMBER.test(line) ? 'ol' : 'p'
       if (kind === 'p') {
         para.push(line.trim())
@@ -52,6 +64,9 @@ export function pieces(line) {
   return out
 }
 
+const tableHtml = ([head, ...rows], line) =>
+  `<table><thead><tr>${head.map((c) => `<th scope="col">${line(c)}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${head.map((_, k) => `<td>${line(r[k] || '')}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+
 // The same, as HTML for the plain pages search engines read.
 export function richHtml(text, esc) {
   const line = (l) =>
@@ -59,12 +74,12 @@ export function richHtml(text, esc) {
       .map(([kind, t, href]) => (kind === 'b' ? `<strong>${esc(t)}</strong>` : kind === 'i' ? `<em>${esc(t)}</em>` : kind === 'a' ? `<a href="${esc(href)}">${esc(t)}</a>` : esc(t)))
       .join('')
   return parse(text)
-    .map((b) => (b.type === 'h' ? `<h3>${line(b.lines[0])}</h3>` : b.type === 'p' ? `<p>${b.lines.map(line).join('<br />')}</p>` : `<${b.type}>${b.lines.map((l) => `<li>${line(l)}</li>`).join('')}</${b.type}>`))
+    .map((b) => (b.type === 'table' ? tableHtml(b.rows, line) : b.type === 'h' ? `<h3>${line(b.lines[0])}</h3>` : b.type === 'p' ? `<p>${b.lines.map(line).join('<br />')}</p>` : `<${b.type}>${b.lines.map((l) => `<li>${line(l)}</li>`).join('')}</${b.type}>`))
     .join('')
 }
 
 // Without the marks, for descriptions and structured data.
 export const plainText = (text) =>
   parse(text)
-    .map((b) => b.lines.map((l) => pieces(l).map((p) => p[1]).join('')).join(' '))
+    .map((b) => (b.rows ? b.rows.map((r) => r.join(', ')) : b.lines).map((l) => pieces(l).map((p) => p[1]).join('')).join(b.rows ? '. ' : ' '))
     .join(' ')

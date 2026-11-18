@@ -5,7 +5,7 @@ import { setContent, slug } from '../data.js'
 import { analyticsId, llmsTxt, robotsTxt, seoFor } from '../seo.js'
 import logo from '../assets/logo-light.png'
 import { api } from './api.js'
-import { AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, newId } from './fields.jsx'
+import { AdminContext, Danger, Fields, Items, MediaLibrary, SECTIONS, SeoBox, newId } from './fields.jsx'
 import { AI_FIELDS, LISTS, SEO_FIELDS, SITE_FIELDS } from './schema.js'
 import './admin.css'
 
@@ -99,30 +99,6 @@ function Gate({ me, onDone }) {
   )
 }
 
-/* ---------- title and description for one address, with a search-result preview ---------- */
-function SeoBox({ path, value, onChange, noindex = true }) {
-  const m = seoFor(path)
-  const v = value || {}
-  const fields = [
-    { k: 'title', label: 'Title in search results', type: 'text', max: 60, placeholder: m.auto?.title },
-    { k: 'description', label: 'Description in search results', type: 'area', rows: 3, max: 160, placeholder: m.auto?.description },
-    { k: 'image', label: 'Picture when this page is shared', type: 'media', kind: 'image', alt: false },
-    ...(noindex ? [{ k: 'noindex', label: 'Hide this page from search engines', type: 'bool' }] : []),
-  ]
-  return (
-    <div className="adm-seo">
-      <div className="adm-snippet" aria-label="How this page can look on Google">
-        <span>{m.url}</span>
-        <strong>{m.title}</strong>
-        <p>{m.description}</p>
-        {m.noindex && <em>Hidden from search engines</em>}
-      </div>
-      <p className="adm-help">Leave a box empty and the site writes it for you from the page&rsquo;s content, as shown above.</p>
-      <Fields schema={fields} value={v} onChange={onChange} />
-    </div>
-  )
-}
-
 /* ---------- pages ---------- */
 function PageEditor({ page, onChange, onDelete, onBack, taken }) {
   const set = (k) => (v) => onChange({ ...page, [k]: v })
@@ -132,7 +108,7 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
   const tabs = [
     ['sections', `Sections (${page.blocks?.length || 0})`],
     ['settings', 'Name and address'],
-    ['seo', 'Search engines'],
+    ['seo', 'SEO and AI answers'],
   ]
   return (
     <>
@@ -189,10 +165,13 @@ function PageEditor({ page, onChange, onDelete, onBack, taken }) {
           )}
         </div>
         {page.path !== '/' && (
+          <>
           <label className="adm-check">
             <input type="checkbox" checked={!!page.inNav} onChange={(e) => set('inNav')(e.target.checked)} />
-            <span>Show this page in the menu and footer</span>
+            <span>Show this page on the website, in the menu and footer</span>
           </label>
+          <p className="adm-help">Switched off, the page is left out of the menu and footer but still opens at its address. To keep it out of Google as well, use &ldquo;Hide this page from search engines&rdquo; under SEO and AI answers.</p>
+          </>
         )}
       </div>
 
@@ -284,9 +263,9 @@ function Pages({ doc, setDoc }) {
 function SeoView({ doc, setDoc }) {
   const [open, setOpen] = useState('')
   const rows = [
-    ...doc.pages.map((p, i) => ({ path: p.path, name: p.title, kind: 'Page', value: p.seo, noindex: true, set: (seo) => setDoc({ ...doc, pages: doc.pages.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
-    ...doc.services.map((s, i) => ({ path: `/services/${slug(s.name)}`, name: s.name, kind: 'Service', value: s.seo, set: (seo) => setDoc({ ...doc, services: doc.services.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
-    ...doc.posts.map((p, i) => ({ path: `/blog/${p.id || slug(p.title)}`, name: p.title, kind: 'Article', value: p.seo, set: (seo) => setDoc({ ...doc, posts: doc.posts.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
+    ...doc.pages.map((p, i) => ({ path: p.path, name: p.title, kind: 'Page', value: p.seo, hidden: p.path !== '/' && !p.inNav, set: (seo) => setDoc({ ...doc, pages: doc.pages.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
+    ...doc.services.map((s, i) => ({ path: `/services/${slug(s.name)}`, name: s.name, kind: 'Service', value: s.seo, hidden: s.hidden, set: (seo) => setDoc({ ...doc, services: doc.services.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
+    ...doc.posts.map((p, i) => ({ path: `/blog/${p.id || slug(p.title)}`, name: p.title, kind: 'Article', value: p.seo, hidden: p.hidden, set: (seo) => setDoc({ ...doc, posts: doc.posts.map((x, k) => (k === i ? { ...x, seo } : x)) }) })),
   ]
   return (
     <>
@@ -326,9 +305,10 @@ function SeoView({ doc, setDoc }) {
                     {m.title.length > 60 ? `, title is ${m.title.length} characters` : ''}
                     {m.description.length > 160 ? `, description is ${m.description.length} characters` : ''}
                     {m.noindex ? ', hidden from search' : ''}
+                    {r.hidden ? ', not shown in lists' : ''}
                   </em>
                 </button>
-                {open === r.path && <SeoBox path={r.path} value={r.value} onChange={r.set} noindex={!!r.noindex} />}
+                {open === r.path && <SeoBox path={r.path} value={r.value} onChange={r.set} />}
               </li>
             )
           })}
@@ -644,7 +624,8 @@ function Panel({ me, onSignOut }) {
 
           <div className="adm-view" key={`${view}${visit}`}>
             {view === 'pages' && <Pages doc={doc} setDoc={setDoc} />}
-            {list && (
+            {list?.page && <Items def={list} value={doc[view]} onChange={(next) => setDoc({ ...doc, [view]: next })} />}
+            {list && !list.page && (
               <div className="adm-panel">
                 <p className="adm-help">{list.intro}</p>
                 <Items def={list} value={doc[view]} onChange={(next) => setDoc({ ...doc, [view]: next })} />

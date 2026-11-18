@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useId, useRef, useState } from 'react'
 import { BLOCKS, isVideo } from '../blocks.js'
 import { mediaUrl, slug } from '../data.js'
+import { seoFor } from '../seo.js'
 import { api } from './api.js'
 import Rich from '../components/Rich.jsx'
 
@@ -350,7 +351,50 @@ export function Items({ def, value, onChange }) {
     setOpen((o) => (o === i ? to : o === to ? i : o))
   }
   const close = useCallback(() => setOpen(-1), [])
-  return (
+
+  // Services and articles open on a screen of their own, like pages, with the list one step back.
+  if (def.page && list[open]) {
+    const item = list[open]
+    const name = (def.name?.(item) || '').trim() || `${def.noun} ${open + 1}`
+    const url = def.url?.(item)
+    return (
+      <>
+        <div className="adm-pagehead">
+          <button type="button" className="adm-btn" onClick={() => (close(), window.scrollTo(0, 0))}>
+            All {def.title.toLowerCase()}
+          </button>
+          <div>
+            <h2>{name}</h2>
+            {url && <span>{url}</span>}
+          </div>
+          {url && (
+            <a className="adm-btn" href={url} target="_blank" rel="noreferrer">
+              View page
+            </a>
+          )}
+        </div>
+        <div className="adm-panel">
+          <Fields schema={typeof def.of === 'function' ? def.of(item) : def.of} value={item} onChange={(v) => onChange(list.map((x, k) => (k === open ? v : x)))} />
+        </div>
+        <div className="adm-panel">
+          <h2>Delete this {def.noun}</h2>
+          <Danger
+            label={`Delete this ${def.noun}`}
+            onConfirm={() => {
+              onChange(list.filter((_, k) => k !== open))
+              setOpen(-1)
+            }}
+          />
+        </div>
+      </>
+    )
+  }
+  const pick = (i) => {
+    setOpen(i)
+    if (def.page) window.scrollTo(0, 0)
+  }
+
+  const view = (
     <div className={`adm-items ${def.sheet ? 'outline' : ''}`}>
       {list.map((item, i) => {
         const name = (def.name?.(item) || '').trim() || `${def.noun} ${i + 1}`
@@ -373,11 +417,11 @@ export function Items({ def, value, onChange }) {
         return (
           <div key={i} className={`adm-item ${isOpen ? 'open' : ''}`}>
             <div className="adm-item-head">
-              <button type="button" className="adm-item-name" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? -1 : i)}>
-                {def.sheet ? <b aria-hidden="true">{i + 1}</b> : <i aria-hidden="true">{isOpen ? '–' : '+'}</i>}
+              <button type="button" className="adm-item-name" aria-expanded={def.page ? undefined : isOpen} onClick={() => pick(isOpen ? -1 : i)}>
+                {def.sheet ? <b aria-hidden="true">{i + 1}</b> : def.page ? null : <i aria-hidden="true">{isOpen ? '–' : '+'}</i>}
                 <span>{name}</span>
                 {def.badge?.(item) && <em>{def.badge(item)}</em>}
-                {def.sheet && <u>Edit</u>}
+                {(def.sheet || def.page) && <u>Edit</u>}
               </button>
               <button type="button" className="adm-icon" aria-label={`Move ${name} up`} disabled={!i} onClick={() => shift(i, i - 1)}>
                 ↑
@@ -403,7 +447,7 @@ export function Items({ def, value, onChange }) {
       {!list.length && <p className="adm-empty">No {def.noun}s yet.</p>}
       {def.adder?.((item) => {
         onChange([...list, item])
-        setOpen(list.length)
+        pick(list.length)
       })}
       {def.blank && (
         <button
@@ -411,12 +455,52 @@ export function Items({ def, value, onChange }) {
           className="adm-btn primary"
           onClick={() => {
             onChange([...list, structuredClone(def.blank)])
-            setOpen(list.length)
+            pick(list.length)
           }}
         >
           Add {/^[aeiou]/i.test(def.noun) ? 'an' : 'a'} {def.noun}
         </button>
       )}
+    </div>
+  )
+  return def.page ? (
+    <div className="adm-panel">
+      {def.intro && <p className="adm-help">{def.intro}</p>}
+      {view}
+    </div>
+  ) : (
+    view
+  )
+}
+
+/* ---------- search engines and AI assistants, for one address, with a search-result preview ---------- */
+export function SeoBox({ path, value, onChange }) {
+  const m = seoFor(path)
+  const fields = [
+    { k: 'title', label: 'Title in search results', type: 'text', max: 60, placeholder: m.auto?.title },
+    { k: 'description', label: 'Description in search results', type: 'area', rows: 3, max: 160, placeholder: m.auto?.description },
+    { k: 'keywords', label: 'Keywords', type: 'text', placeholder: 'website design delhi, ecommerce website', help: 'Words people search for, separated by commas. Leave empty to use the keywords set for the whole site.' },
+    {
+      k: 'answer',
+      label: 'Short answer for AI assistants',
+      type: 'area',
+      rows: 3,
+      max: 300,
+      help: 'One or two plain sentences that answer what this page is about, as you would want ChatGPT, Gemini or Google’s AI answers to quote it. Added to the page’s structured data and llms.txt. To give this page its own questions and answers, add a “Questions for this page” section.',
+    },
+    { k: 'image', label: 'Picture when this page is shared', type: 'media', kind: 'image', alt: false },
+    { k: 'noindex', label: 'Hide this page from search engines', type: 'bool' },
+  ]
+  return (
+    <div className="adm-seo">
+      <div className="adm-snippet" aria-label="How this page can look on Google">
+        <span>{m.url}</span>
+        <strong>{m.title}</strong>
+        <p>{m.description}</p>
+        {m.noindex && <em>Hidden from search engines</em>}
+      </div>
+      <p className="adm-help">Leave a box empty and the site writes it for you from the page&rsquo;s content, as shown above.</p>
+      <Fields schema={fields} value={value || {}} onChange={onChange} />
     </div>
   )
 }
@@ -459,6 +543,28 @@ function RichArea({ id, rows, value, onChange }) {
     const url = window.prompt('Link address, for example https://example.com or /contact')
     if (url && url.trim()) wrap('[', `](${url.trim()})`, 'link text')
   }
+  // A starter table on its own paragraph. Rows are "| a | b |" lines; the first row is the header.
+  const table = () => {
+    const el = box.current
+    const { selectionStart: a, value: v } = el
+    const ask = (q, max) => {
+      const n = parseInt(window.prompt(q, '3'), 10)
+      return n > 0 ? Math.min(max, n) : 0
+    }
+    const cols = ask('How many columns?', 6)
+    const rows = cols && ask('How many rows, not counting the header?', 30)
+    if (!cols || !rows) return
+    const row = (f) => `| ${Array.from({ length: cols }, (_, k) => f(k)).join(' | ')} |`
+    const grid = [row((k) => `Heading ${k + 1}`), row(() => '---'), ...Array.from({ length: rows }, () => row(() => 'Text'))].join('\n')
+    const before = v.slice(0, a).replace(/\s*$/, '')
+    const text = (before ? before + '\n\n' : '') + grid + '\n\n' + v.slice(a).replace(/^\s*/, '')
+    onChange(text)
+    requestAnimationFrame(() => {
+      el.focus()
+      const at = (before ? before.length + 2 : 0) + 2
+      el.setSelectionRange(at, at + 9)
+    })
+  }
   const keys = (e) => {
     if (!(e.ctrlKey || e.metaKey)) return
     const k = e.key.toLowerCase()
@@ -474,6 +580,7 @@ function RichArea({ id, rows, value, onChange }) {
     ['Subheading', 'H', () => lines('## ')],
     ['Bullet list', '• List', () => lines('- ')],
     ['Numbered list', '1. List', () => lines((i) => `${i + 1}. `)],
+    ['Table', 'Table', table],
   ]
 
   return (
@@ -513,6 +620,14 @@ function Field({ def, value, onChange }) {
         </label>
         {def.help && <p className="adm-help">{def.help}</p>}
       </div>
+    )
+  }
+  if (def.type === 'seo') {
+    return (
+      <fieldset className="adm-group">
+        <legend>{def.label}</legend>
+        <SeoBox path={def.path} value={value} onChange={onChange} />
+      </fieldset>
     )
   }
   if (def.type === 'group') {

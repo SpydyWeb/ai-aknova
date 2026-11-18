@@ -28,8 +28,10 @@ export let TAGLINE = ''
 export let CONTACT = { phone: '', tel: '', whatsapp: '', site: '', address: '' }
 export let SEO_SETTINGS = { ai: {} }
 export let PAGES = []
+export let ALL_SERVICES = []
 export let SERVICE_INFO = []
 export let SERVICES = []
+export let ALL_POSTS = []
 export let PROJECTS = []
 export let STEPS = []
 export let REASONS = []
@@ -81,9 +83,11 @@ export function setContent(json) {
   PAGES = list(j.pages)
     .filter((p) => typeof p.path === 'string' && p.path.startsWith('/'))
     .map((p) => ({ ...p, seo: p.seo || {}, blocks: list(p.blocks).filter((b) => b.type) }))
-  SERVICE_INFO = list(j.services)
+  // A hidden service or article is left out of every list on the site, but its own address still opens.
+  ALL_SERVICES = list(j.services)
     .filter((s) => s.name)
     .map((s) => ({ line: '', ...s, items: strings(s.items), seo: s.seo || {}, blocks: list(s.blocks).filter((b) => b.type) }))
+  SERVICE_INFO = ALL_SERVICES.filter((s) => !s.hidden)
   SERVICES = SERVICE_INFO.map((s) => s.name)
   PROJECTS = list(j.projects).filter((p) => p.name)
   STEPS = list(j.steps).map((s) => [s.name || '', s.text || ''])
@@ -93,9 +97,10 @@ export function setContent(json) {
     .filter((f) => f.q)
     .map((f) => [f.q, f.a || ''])
   PLANS = list(j.plans).map((p) => ({ ...p, items: strings(p.items), services: strings(p.services).filter((s) => SERVICES.includes(s)) }))
-  POSTS = list(j.posts)
+  ALL_POSTS = list(j.posts)
     .filter((p) => p.title)
     .map((p) => ({ tone: 'blue', topic: '', intro: '', ...p, id: p.id || slug(p.title), body: list(p.body), seo: p.seo || {} }))
+  POSTS = ALL_POSTS.filter((p) => !p.hidden)
   CERTS = list(j.certificates).filter((c) => c.image || c.name)
   INDUSTRIES = list(j.industries).filter((x) => x.name)
 }
