@@ -5,10 +5,11 @@ import { ALL_SERVICES, TOY as C } from '../data.js'
 
 const HALF_PI = Math.PI / 2
 
-// Glossy moulded plastic: smooth, a little reflective, with a clear top coat.
-export const Mat = ({ color }) => (
-  <meshPhysicalMaterial color={color} roughness={0.34} metalness={0} clearcoat={0.55} clearcoatRoughness={0.25} envMapIntensity={0.4} />
-)
+// Glossy moulded plastic: smooth and a little reflective. Standard rather than physical (clear
+// coat) material: it looks nearly the same and its shader builds several times faster, which is
+// what froze the page on laptop graphics.
+export const Mat = ({ color }) => <meshStandardMaterial color={color} roughness={0.27} metalness={0} envMapIntensity={0.55} />
+
 // Marks the main body of a model as a shadow caster.
 export const Ink = () => {
   const ref = useRef(null)

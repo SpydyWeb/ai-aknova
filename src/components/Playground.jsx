@@ -55,7 +55,9 @@ const TOYS = [
 function useWorld(clear) {
   const { size, camera } = useThree()
   return useMemo(() => {
-    const aspect = size.width / size.height
+    // A canvas measured at zero height would give walls of infinite size, which the physics engine
+    // cannot handle; fall back to a normal shape until it has a real size.
+    const aspect = size.width > 0 && size.height > 0 ? size.width / size.height : 16 / 9
     const z = aspect < 1 ? 22 : aspect < 1.45 ? 19 : 15
     const h = 2 * z * Math.tan(THREE.MathUtils.degToRad(FOV / 2))
     camera.position.z = z
@@ -63,7 +65,7 @@ function useWorld(clear) {
     const w = h * aspect
     // On wide screens the copy has its own column, and the toys get the space to the right of it.
     // Narrow screens stack the copy above the toys, so they keep the full width.
-    const walled = aspect >= 1.45 && clear > 0 && clear < 0.72
+    const walled = aspect >= 1.45 && Number.isFinite(clear) && clear > 0 && clear < 0.72
     const left = walled ? -w / 2 + clear * w : -w / 2
     return { w, h, left, right: w / 2, count: aspect < 1 ? 7 : aspect < 1.45 ? 9 : walled ? 9 : 12 }
   }, [size, camera, clear])
@@ -114,7 +116,9 @@ function Toy({ name, index, world, drag, bodies, onPop, children }) {
       restitution={0.35}
       friction={0.6}
       linearDamping={0.15}
-      ccd
+      // No continuous collision detection: with toys locked to a plane and stacked, it could send
+      // the physics engine into an endless loop that froze the page. Speed is capped at 45 (0.75 per
+      // step at 60 steps a second) and the walls are 2 thick, so nothing can pass through them.
       angularDamping={0.5}
       enabledTranslations={[true, true, false]}
       enabledRotations={[false, false, true]}

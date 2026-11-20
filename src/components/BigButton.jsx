@@ -72,11 +72,11 @@ function Scene({ down, enabled, burst, coins }) {
       <Studio />
       <mesh>
         <cylinderGeometry args={[1.55, 1.7, 0.55, 56]} />
-        <meshPhysicalMaterial color={C.ink} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
+        <meshStandardMaterial color={C.ink} roughness={0.27} />
       </mesh>
       <mesh ref={cap} position={[0, 0.62, 0]}>
         <cylinderGeometry args={[1.2, 1.2, 0.7, 56]} />
-        <meshPhysicalMaterial color={enabled ? C.sun : '#D5DBEA'} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
+        <meshStandardMaterial color={enabled ? C.sun : '#D5DBEA'} roughness={0.27} />
       </mesh>
       <instancedMesh ref={bits.mesh} args={[null, null, 80]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 0.3]} />
@@ -84,7 +84,7 @@ function Scene({ down, enabled, burst, coins }) {
       </instancedMesh>
       <instancedMesh ref={money.mesh} args={[null, null, 8]} frustumCulled={false}>
         <cylinderGeometry args={[1, 1, 0.28, 28]} />
-        <meshPhysicalMaterial color={C.sun} roughness={0.3} clearcoat={0.7} clearcoatRoughness={0.2} />
+        <meshStandardMaterial color={C.sun} roughness={0.27} />
       </instancedMesh>
     </>
   )
