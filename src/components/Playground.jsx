@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { BallCollider, CuboidCollider, CylinderCollider, Physics, RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import { SERVICE_INFO, SITE_INFO, TOY as C } from '../data.js'

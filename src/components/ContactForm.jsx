@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { Float } from '@react-three/drei'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import Tilt from './Tilt.jsx'

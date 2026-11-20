@@ -34,7 +34,7 @@ export default function Studio({ wall, sway = 0 }) {
     <>
       {/* Plenty of even light keeps the brand colours saturated; the panels only add highlights. */}
       <ambientLight intensity={0.95} />
-      <directionalLight position={[3, 6, 12]} intensity={1.5} castShadow={shadows} shadow-mapSize={[2048, 2048]} shadow-bias={-0.0004}>
+      <directionalLight position={[3, 6, 12]} intensity={1.5} castShadow={shadows} shadow-mapSize={[1024, 1024]} shadow-bias={-0.0004}>
         <orthographicCamera attach="shadow-camera" args={[-14, 14, 14, -14, 0.1, 60]} />
       </directionalLight>
       <Environment resolution={256} frames={1}>

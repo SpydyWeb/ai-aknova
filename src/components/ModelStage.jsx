@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { Float, PresentationControls } from '@react-three/drei'
 import { useInView } from 'framer-motion'
 import { shapeFor } from './models.jsx'

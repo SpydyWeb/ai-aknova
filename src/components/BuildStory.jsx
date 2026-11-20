@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { RoundedBox } from '@react-three/drei'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import * as THREE from 'three'

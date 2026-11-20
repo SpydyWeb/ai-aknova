@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import * as THREE from 'three'
 import { useInView } from 'framer-motion'
 import { TOY as C } from '../data.js'

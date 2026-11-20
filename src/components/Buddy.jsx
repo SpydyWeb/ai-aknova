@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { RoundedBox } from '@react-three/drei'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { SITE_INFO, TOY as C } from '../data.js'

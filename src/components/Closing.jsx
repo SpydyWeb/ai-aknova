@@ -1,5 +1,6 @@
 import { useRef } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
+import Canvas from './Canvas3D.jsx'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { EMAIL, SERVICES, SITE_INFO } from '../data.js'
 import { MLink, press } from '../ui.jsx'
