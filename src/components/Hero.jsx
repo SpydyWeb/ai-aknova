@@ -16,6 +16,12 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
   const [label, setLabel] = useState(null)
   const [inView, setInView] = useState(true)
   const [shake, setShake] = useState(0)
+  // The toys load after the headline has risen, so building them cannot stall the text intro.
+  const [toys, setToys] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setToys(true), 900)
+    return () => clearTimeout(t)
+  }, [])
   // How far the copy reaches across the hero (0 to 1). The toys stay to the right of it, so they
   // never pile up under the buttons or the text.
   const [clear, setClear] = useState(0)
@@ -74,7 +80,7 @@ export default function Hero({ before, words, after, text, primaryLabel, primary
 
   return (
     <section id="top" className="hero" ref={root}>
-      {!reduce && (
+      {!reduce && toys && (
         <div className="hero-canvas">
           <Suspense fallback={null}>
             <Playground active={inView} shake={shake} clear={clear} onPop={(name) => setLabel({ name, k: Date.now() })} />

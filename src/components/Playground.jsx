@@ -222,7 +222,32 @@ function Scene({ onPop, shake, clear }) {
   )
 }
 
+// Builds every toy's shaders before the toys are shown. Without this they compile mid-fall on
+// slower graphics: only their shadows draw, and the page stalls while the hero text animates.
+function Warmup({ onReady }) {
+  const { gl, scene, camera } = useThree()
+  useEffect(() => {
+    let off = false
+    const start = performance.now()
+    const go = () => {
+      if (off) return
+      // Wait for the environment light, since adding it changes every model's shader.
+      if (!scene.environment && performance.now() - start < 3000) return requestAnimationFrame(go)
+      gl.compileAsync(scene, camera)
+        .catch(() => {})
+        .then(() => !off && onReady())
+    }
+    go()
+    return () => {
+      off = true
+    }
+  }, [gl, scene, camera, onReady])
+  return null
+}
+
 export default function Playground({ active, onPop, shake, clear = 0 }) {
+  const [ready, setReady] = useState(false)
+  const onReady = useMemo(() => () => setReady(true), [])
   return (
     <Canvas
       flat
@@ -231,10 +256,11 @@ export default function Playground({ active, onPop, shake, clear = 0 }) {
       frameloop={active ? 'always' : 'never'}
       camera={{ fov: FOV, position: [0, 0, 15] }}
       gl={{ antialias: true, alpha: true }}
-      style={{ touchAction: 'pan-y' }}
+      style={{ touchAction: 'pan-y', opacity: ready ? 1 : 0, transition: 'opacity .4s' }}
     >
       <Studio wall={-0.9} sway={0.35} />
-      <Physics gravity={[0, -28, 0]} paused={!active}>
+      {!ready && <Warmup onReady={onReady} />}
+      <Physics gravity={[0, -28, 0]} paused={!active || !ready}>
         <Scene onPop={onPop} shake={shake} clear={clear} />
       </Physics>
     </Canvas>
